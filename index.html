@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TARAflow — Graph-based Threat Analysis &amp; Risk Assessment</title>
+  <meta name="description" content="TARAflow is a graph-based TARA tool for OT, embedded and cyber-physical systems. Threat modeling and risk assessment aligned with IEC 62443, ISO 21434 and the EU Cyber Resilience Act.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:        #0a0e14;
+      --bg-2:      #0d1219;
+      --panel:     #11161f;
+      --line:      #1c2530;
+      --line-2:    #283341;
+      --text:      #d7dee8;
+      --text-dim:  #6b7787;
+      --text-mute: #45505f;
+      --accent:    #36e2b4;   /* signal green-teal */
+      --accent-2:  #1ea7d6;   /* node blue */
+      --warn:      #f0a830;
+      --crit:      #ff5d5d;
+      --glow:      rgba(54, 226, 180, 0.14);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Background grid + glow ===== */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 75%);
+      opacity: 0.5;
+    }
+    .bg-glow {
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+      filter: blur(40px);
+    }
+    .bg-noise {
+      position: absolute;
+      inset: 0;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ===== Top bar ===== */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+    }
+    .brand svg { display: block; }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border: 1px solid var(--line-2);
+      border-radius: 100px;
+      padding: 6px 14px;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 var(--accent);
+      animation: pulse 2.4s infinite;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(54,226,180,0.5); }
+      70%  { box-shadow: 0 0 0 7px rgba(54,226,180,0); }
+      100% { box-shadow: 0 0 0 0 rgba(54,226,180,0); }
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      padding: 90px 0 70px;
+    }
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 26px;
+      opacity: 0;
+      animation: rise 0.7s 0.1s forwards;
+    }
+    h1 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.8rem, 8vw, 5.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: rise 0.7s 0.2s forwards;
+    }
+    h1 .flow {
+      color: transparent;
+      background: linear-gradient(100deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .lede {
+      font-weight: 300;
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      color: var(--text);
+      max-width: 640px;
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: rise 0.7s 0.32s forwards;
+    }
+    .sub {
+      font-size: 0.98rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: rise 0.7s 0.42s forwards;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      opacity: 0;
+      animation: rise 0.7s 0.52s forwards;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 600;
+      font-size: 0.92rem;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      padding: 13px 22px;
+      border-radius: 8px;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #06231b;
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--glow); }
+    .btn-ghost {
+      color: var(--text);
+      border: 1px solid var(--line-2);
+      background: transparent;
+    }
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Standards strip ===== */
+    .standards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 8px;
+      margin-top: 56px;
+      padding-top: 30px;
+      border-top: 1px solid var(--line);
+      opacity: 0;
+      animation: rise 0.7s 0.62s forwards;
+    }
+    .standards .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      width: 100%;
+      margin-bottom: 4px;
+    }
+    .tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      border: 1px solid var(--line-2);
+      border-radius: 5px;
+      padding: 5px 11px;
+      transition: color 0.18s, border-color 0.18s;
+    }
+    .tag:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ===== Section heading ===== */
+    section { padding: 80px 0; }
+    .sec-head {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .sec-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+    .sec-title {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 600;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      letter-spacing: -0.01em;
+    }
+
+    /* ===== What it is ===== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .about-text p { color: var(--text-dim); margin-bottom: 18px; font-weight: 300; }
+    .about-text strong { color: var(--text); font-weight: 500; }
+
+    .node-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(160deg, var(--panel), var(--bg-2));
+      border-radius: 12px;
+      padding: 28px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.82rem;
+    }
+    .node-card .flow-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px dashed var(--line);
+      color: var(--text-dim);
+    }
+    .node-card .flow-line:last-child { border-bottom: none; }
+    .node-card .dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .node-card .arrow { color: var(--text-mute); margin-left: auto; }
+    .d-green { background: var(--accent); }
+    .d-blue  { background: var(--accent-2); }
+    .d-warn  { background: var(--warn); }
+    .d-crit  { background: var(--crit); }
+
+    /* ===== Features ===== */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .feature {
+      background: var(--bg-2);
+      padding: 30px 26px;
+      transition: background 0.2s ease;
+    }
+    .feature:hover { background: var(--panel); }
+    .feature .ic {
+      width: 38px; height: 38px;
+      margin-bottom: 18px;
+      color: var(--accent);
+    }
+    .feature h3 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 600;
+      font-size: 1.08rem;
+      margin-bottom: 10px;
+      letter-spacing: 0.01em;
+    }
+    .feature p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+
+    /* ===== Use cases ===== */
+    .domains {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .domain {
+      flex: 1 1 200px;
+      border: 1px solid var(--line);
+      border-left: 2px solid var(--accent-2);
+      background: var(--bg-2);
+      border-radius: 0 8px 8px 0;
+      padding: 20px 22px;
+    }
+    .domain h4 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+    .domain p { font-size: 0.85rem; color: var(--text-dim); font-weight: 300; }
+
+    /* ===== Footer ===== */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 40px 0 60px;
+      margin-top: 40px;
+    }
+    .foot-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .foot-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-mute);
+      letter-spacing: 0.04em;
+    }
+    .foot-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color 0.18s, border-color 0.18s;
+    }
+    .foot-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ===== Reveal on scroll ===== */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 760px) {
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .features { grid-template-columns: 1fr; }
+      section { padding: 60px 0; }
+      .hero { padding: 60px 0 50px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-layer">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-noise"></div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+          <circle cx="5" cy="13" r="3" stroke="#36e2b4" stroke-width="1.6"/>
+          <circle cx="21" cy="6" r="3" stroke="#1ea7d6" stroke-width="1.6"/>
+          <circle cx="21" cy="20" r="3" stroke="#1ea7d6" stroke-width="1.6"/>
+          <path d="M7.6 11.5L18.4 7M7.6 14.5L18.4 19" stroke="#45505f" stroke-width="1.4"/>
+        </svg>
+        TARAflow
+      </div>
+      <span class="status-pill"><span class="status-dot"></span>In Development</span>
+    </header>
+
+    <!-- Hero -->
+    <main class="hero">
+      <div class="eyebrow">Threat Analysis &amp; Risk Assessment</div>
+      <h1>Map threats.<br>Trace risk.<br><span class="flow">Flow</span> to mitigation.</h1>
+      <p class="lede">
+        TARAflow is a graph-based TARA tool for OT, embedded and cyber-physical systems — turning
+        data-flow diagrams into traceable threats, scored risks and verifiable controls.
+      </p>
+      <p class="sub">
+        Built for engineers and security consultants who need defensible, standards-aligned
+        assessments without spreadsheet sprawl.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/TARAflow" target="_blank" rel="noopener">
+          View on GitHub
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38l-.01-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#features">Explore Capabilities</a>
+      </div>
+
+      <!-- Standards -->
+      <div class="standards">
+        <span class="label">// Standards &amp; regulatory alignment</span>
+        <span class="tag">IEC 62443</span>
+        <span class="tag">ISO/SAE 21434</span>
+        <span class="tag">EU Cyber Resilience Act</span>
+        <span class="tag">EN 50742</span>
+        <span class="tag">STRIDE</span>
+        <span class="tag">CIANAAA</span>
+      </div>
+    </main>
+
+    <!-- What it is -->
+    <section id="about">
+      <div class="sec-head reveal">
+        <span class="sec-num">01</span>
+        <h2 class="sec-title">What is TARAflow?</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            TARA — <strong>Threat Analysis and Risk Assessment</strong> — is a cornerstone of modern
+            product security. TARAflow makes it <strong>graph-based and traceable</strong>: every threat
+            links back to the asset it endangers and forward to the control that mitigates it.
+          </p>
+          <p>
+            Starting from a <strong>data-flow diagram</strong>, the tool derives protection goals,
+            generates STRIDE-based threats per element and interaction, scores risk as
+            <strong>impact × likelihood</strong>, and tracks each mitigation through to verification.
+          </p>
+          <p>
+            The result is a living assessment — not a static spreadsheet — that holds up in audits
+            and evolves with your system.
+          </p>
+        </div>
+        <div class="node-card reveal" aria-hidden="true">
+          <div class="flow-line"><span class="dot d-blue"></span> Asset &amp; DFD <span class="arrow">→</span></div>
+          <div class="flow-line"><span class="dot d-green"></span> Protection goals <span class="arrow">→</span></div>
+          <div class="flow-line"><span class="dot d-warn"></span> Threats (STRIDE) <span class="arrow">→</span></div>
+          <div class="flow-line"><span class="dot d-crit"></span> Risk = I × L <span class="arrow">→</span></div>
+          <div class="flow-line"><span class="dot d-green"></span> Mitigation &amp; verify <span class="arrow">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+      <div class="sec-head reveal">
+        <span class="sec-num">02</span>
+        <h2 class="sec-title">Capabilities</h2>
+      </div>
+      <div class="features reveal">
+        <div class="feature">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7 6.5l3.5 9M17 6.5L13.5 15.5"/></svg>
+          <h3>Graph-based modeling</h3>
+          <p>Assets, data flows and threats live in a connected graph — relationships are first-class, not buried in rows.</p>
+        </div>
+        <div class="feature">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg>
+          <h3>DFD-driven threats</h3>
+          <p>Import or draw a data-flow diagram; TARAflow proposes STRIDE threats per element and per interaction automatically.</p>
+        </div>
+        <div class="feature">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M3 12h18" opacity="0"/><path d="M4 20L10 10l4 5 6-11"/><path d="M4 20h16"/></svg>
+          <h3>Quantified risk</h3>
+          <p>Impact × likelihood scoring with configurable factors (OWASP, ETSI, EN 50742) and threshold-based risk levels.</p>
+        </div>
+        <div class="feature">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          <h3>Safety &amp; security</h3>
+          <p>Native safety-security integration — physical impact and safety overrides feed directly into the risk model.</p>
+        </div>
+        <div class="feature">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7l8-4 8 4v6c0 1-8 8-8 8s-8-7-8-8z" opacity="0"/><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <h3>Mitigation tracking</h3>
+          <p>Link controls to threats, track implementation progress, and tie each mitigation to a verification.</p>
+        </div>
+        <div class="feature">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+          <h3>Audit-ready output</h3>
+          <p>Generate documentation that maps cleanly to IEC 62443, ISO 21434 and CRA requirements — defensible by design.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use cases -->
+    <section id="use-cases">
+      <div class="sec-head reveal">
+        <span class="sec-num">03</span>
+        <h2 class="sec-title">Where it's used</h2>
+      </div>
+      <div class="domains reveal">
+        <div class="domain">
+          <h4>Industrial &amp; OT</h4>
+          <p>PLCs, machinery and ICS environments under IEC 62443 and the Machinery Regulation.</p>
+        </div>
+        <div class="domain">
+          <h4>Embedded &amp; IoT</h4>
+          <p>Connected devices and firmware facing the EU Cyber Resilience Act.</p>
+        </div>
+        <div class="domain">
+          <h4>Automotive</h4>
+          <p>Cyber-physical components requiring ISO/SAE 21434 TARA workflows.</p>
+        </div>
+        <div class="domain">
+          <h4>Medical &amp; safety-critical</h4>
+          <p>Systems where safety and security must be assessed together, not in isolation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="foot-row">
+        <span class="foot-meta">TARAflow — coming soon. Built for OT, embedded &amp; cyber-physical security.</span>
+        <a class="foot-link" href="https://github.com/TARAflow" target="_blank" rel="noopener">github.com/TARAflow ↗</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Scroll reveal
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
+
+</body>
+</html>
