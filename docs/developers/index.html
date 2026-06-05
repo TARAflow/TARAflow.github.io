@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TARAflow — Developers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared.css">
+  <style>
+    .module-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .module { background: var(--bg-2); padding: 28px 24px; transition: background 0.2s; text-decoration: none; color: inherit; display: block; }
+    .module:hover { background: var(--panel); }
+    .module-num { font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 10px; }
+    .module h3 { font-family: 'Chakra Petch', sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 8px; }
+    .module p { font-size: 0.84rem; color: var(--text-dim); font-weight: 300; }
+    @media(max-width:760px){ .module-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-grid"></div><div class="bg-glow"></div></div>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="../index.html">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="5" cy="13" r="3" stroke="#36e2b4" stroke-width="1.6"/><circle cx="21" cy="6" r="3" stroke="#1ea7d6" stroke-width="1.6"/><circle cx="21" cy="20" r="3" stroke="#1ea7d6" stroke-width="1.6"/><path d="M7.6 11.5L18.4 7M7.6 14.5L18.4 19" stroke="#45505f" stroke-width="1.4"/></svg>
+      TARAflow
+    </a>
+    <nav class="nav">
+      <a href="../../index.html">Overview</a>
+      <a href="../method.html">Methodology</a>
+      <a href="../app/index.html">App</a>
+      <a href="index.html" class="active">Developers</a>
+      <a href="https://github.com/TARAflow/TARAflow.github.io" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <div class="page-head">
+    <div class="eyebrow">Developer Docs</div>
+    <h1>TARAflow<br>Architecture</h1>
+    <p>Technical reference for contributors and integrators. Covers the application architecture, threat generator pipeline, catalog structure, i18n system, and extension points.</p>
+  </div>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">Sections</span><h2 class="sec-title">Developer Docs</h2></div>
+    <div class="module-grid reveal">
+      <a class="module" href="architecture.html">
+        <div class="module-num">Dev / 01</div>
+        <h3>Architecture</h3>
+        <p>Electron + React + TypeScript stack, feature modules, shared types, data flow.</p>
+      </a>
+      <a class="module" href="dfd-dev.html">
+        <div class="module-num">Dev / 02</div>
+        <h3>DFD Engine</h3>
+        <p>Draw.io integration, DFDGraphReference, effectiveElementTrustBoundary, edge parsing.</p>
+      </a>
+      <a class="module" href="assets-dev.html">
+        <div class="module-num">Dev / 03</div>
+        <h3>Asset Model</h3>
+        <p>AssetProperties discriminated union, CIANAAA derivation engine, asset-to-element sync.</p>
+      </a>
+      <a class="module" href="threats-dev.html">
+        <div class="module-num">Dev / 04</div>
+        <h3>Threat Generator</h3>
+        <p>UnifiedStrategy, catalog domain structure, i18n hierarchy, closed-loop mapper.</p>
+      </a>
+      <a class="module" href="risks-dev.html">
+        <div class="module-num">Dev / 05</div>
+        <h3>Risk Engine</h3>
+        <p>Risk scoring, factor model, MoSCoW, before/after, RiskStatus architecture.</p>
+      </a>
+      <a class="module" href="integration-dev.html">
+        <div class="module-num">Dev / 06</div>
+        <h3>Integrations</h3>
+        <p>ITicketAdapter pattern, Jira/ADO/GitHub adapters, keytar credential storage.</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-row">
+      <span class="foot-meta">TARAflow Developer Docs</span>
+      <a class="foot-link" href="https://github.com/TARAflow" target="_blank" rel="noopener">github.com/TARAflow ↗</a>
+    </div>
+  </footer>
+</div>
+<script>
+  const io = new IntersectionObserver((e) => { e.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body></html>

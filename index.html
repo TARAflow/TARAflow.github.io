@@ -20,36 +20,26 @@
       --text:      #d7dee8;
       --text-dim:  #6b7787;
       --text-mute: #45505f;
-      --accent:    #36e2b4;   /* signal green-teal */
-      --accent-2:  #1ea7d6;   /* node blue */
+      --accent:    #36e2b4;
+      --accent-2:  #1ea7d6;
       --warn:      #f0a830;
       --crit:      #ff5d5d;
       --glow:      rgba(54, 226, 180, 0.14);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Sora', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ===== Background grid + glow ===== */
-    .bg-layer {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
+    /* ===== Background ===== */
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     .bg-grid {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-image:
         linear-gradient(var(--line) 1px, transparent 1px),
         linear-gradient(90deg, var(--line) 1px, transparent 1px);
@@ -58,66 +48,50 @@
       opacity: 0.5;
     }
     .bg-glow {
-      position: absolute;
-      top: -20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 600px;
+      position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 700px;
       background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
       filter: blur(40px);
     }
     .bg-noise {
-      position: absolute;
-      inset: 0;
-      opacity: 0.025;
+      position: absolute; inset: 0; opacity: 0.025;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    .wrap {
-      position: relative;
-      z-index: 1;
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 28px;
-    }
+    .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 28px; }
 
     /* ===== Top bar ===== */
     .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 26px 0;
-      border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 26px 0; border-bottom: 1px solid var(--line);
     }
     .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: 'Chakra Petch', sans-serif;
-      font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: 0.04em;
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+      font-size: 1.05rem; letter-spacing: 0.04em;
+      text-decoration: none; color: var(--text);
     }
-    .brand svg { display: block; }
+    /* topbar uses small inline icon only */
+    .brand-icon-sm { display: block; width: 26px; height: 26px; }
+
+    .nav { display: flex; gap: 24px; align-items: center; }
+    .nav a {
+      font-family: 'Space Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none; transition: color 0.18s;
+    }
+    .nav a:hover { color: var(--accent); }
+
     .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      border: 1px solid var(--line-2);
-      border-radius: 100px;
-      padding: 6px 14px;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-dim); border: 1px solid var(--line-2);
+      border-radius: 100px; padding: 6px 14px;
     }
     .status-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
+      width: 7px; height: 7px; border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 0 0 var(--accent);
       animation: pulse 2.4s infinite;
     }
     @keyframes pulse {
@@ -127,84 +101,78 @@
     }
 
     /* ===== Hero ===== */
-    .hero {
-      padding: 90px 0 70px;
+    .hero { padding: 80px 0 70px; }
+
+    /* Logo block: icon + wordmark stacked centrally in left column */
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
     }
+
+    .hero-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+      opacity: 0;
+      animation: rise 0.8s 0.1s forwards;
+    }
+
+    /* Icon: the full circular SVG, large */
+    .logo-icon {
+      width: 220px;
+      height: 220px;
+      filter: drop-shadow(0 0 40px rgba(54, 226, 180, 0.2))
+              drop-shadow(0 0 80px rgba(30, 167, 214, 0.15));
+      transition: filter 0.4s ease;
+    }
+    .logo-icon:hover {
+      filter: drop-shadow(0 0 60px rgba(54, 226, 180, 0.35))
+              drop-shadow(0 0 100px rgba(30, 167, 214, 0.25));
+    }
+
+    /* Wordmark: the text SVG */
+    .logo-wordmark {
+      width: 280px;
+      height: auto;
+      opacity: 0.92;
+      /* SVG has white fill — renders correctly on dark bg */
+    }
+
+    .hero-text {
+      opacity: 0;
+      animation: rise 0.8s 0.28s forwards;
+    }
+
     .eyebrow {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 26px;
-      opacity: 0;
-      animation: rise 0.7s 0.1s forwards;
-    }
-    h1 {
-      font-family: 'Chakra Petch', sans-serif;
-      font-weight: 700;
-      font-size: clamp(2.8rem, 8vw, 5.6rem);
-      line-height: 0.98;
-      letter-spacing: -0.02em;
-      margin-bottom: 28px;
-      opacity: 0;
-      animation: rise 0.7s 0.2s forwards;
-    }
-    h1 .flow {
-      color: transparent;
-      background: linear-gradient(100deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      background-clip: text;
+      font-family: 'Space Mono', monospace; font-size: 0.78rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 24px;
     }
     .lede {
-      font-weight: 300;
-      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
-      color: var(--text);
-      max-width: 640px;
-      margin-bottom: 18px;
-      opacity: 0;
-      animation: rise 0.7s 0.32s forwards;
+      font-weight: 300; font-size: clamp(1.05rem, 2vw, 1.3rem);
+      color: var(--text); max-width: 520px;
+      margin-bottom: 16px; line-height: 1.65;
     }
     .sub {
-      font-size: 0.98rem;
-      color: var(--text-dim);
-      max-width: 600px;
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: rise 0.7s 0.42s forwards;
+      font-size: 0.96rem; color: var(--text-dim);
+      max-width: 480px; margin-bottom: 36px; font-weight: 300;
     }
     .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      align-items: center;
-      opacity: 0;
-      animation: rise 0.7s 0.52s forwards;
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
     }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Chakra Petch', sans-serif;
-      font-weight: 600;
-      font-size: 0.92rem;
-      letter-spacing: 0.02em;
-      text-decoration: none;
-      padding: 13px 22px;
-      border-radius: 8px;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'Chakra Petch', sans-serif; font-weight: 600;
+      font-size: 0.92rem; letter-spacing: 0.02em;
+      text-decoration: none; padding: 13px 22px; border-radius: 8px;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     }
-    .btn-primary {
-      background: var(--accent);
-      color: #06231b;
-      border: 1px solid var(--accent);
-    }
+    .btn-primary { background: var(--accent); color: #06231b; border: 1px solid var(--accent); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--glow); }
-    .btn-ghost {
-      color: var(--text);
-      border: 1px solid var(--line-2);
-      background: transparent;
-    }
+    .btn-ghost { color: var(--text); border: 1px solid var(--line-2); background: transparent; }
     .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
 
     @keyframes rise {
@@ -214,86 +182,50 @@
 
     /* ===== Standards strip ===== */
     .standards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 8px;
-      margin-top: 56px;
-      padding-top: 30px;
+      display: flex; flex-wrap: wrap; gap: 10px 8px;
+      margin-top: 56px; padding-top: 28px;
       border-top: 1px solid var(--line);
-      opacity: 0;
-      animation: rise 0.7s 0.62s forwards;
+      opacity: 0; animation: rise 0.7s 0.52s forwards;
     }
     .standards .label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-mute);
-      width: 100%;
-      margin-bottom: 4px;
+      font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-mute); width: 100%; margin-bottom: 4px;
     }
     .tag {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.74rem;
-      color: var(--text-dim);
-      border: 1px solid var(--line-2);
-      border-radius: 5px;
-      padding: 5px 11px;
+      font-family: 'Space Mono', monospace; font-size: 0.74rem;
+      color: var(--text-dim); border: 1px solid var(--line-2);
+      border-radius: 5px; padding: 5px 11px;
       transition: color 0.18s, border-color 0.18s;
     }
     .tag:hover { color: var(--accent); border-color: var(--accent); }
 
-    /* ===== Section heading ===== */
+    /* ===== Section ===== */
     section { padding: 80px 0; }
-    .sec-head {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      margin-bottom: 48px;
-    }
-    .sec-num {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--accent);
-    }
+    .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 48px; }
+    .sec-num { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--accent); }
     .sec-title {
-      font-family: 'Chakra Petch', sans-serif;
-      font-weight: 600;
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      letter-spacing: -0.01em;
+      font-family: 'Chakra Petch', sans-serif; font-weight: 600;
+      font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: -0.01em;
     }
 
-    /* ===== What it is ===== */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 48px;
-      align-items: start;
-    }
+    /* ===== About ===== */
+    .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: start; }
     .about-text p { color: var(--text-dim); margin-bottom: 18px; font-weight: 300; }
     .about-text strong { color: var(--text); font-weight: 500; }
-
     .node-card {
       border: 1px solid var(--line);
       background: linear-gradient(160deg, var(--panel), var(--bg-2));
-      border-radius: 12px;
-      padding: 28px;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.82rem;
+      border-radius: 12px; padding: 28px;
+      font-family: 'Space Mono', monospace; font-size: 0.82rem;
     }
     .node-card .flow-line {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 0;
-      border-bottom: 1px dashed var(--line);
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 0; border-bottom: 1px dashed var(--line);
       color: var(--text-dim);
     }
     .node-card .flow-line:last-child { border-bottom: none; }
-    .node-card .dot {
-      width: 9px; height: 9px; border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .node-card .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
     .node-card .arrow { color: var(--text-mute); margin-left: auto; }
     .d-green { background: var(--accent); }
     .d-blue  { background: var(--accent-2); }
@@ -302,99 +234,70 @@
 
     /* ===== Features ===== */
     .features {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--line);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      overflow: hidden;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--line);
+      border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
     }
-    .feature {
-      background: var(--bg-2);
-      padding: 30px 26px;
-      transition: background 0.2s ease;
-    }
+    .feature { background: var(--bg-2); padding: 30px 26px; transition: background 0.2s ease; }
     .feature:hover { background: var(--panel); }
-    .feature .ic {
-      width: 38px; height: 38px;
-      margin-bottom: 18px;
-      color: var(--accent);
-    }
-    .feature h3 {
-      font-family: 'Chakra Petch', sans-serif;
-      font-weight: 600;
-      font-size: 1.08rem;
-      margin-bottom: 10px;
-      letter-spacing: 0.01em;
-    }
-    .feature p {
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      font-weight: 300;
-    }
+    .feature .ic { width: 38px; height: 38px; margin-bottom: 18px; color: var(--accent); }
+    .feature h3 { font-family: 'Chakra Petch', sans-serif; font-weight: 600; font-size: 1.08rem; margin-bottom: 10px; letter-spacing: 0.01em; }
+    .feature p { font-size: 0.9rem; color: var(--text-dim); font-weight: 300; }
 
     /* ===== Use cases ===== */
-    .domains {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+    .domains { display: flex; flex-wrap: wrap; gap: 12px; }
     .domain {
-      flex: 1 1 200px;
-      border: 1px solid var(--line);
+      flex: 1 1 200px; border: 1px solid var(--line);
       border-left: 2px solid var(--accent-2);
-      background: var(--bg-2);
-      border-radius: 0 8px 8px 0;
-      padding: 20px 22px;
+      background: var(--bg-2); border-radius: 0 8px 8px 0; padding: 20px 22px;
     }
-    .domain h4 {
-      font-family: 'Chakra Petch', sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 6px;
-    }
+    .domain h4 { font-family: 'Chakra Petch', sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 6px; }
     .domain p { font-size: 0.85rem; color: var(--text-dim); font-weight: 300; }
 
+    /* ===== Nav section (docs links) ===== */
+    .doc-nav-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    .doc-nav-card {
+      border: 1px solid var(--line); border-radius: 10px;
+      background: var(--bg-2); padding: 22px 24px;
+      text-decoration: none; color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+      display: block;
+    }
+    .doc-nav-card:hover { border-color: var(--accent); background: var(--panel); }
+    .doc-nav-card .dnc-label {
+      font-family: 'Space Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 8px;
+    }
+    .doc-nav-card h4 { font-family: 'Chakra Petch', sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 6px; }
+    .doc-nav-card p { font-size: 0.83rem; color: var(--text-dim); font-weight: 300; }
+
     /* ===== Footer ===== */
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 40px 0 60px;
-      margin-top: 40px;
-    }
-    .foot-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .foot-meta {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.74rem;
-      color: var(--text-mute);
-      letter-spacing: 0.04em;
-    }
-    .foot-link {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: color 0.18s, border-color 0.18s;
-    }
+    footer { border-top: 1px solid var(--line); padding: 40px 0 60px; margin-top: 40px; }
+    .foot-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+    .foot-meta { font-family: 'Space Mono', monospace; font-size: 0.74rem; color: var(--text-mute); letter-spacing: 0.04em; }
+    .foot-link { font-family: 'Space Mono', monospace; font-size: 0.78rem; color: var(--text-dim); text-decoration: none; border-bottom: 1px solid transparent; transition: color 0.18s, border-color 0.18s; }
     .foot-link:hover { color: var(--accent); border-color: var(--accent); }
 
-    /* ===== Reveal on scroll ===== */
+    /* ===== Reveal ===== */
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.in { opacity: 1; transform: translateY(0); }
 
     /* ===== Responsive ===== */
-    @media (max-width: 760px) {
+    @media (max-width: 860px) {
+      .hero-layout { grid-template-columns: 1fr; gap: 40px; }
+      .hero-logo { align-items: center; }
+      .logo-icon { width: 160px; height: 160px; }
+      .logo-wordmark { width: 220px; }
       .about-grid { grid-template-columns: 1fr; gap: 32px; }
       .features { grid-template-columns: 1fr; }
+      .doc-nav-grid { grid-template-columns: 1fr; }
       section { padding: 60px 0; }
-      .hero { padding: 60px 0 50px; }
+      .hero { padding: 56px 0 48px; }
+      .nav { gap: 16px; }
+      .nav a { font-size: 0.68rem; }
     }
   </style>
 </head>
@@ -411,7 +314,8 @@
     <!-- Top bar -->
     <header class="topbar">
       <div class="brand">
-        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+        <!-- small inline icon for topbar -->
+        <svg class="brand-icon-sm" viewBox="0 0 26 26" fill="none">
           <circle cx="5" cy="13" r="3" stroke="#36e2b4" stroke-width="1.6"/>
           <circle cx="21" cy="6" r="3" stroke="#1ea7d6" stroke-width="1.6"/>
           <circle cx="21" cy="20" r="3" stroke="#1ea7d6" stroke-width="1.6"/>
@@ -419,30 +323,53 @@
         </svg>
         TARAflow
       </div>
-      <span class="status-pill"><span class="status-dot"></span>In Development</span>
+      <nav class="nav">
+        <a href="docs/method.html">Methodology</a>
+        <a href="docs/app/index.html">App Guide</a>
+        <a href="docs/developers/index.html">Developers</a>
+        <a href="https://github.com/TARAflow/TARAflow.github.io" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+      <span class="status-pill"><span class="status-dot"></span>v0.2.0-alpha</span>
     </header>
 
     <!-- Hero -->
     <main class="hero">
-      <div class="eyebrow">Threat Analysis &amp; Risk Assessment</div>
-      <h1>Map threats.<br>Trace risk.<br><span class="flow">Flow</span> to mitigation.</h1>
-      <p class="lede">
-        TARAflow is a graph-based TARA tool for OT, embedded and cyber-physical systems — turning
-        data-flow diagrams into traceable threats, scored risks and verifiable controls.
-      </p>
-      <p class="sub">
-        Built for engineers and security consultants who need defensible, standards-aligned
-        assessments without spreadsheet sprawl.
-      </p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="https://github.com/TARAflow" target="_blank" rel="noopener">
-          View on GitHub
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38l-.01-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        </a>
-        <a class="btn btn-ghost" href="#features">Explore Capabilities</a>
-      </div>
+      <div class="hero-layout">
+      
+        <!-- Left: Icon + Wordmark -->
+        <div class="hero-logo">
+          <!-- Full circular icon -->
+          <img class="logo-icon" src="taraflow_final_v6.svg" alt="TARAflow icon" width="220" height="220">
+          <!-- Wordmark (white paths render on dark bg) -->
+          <img class="logo-wordmark" src="taraflow.svg" alt="TARAflow" width="280">
+        </div>
+      
+        <!-- Right: Text + CTA -->
+        <div class="hero-text">
+          <div class="eyebrow">Threat Analysis &amp; Risk Assessment</div>
+          <p class="lede">
+            A graph-based TARA tool for OT, embedded and cyber-physical systems — turning
+            data-flow diagrams into traceable threats, scored risks, and verifiable controls.
+            </p>
+            <p class="sub">
+            Built for engineers and security consultants who need defensible,
+            standards-aligned assessments without spreadsheet sprawl.
+            </p>
+            <div class="cta-row">
+            <a class="btn btn-primary" href="https://github.com/TARAflow/TARAflow.github.io/releases" target="_blank"
+              rel="noopener">
+              Download v0.2.0-alpha
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M7 1v8M3 6l4 4 4-4M1 11h12" />
+              </svg>
+            </a>
+            <a class="btn btn-ghost" href="docs/method.html">Explore Methodology</a>
+            </div>
+            </div>
 
-      <!-- Standards -->
+      </div>
+      
+      <!-- Standards strip — full width below hero -->
       <div class="standards">
         <span class="label">// Standards &amp; regulatory alignment</span>
         <span class="tag">IEC 62443</span>
@@ -451,6 +378,7 @@
         <span class="tag">EN 50742</span>
         <span class="tag">STRIDE</span>
         <span class="tag">CIANAAA</span>
+        <span class="tag">OWASP Risk Rating</span>
       </div>
     </main>
 
@@ -469,8 +397,8 @@
           </p>
           <p>
             Starting from a <strong>data-flow diagram</strong>, the tool derives protection goals,
-            generates STRIDE-based threats per element and interaction, scores risk as
-            <strong>impact × likelihood</strong>, and tracks each mitigation through to verification.
+            generates STRIDE-based threats per element and per interaction, scores risk as
+            <strong>Impact × Likelihood</strong>, and tracks each mitigation through to verification.
           </p>
           <p>
             The result is a living assessment — not a static spreadsheet — that holds up in audits
@@ -505,9 +433,12 @@
           <p>Import or draw a data-flow diagram; TARAflow proposes STRIDE threats per element and per interaction automatically.</p>
         </div>
         <div class="feature">
-          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M3 12h18" opacity="0"/><path d="M4 20L10 10l4 5 6-11"/><path d="M4 20h16"/></svg>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M4 20L10 10l4 5 6-11" />
+            <path d="M4 20h16" />
+          </svg>
           <h3>Quantified risk</h3>
-          <p>Impact × likelihood scoring with configurable factors (OWASP, ETSI, EN 50742) and threshold-based risk levels.</p>
+          <p>Impact × likelihood scoring with configurable factors (OWASP) and threshold-based risk levels.</p>
         </div>
         <div class="feature">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
@@ -515,9 +446,13 @@
           <p>Native safety-security integration — physical impact and safety overrides feed directly into the risk model.</p>
         </div>
         <div class="feature">
-          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7l8-4 8 4v6c0 1-8 8-8 8s-8-7-8-8z" opacity="0"/><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <h3>Mitigation tracking</h3>
-          <p>Link controls to threats, track implementation progress, and tie each mitigation to a verification.</p>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 3" />
+          </svg>
+          <h3>Closed-loop mitigations</h3>
+          <p>Implemented controls are auto-detected from DFD properties and pre-flagged. Nothing is suppressed — the before/after
+            delta is always visible.</p>
         </div>
         <div class="feature">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
@@ -553,18 +488,43 @@
       </div>
     </section>
 
+    <!-- Documentation nav -->
+    <section id="docs">
+      <div class="sec-head reveal">
+        <span class="sec-num">04</span>
+        <h2 class="sec-title">Documentation</h2>
+      </div>
+      <div class="doc-nav-grid reveal">
+        <a class="doc-nav-card" href="docs/method.html">
+          <div class="dnc-label">Method</div>
+          <h4>Methodology</h4>
+          <p>Process flow, STRIDE, CIANAAA, standards alignment, artefact traceability.</p>
+        </a>
+        <a class="doc-nav-card" href="docs/app/index.html">
+          <div class="dnc-label">User Guide</div>
+          <h4>App Guide</h4>
+          <p>Step-by-step: project setup, DFD, assets, threats, risks, documentation, integrations.</p>
+        </a>
+        <a class="doc-nav-card" href="docs/developers/index.html">
+          <div class="dnc-label">Developer</div>
+          <h4>Developer Docs</h4>
+          <p>Architecture, threat generator pipeline, catalog structure, i18n, sync services.</p>
+        </a>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer>
       <div class="foot-row">
-        <span class="foot-meta">TARAflow — coming soon. Built for OT, embedded &amp; cyber-physical security.</span>
-        <a class="foot-link" href="https://github.com/TARAflow" target="_blank" rel="noopener">github.com/TARAflow ↗</a>
+        <span class="foot-meta">TARAflow v0.2.0-alpha — open-source TARA for OT, embedded &amp; cyber-physical security.</span>
+        <a class="foot-link" href="https://github.com/TARAflow/TARAflow.github.io" target="_blank"
+          rel="noopener">github.com/TARAflow/TARAflow.github.io ↗</a>
       </div>
     </footer>
 
   </div>
 
   <script>
-    // Scroll reveal
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }

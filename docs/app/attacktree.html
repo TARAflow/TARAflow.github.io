@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TARAflow — App — Attack Tree</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="bg-layer"><div class="bg-grid"></div><div class="bg-glow"></div></div>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="../index.html"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="5" cy="13" r="3" stroke="#36e2b4" stroke-width="1.6"/><circle cx="21" cy="6" r="3" stroke="#1ea7d6" stroke-width="1.6"/><circle cx="21" cy="20" r="3" stroke="#1ea7d6" stroke-width="1.6"/><path d="M7.6 11.5L18.4 7M7.6 14.5L18.4 19" stroke="#45505f" stroke-width="1.4"/></svg> TARAflow</a>
+    <nav class="nav">
+      <a href="../index.html">Overview</a>
+      <a href="../method.html">Methodology</a>
+      <a href="index.html" class="active">App</a>
+      <a href="../developers/index.html">Developers</a>
+      
+      <a href="https://github.com/TARAflow/TARAflow.github.io" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+  <div class="page-head">
+    <div class="eyebrow">App / 06</div>
+    <h1>Attack Tree</h1>
+    <p>Model AND/OR attack trees for high-impact assets. Assess probability and feasibility per leaf node, and link tree paths back to the threat table.</p>
+  </div>
+  
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">01</span><h2 class="sec-title">Attack Tree Workflow</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>Derive attack goals from high-impact assets (Variant B) or high-risk threats (Variant A, Phase 5A)</li><li>Model AND/OR trees: AND-nodes require all child conditions, OR-nodes require any one</li><li>Assess probability and feasibility per leaf — escalates to parent nodes</li><li>Link attack tree leaves to STRIDE threats in the threat table for traceability</li><li>Validate Won't-fix decisions: if attack tree shows a viable path, reconsider</li></ul></div>
+  </section>
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">02</span><h2 class="sec-title">Integration with STRIDE</h2></div>
+    <div class="reveal"><p style="font-size:0.88rem;color:var(--text-dim);font-weight:300">The feedback loop between STRIDE and Attack Trees checks: all attack paths covered by at least one STRIDE threat? Missing STRIDE categories? Inconsistent likelihood estimates between tree leaves and threat scores? Iterate Phase 3 until the cross-check is clean.</p></div>
+  </section>
+  <footer>
+    <div class="foot-row">
+      <span class="foot-meta">TARAflow — App — Attack Tree</span>
+      <div style="display:flex;gap:20px"><a class="foot-link" href="documentation.html">Next: Documentation →</a><a class="foot-link" href="risks.html">← Risk Assessment</a></div>
+    </div>
+  </footer>
+</div>
+<script>
+  const io = new IntersectionObserver((e) => { e.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body></html>
