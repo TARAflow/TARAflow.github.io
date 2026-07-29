@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TARAflow — App — Hazard Identification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="bg-layer"><div class="bg-grid"></div><div class="bg-glow"></div></div>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="../../index.html"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="5" cy="13" r="3" stroke="#36e2b4" stroke-width="1.6"/><circle cx="21" cy="6" r="3" stroke="#1ea7d6" stroke-width="1.6"/><circle cx="21" cy="20" r="3" stroke="#1ea7d6" stroke-width="1.6"/><path d="M7.6 11.5L18.4 7M7.6 14.5L18.4 19" stroke="#45505f" stroke-width="1.4"/></svg> TARAflow</a>
+    <nav class="nav">
+      <a href="../../index.html">Overview</a>
+      <a href="../method.html">Methodology</a>
+      <a href="index.html" class="active">App</a>
+      <a href="../developers/index.html">Developers</a>
+      <a href="https://github.com/TARAflow/TARAflow.github.io" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+  <div class="page-head">
+    <div class="eyebrow">App / 02</div>
+    <h1>Hazard Identification</h1>
+    <p>An optional safety-analysis tab, alongside the security workflow: model each hazard as a Bowtie — contributing causes on the left, the hazard with its gate in the middle, endangered safety goals on the right — and triage which hazards a cyberattack can actually reach.</p>
+  </div>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">01</span><h2 class="sec-title">Enabling the tab</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>Off by default — a project only gets a Hazard tab once marked safety-relevant via the switch in the Overview tab (below the Criticality switch)</li><li>Existing projects are unaffected; no migration required</li><li>When enabled, Hazard also joins the Overview progress bar alongside the other phases</li></ul></div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">02</span><h2 class="sec-title">The Bowtie model</h2></div>
+    <div class="reveal">
+      <p style="color:var(--text-dim);font-size:0.92rem;margin-bottom:18px;max-width:640px;">Each hazard item is a Bowtie: assets that <strong>contribute to</strong> it on the left, the hazard with a combination gate in the middle, and safety goals it <strong>endangers</strong> on the right.</p>
+      <ul class="bullet-list">
+        <li><strong>Causes</strong> — contributing assets, each rated direct or indirect and (optionally) by hazard distance</li>
+        <li><strong>Gate</strong> — <code>combinationType</code>: <em>ANY</em> (OR — a single cause is enough) or <em>ALL</em> (AND — causes must combine); only meaningful once a hazard has two or more causes</li>
+        <li><strong>Targets</strong> — endangered safety goals, each rated on a severity scale specific to its target type (human / environment / infrastructure)</li>
+        <li>Assets can be created inline from the Bowtie editor without leaving the dialog</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">03</span><h2 class="sec-title">Review workflow</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>A master-detail review workspace, not a plain edit dialog: a sidebar lists every hazard with its review status and completeness, the detail pane holds the decision and the Bowtie</li><li>Every hazard is first triaged on one question — <em>is this reachable by a cyberattack?</em> — answered as in scope, out of scope (with a required reason), or unknown</li><li>Only in-scope hazards need a Bowtie modeled; out-of-scope hazards stay in the safety record but are excluded from threat derivation, never deleted</li><li>Commit-on-close: there is no separate Save button — closing the dialog (OK, Escape, or clicking outside) commits the draft</li></ul></div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">04</span><h2 class="sec-title">Import</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>Bring in hazards from an existing safety analysis (CSV, Excel/ODS, or a TARAflow JSON export) via a profile-based importer with an interactive column-mapping dialog</li><li>Affected-persons data is bridged into deduplicated human assets with structured, per-role severity — not collapsed into one flat rating</li><li>Provenance from the source file (extra columns that don't map to a known field) is retained on the imported item</li></ul></div>
+  </section>
+
+  <footer>
+    <div class="foot-row">
+      <span class="foot-meta">TARAflow — App — Hazard Identification</span>
+      <div style="display:flex;gap:20px"><a class="foot-link" href="dfd.html">Next: DFD Modeling →</a><a class="foot-link" href="overview.html">← Overview</a></div>
+    </div>
+  </footer>
+</div>
+<script>
+  const io = new IntersectionObserver((e) => { e.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body></html>

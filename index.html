@@ -44,6 +44,7 @@
         linear-gradient(var(--line) 1px, transparent 1px),
         linear-gradient(90deg, var(--line) 1px, transparent 1px);
       background-size: 48px 48px;
+      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 75%);
       mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 75%);
       opacity: 0.5;
     }
@@ -329,7 +330,7 @@
         <a href="docs/developers/index.html">Developers</a>
         <a href="https://github.com/TARAflow/TARAflow.github.io" target="_blank" rel="noopener">GitHub ↗</a>
       </nav>
-      <span class="status-pill"><span class="status-dot"></span>v0.2.0-alpha</span>
+      <span class="status-pill"><span class="status-dot"></span>v0.7.0-alpha</span>
     </header>
 
     <!-- Hero -->
@@ -356,9 +357,9 @@
             standards-aligned assessments without spreadsheet sprawl.
             </p>
             <div class="cta-row">
-            <a class="btn btn-primary" href="https://github.com/TARAflow/TARAflow.github.io/releases" target="_blank"
+            <a class="btn btn-primary" href="https://github.com/TARAflow/TARAflow.github.io/releases/latest" target="_blank"
               rel="noopener">
-              Download v0.2.0-alpha
+              Download v0.7.0-alpha
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8">
                 <path d="M7 1v8M3 6l4 4 4-4M1 11h12" />
               </svg>
@@ -397,7 +398,8 @@
           </p>
           <p>
             Starting from a <strong>data-flow diagram</strong>, the tool derives protection goals,
-            generates STRIDE-based threats per element and per interaction, scores risk as
+            generates STRIDE-based threats per element and per interaction — plus attack-path threats
+            from attack trees and hazard-driven scenarios from a Bowtie analysis — scores risk as
             <strong>Impact × Likelihood</strong>, and tracks each mitigation through to verification.
           </p>
           <p>
@@ -438,12 +440,17 @@
             <path d="M4 20h16" />
           </svg>
           <h3>Quantified risk</h3>
-          <p>Impact × likelihood scoring with configurable factors (OWASP) and threshold-based risk levels.</p>
+          <p>Impact × likelihood scoring with configurable factor sets (OWASP, ETSI, EN 50742) and threshold-based risk levels.</p>
+        </div>
+        <div class="feature">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="4" r="2"/><circle cx="5" cy="14" r="2"/><circle cx="12" cy="14" r="2"/><circle cx="19" cy="14" r="2"/><circle cx="8.5" cy="21" r="1.6"/><circle cx="15.5" cy="21" r="1.6"/><path d="M12 6v6M6.4 12.5L11 5.6M17.6 12.5L13 5.6M6 16l2 3.4M14 16l1.5 3.4M12 16v3"/></svg>
+          <h3>Attack-tree modeling</h3>
+          <p>Model attacker paths as trees; feasibility per ISO 21434 Annex G or IEC 62443, synced into the risk register with full provenance.</p>
         </div>
         <div class="feature">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
           <h3>Safety &amp; security</h3>
-          <p>Native safety-security integration — physical impact and safety overrides feed directly into the risk model.</p>
+          <p>A dedicated Hazard Identification (Bowtie) workflow feeds physical impact and safety-override rules directly into the risk model.</p>
         </div>
         <div class="feature">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -458,6 +465,11 @@
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
           <h3>Audit-ready output</h3>
           <p>Generate documentation that maps cleanly to IEC 62443, ISO 21434 and CRA requirements — defensible by design.</p>
+        </div>
+        <div class="feature">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg>
+          <h3>Headless reporting</h3>
+          <p>Generate the same Markdown, AsciiDoc, HTML, PDF and StrictDoc output from the command line — built for CI/CD pipelines, no desktop app required.</p>
         </div>
       </div>
     </section>
@@ -516,7 +528,7 @@
     <!-- Footer -->
     <footer>
       <div class="foot-row">
-        <span class="foot-meta">TARAflow v0.2.0-alpha — open-source TARA for OT, embedded &amp; cyber-physical security.</span>
+        <span class="foot-meta">TARAflow v0.7.0-alpha — open-source TARA for OT, embedded &amp; cyber-physical security.</span>
         <a class="foot-link" href="https://github.com/TARAflow/TARAflow.github.io" target="_blank"
           rel="noopener">github.com/TARAflow/TARAflow.github.io ↗</a>
       </div>

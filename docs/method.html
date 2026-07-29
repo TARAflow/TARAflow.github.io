@@ -431,7 +431,8 @@
           <ul>
             <li>Project name, version, responsible roles</li>
             <li>System description and scope</li>
-            <li>Criticality classification (standard / critical system)</li>
+            <li>Rating mode: ISO 21434 (feasibility-only) or Standard/IEC 62443 (feasibility × motivation)</li>
+            <li>Safety-relevant toggle — enables Phase 1 (Hazard Identification) when on</li>
             <li>Industry, platform, and regulatory tags</li>
           </ul>
         </div>
@@ -440,7 +441,25 @@
       <!-- Phase 1 -->
       <div class="phase reveal">
         <div class="phase-left">
-          <div class="phase-badge">Phase 1</div>
+          <div class="phase-badge" style="background:var(--line-2);color:var(--text-dim)">Phase 1</div>
+          <div class="phase-line dashed"></div>
+        </div>
+        <div class="phase-card">
+          <div class="artifact">Artefact → Hazard / Bowtie Register <span style="font-weight:400;color:var(--text-mute)">(optional)</span></div>
+          <h3>Hazard Identification</h3>
+          <ul>
+            <li>Only present when the project is marked safety-relevant</li>
+            <li>Model each hazard as a Bowtie: contributing causes → hazard (with AND/OR gate) → endangered safety goals</li>
+            <li>Triage every hazard: reachable by a cyberattack (in scope), not cyber-caused (out of scope), or unknown</li>
+            <li>In-scope hazards feed the Safety Annotation Layer used in Asset and Risk impact</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase reveal">
+        <div class="phase-left">
+          <div class="phase-badge">Phase 2</div>
           <div class="phase-line"></div>
         </div>
         <div class="phase-card">
@@ -457,10 +476,10 @@
         </div>
       </div>
 
-      <!-- Phase 2 -->
+      <!-- Phase 3 -->
       <div class="phase reveal">
         <div class="phase-left">
-          <div class="phase-badge">Phase 2</div>
+          <div class="phase-badge">Phase 3</div>
           <div class="phase-line"></div>
         </div>
         <div class="phase-card">
@@ -475,17 +494,15 @@
         </div>
       </div>
 
-      <!-- Decision -->
-      <div class="decision-node reveal">
-        <div class="diamond"></div>
-        <span class="decision-label">Workflow selection — critical system?</span>
-      </div>
-
-      <!-- Variant split -->
-      <div class="variant-split reveal">
-        <div class="variant-card a">
-          <div class="variant-header a">// Variant A — STRIDE first</div>
-          <h4>Phase 3A: Threat Analysis</h4>
+      <!-- Phase 4 -->
+      <div class="phase reveal">
+        <div class="phase-left">
+          <div class="phase-badge">Phase 4</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-card">
+          <div class="artifact">Artefact → Threat Table</div>
+          <h3>Threat Analysis</h3>
           <ul>
             <li>STRIDE per element and per interaction</li>
             <li>Context-aware template matching</li>
@@ -493,49 +510,78 @@
             <li>Prioritize by asset impact</li>
           </ul>
         </div>
-        <div class="variant-card b">
-          <div class="variant-header b">// Variant B — Attack Tree first</div>
-          <h4>Phase 3B: Attack Trees</h4>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="phase reveal">
+        <div class="phase-left">
+          <div class="phase-badge">Phase 5</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-card">
+          <div class="artifact">Artefact → Attack Trees, Path Feasibility</div>
+          <h3>Attack Tree</h3>
           <ul>
-            <li>Derive attack goals from high-impact assets</li>
-            <li>Model AND/OR attack trees per goal</li>
-            <li>Assess probability and feasibility per leaf</li>
-            <li>STRIDE validation follows to close gaps</li>
+            <li>A third threat generator alongside per-element and per-interaction STRIDE — always this phase, in this position, in both rating modes</li>
+            <li>Refine an existing STRIDE threat's feasibility, or model a new attack path STRIDE has no element for (supply chain, physical access, social engineering)</li>
+            <li>Feasibility per attack-potential factors (elapsed time, expertise, knowledge, window of opportunity, equipment)</li>
+            <li>Gate aggregation follows the quantity being composed — sum/min for effort, product/union for probability</li>
           </ul>
         </div>
       </div>
 
-      <!-- Feedback loop -->
+      <!-- Mode note (replaces the old workflow-selection fork) -->
+      <div class="variant-split reveal">
+        <div class="variant-card a">
+          <div class="variant-header a">// ISO 21434 mode</div>
+          <h4>Feasibility is the likelihood axis</h4>
+          <ul>
+            <li>Phase 5 is used comprehensively — it is where Cl. 15.6/15.7 attack feasibility is normatively determined</li>
+            <li>Attacker motivation is excluded from the risk number (Cl. 3.1.29): unattributable, and it would become a licence to argue a risk away</li>
+            <li>An audit-grade RC-15-11 method is required on every rated leaf</li>
+          </ul>
+        </div>
+        <div class="variant-card b">
+          <div class="variant-header b">// Standard / IEC 62443 mode</div>
+          <h4>Feasibility × motivation</h4>
+          <ul>
+            <li>Phase 5 is used opportunistically — on coverage gaps STRIDE can't reach, and on threats whose exploitability is uncertain</li>
+            <li>Attacker benefit counts toward likelihood alongside feasibility, as threat-actor profiles do</li>
+            <li>Quick, unrated-effort estimates are permitted alongside the audit-grade method</li>
+          </ul>
+        </div>
+      </div>
       <div class="feedback-box reveal">
-        <div class="fb-label">// Feedback Loop</div>
+        <div class="fb-label">// Same phase, different role</div>
         <p>
-          Cross-check STRIDE ↔ Attack Trees: all attack paths covered? Missing STRIDE categories?
-          Inconsistent likelihood estimates? Iterate Phase 3 until gaps are closed.
+          The rating mode changes how Phase 5's output is used — and, in Standard mode, how
+          thoroughly it's applied — never whether it happens or where it sits. The Attack Tree
+          always follows Threat Analysis and always precedes Risk Assessment.
         </p>
       </div>
 
-      <!-- Phase 4 -->
+      <!-- Phase 6 -->
       <div class="phase reveal" style="margin-top:24px">
         <div class="phase-left">
-          <div class="phase-badge phase-risk">Phase 4</div>
+          <div class="phase-badge phase-risk">Phase 6</div>
           <div class="phase-line"></div>
         </div>
         <div class="phase-card">
           <div class="artifact">Artefact → Risk Register, Risk Matrix</div>
           <h3>Risk Assessment</h3>
           <ul>
-            <li>Likelihood scoring per threat (OWASP Risk Rating factors)</li>
-            <li>Risk = Impact × Likelihood</li>
+            <li>One register — STRIDE-derived and attack-path-derived threats are both just threats here</li>
+            <li>Risk = Impact × Likelihood, impact anchored to (Asset × Security Goal)</li>
             <li>MoSCoW prioritization of mitigations</li>
             <li>Risk before and after mitigation tracked</li>
           </ul>
         </div>
       </div>
 
-      <!-- Phase 5 -->
+      <!-- Phase 7 -->
       <div class="phase reveal">
         <div class="phase-left">
-          <div class="phase-badge phase-gov">Phase 5</div>
+          <div class="phase-badge phase-gov">Phase 7</div>
           <div class="phase-line dashed"></div>
         </div>
         <div class="phase-card">
@@ -671,7 +717,7 @@
         <h4>Automotive Cybersecurity</h4>
         <p>
           TARA as mandatory activity, asset identification, threat scenario and risk value
-          determination — all covered by the Phase 0–5 workflow.
+          determination — all covered by the Phase 0–7 workflow.
         </p>
       </div>
 
@@ -733,60 +779,65 @@
           <tr>
             <td class="td-phase">0</td>
             <td>Project &amp; Context Profile</td>
-            <td>Phase 1, 5</td>
+            <td>Phase 1–7</td>
           </tr>
           <tr>
             <td class="td-phase">1</td>
-            <td>Validated DFD</td>
-            <td>Phase 2, 3, 5</td>
-          </tr>
-          <tr>
-            <td class="td-phase">1</td>
-            <td>Element list, Interface list, Trust Boundary register</td>
-            <td>Phase 2, 3</td>
+            <td>Hazard / Bowtie Register <span style="color:var(--text-mute)">(optional)</span></td>
+            <td>Phase 3, 6</td>
           </tr>
           <tr>
             <td class="td-phase">2</td>
-            <td>Asset Table</td>
+            <td>Validated DFD</td>
+            <td>Phase 3, 4, 7</td>
+          </tr>
+          <tr>
+            <td class="td-phase">2</td>
+            <td>Element list, Interface list, Trust Boundary register</td>
             <td>Phase 3, 4</td>
           </tr>
           <tr>
-            <td class="td-phase">2</td>
+            <td class="td-phase">3</td>
+            <td>Asset Table</td>
+            <td>Phase 4, 6</td>
+          </tr>
+          <tr>
+            <td class="td-phase">3</td>
             <td>Asset Security Mapping, Impact assessments</td>
-            <td>Phase 3, 4, 5</td>
+            <td>Phase 4, 5, 6</td>
           </tr>
           <tr>
-            <td class="td-phase">3</td>
+            <td class="td-phase">4</td>
             <td>Threat Table</td>
-            <td>Phase 4, 5</td>
-          </tr>
-          <tr>
-            <td class="td-phase">3</td>
-            <td>Attack Trees, Feedback Loop Protocol</td>
-            <td>Phase 4, 5, Audit</td>
-          </tr>
-          <tr>
-            <td class="td-phase">4</td>
-            <td>Risk Register, Risk Matrix</td>
-            <td>Phase 5</td>
-          </tr>
-          <tr>
-            <td class="td-phase">4</td>
-            <td>Prioritized mitigation list</td>
-            <td>Phase 5</td>
+            <td>Phase 5, 6</td>
           </tr>
           <tr>
             <td class="td-phase">5</td>
+            <td>Attack Trees, Path Feasibility</td>
+            <td>Phase 4 (refine), 6, 7</td>
+          </tr>
+          <tr>
+            <td class="td-phase">6</td>
+            <td>Risk Register, Risk Matrix</td>
+            <td>Phase 7</td>
+          </tr>
+          <tr>
+            <td class="td-phase">6</td>
+            <td>Prioritized mitigation list</td>
+            <td>Phase 7</td>
+          </tr>
+          <tr>
+            <td class="td-phase">7</td>
             <td>CBA Protocol, Validation Protocol, Sign-off</td>
             <td>Governance, Compliance</td>
           </tr>
           <tr>
-            <td class="td-phase">5</td>
+            <td class="td-phase">7</td>
             <td>Audit Trail</td>
             <td>All phases — continuous</td>
           </tr>
           <tr>
-            <td class="td-phase">5</td>
+            <td class="td-phase">7</td>
             <td>Re-Assessment Plan</td>
             <td>Governance cycle</td>
           </tr>
@@ -798,7 +849,7 @@
   <!-- Footer -->
   <footer>
     <div class="foot-row">
-      <span class="foot-meta">TARAflow — Methodology v1.0 · Jan 2026</span>
+      <span class="foot-meta">TARAflow — Methodology · matches app v0.7.0-alpha</span>
       <a class="foot-link" href="https://github.com/TARAflow" target="_blank" rel="noopener">github.com/TARAflow ↗</a>
     </div>
   </footer>

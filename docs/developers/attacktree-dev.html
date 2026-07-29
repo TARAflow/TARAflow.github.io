@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TARAflow — Dev — Attack Tree</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared.css">
+</head>
+<body>
+<div class="bg-layer"><div class="bg-grid"></div><div class="bg-glow"></div></div>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="../../index.html"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="5" cy="13" r="3" stroke="#36e2b4" stroke-width="1.6"/><circle cx="21" cy="6" r="3" stroke="#1ea7d6" stroke-width="1.6"/><circle cx="21" cy="20" r="3" stroke="#1ea7d6" stroke-width="1.6"/><path d="M7.6 11.5L18.4 7M7.6 14.5L18.4 19" stroke="#45505f" stroke-width="1.4"/></svg> TARAflow</a>
+    <nav class="nav">
+      <a href="../../index.html">Overview</a>
+      <a href="../method.html">Methodology</a>
+      <a href="../app/index.html">App</a>
+      <a href="index.html" class="active">Developers</a>
+      <a href="https://github.com/TARAflow/TARAflow.github.io" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+  <div class="page-head">
+    <div class="eyebrow">Developers / 06</div>
+    <h1>Attack Tree</h1>
+    <p>The attack tree is a third threat generator, alongside per-element and per-interaction STRIDE. It emits <code>ThreatReference</code>s, not a parallel risk type — there is one risk register, regardless of which generator produced the threat.</p>
+  </div>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">01</span><h2 class="sec-title">Core model</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>One attack path (ROOT → leaf) is one threat scenario. <code>StrideMethod</code> gains a third value, <code>"attack-path"</code>, alongside <code>"per-element"</code> / <code>"per-interaction"</code> — audit every <code>switch</code> on it for exhaustiveness</li><li><strong>Anchor determines behavior</strong>, independent of ISO/Standard mode: <code>threat</code>-anchored trees refine an existing STRIDE threat's feasibility (emit no new threat); <code>asset</code>-anchored trees emit a genuinely new threat for attacks STRIDE has no element to hang on (supply chain, physical access, social engineering); <code>standalone</code> trees are Cl. 8.5 vulnerability analysis only, feeding nothing downstream</li><li>Only asset-anchored trees emit threats at all (3.1.33 — a threat scenario is by definition the compromise of a property <em>of an asset</em>); threat-anchored and standalone trees never create a <code>Risk</code> row on their own</li><li>Fixed tab order as a consequence of the data flow, not an ergonomic choice: <code>DFD → Assets → Threats → Attack Tree → Risks</code> — the tree refines Threats and informs Risks, in both methods, regardless of project criticality (the old "Critical System" slider that drove ordering is removed)</li></ul></div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">02</span><h2 class="sec-title">Path identity</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>Content-derived, not index-based: <code>pathKey = sha1(rootName ␟ ... ␟ leafName).slice(0,8)</code>, <code>threatId = "AT-${treeId}-${pathKey}"</code> — an unrelated DSL edit (reordering, comments, re-rating) must never reassign an analyst's confirm/rate/ticket-link decisions to the wrong path</li><li>Renaming a node <em>is</em> a new scenario by design — its identity is meant to change</li><li>Sync policy mirrors the existing DFD↔Threat pattern: Class A (silent) for a new path → new <code>unrated</code> threat; Class B (banner) when a path backing an already-confirmed threat disappears or changes identity — never silently drop an assessment</li><li>Parser-generated node ids are likewise stable/content-derived, not timestamp-based, so every keystroke doesn't rewrite unrelated parts of the persisted project file</li></ul></div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">03</span><h2 class="sec-title">Feasibility &amp; the dual likelihood model</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li><code>LikelihoodModel = "feasibility-only" | "feasibility-x-motivation"</code> — project-wide, bound to the ISO/Standard mode chip. In ISO 21434 mode, feasibility alone <em>is</em> the likelihood axis (3.1.29); attacker motivation/benefit is deliberately excluded from the number (unattributable, and a license to argue a risk away) but is still parsed and used for path plausibility, ordering, and CRA "reasonably foreseeable misuse" reasoning. In IEC 62443/classic mode, benefit counts toward likelihood alongside feasibility</li><li><code>FeasibilityMethod = "quick" | "attack-potential" | "cvss" | "attack-vector"</code>, recorded project-wide on <code>AttackTreeProjectConfiguration.feasibilityConfiguration</code> and printed in the report — a mixed-method TARA isn't comparable and is an audit finding</li><li>ISO mode's validator enforces an <em>implemented, audit-grade RC-15-11 method</em> (today: attack-potential per Annex G.2 — elapsed time, expertise, knowledge, window of opportunity, equipment); the quick <code>f,b,i</code> / <code>p,i</code> DSL forms are rejected as syntax errors in ISO mode, not warnings — narrowing is keyed off the project's <code>FeasibilityConfiguration</code> and only fires on explicit opt-in, so an unconfigured project (and the bundled templates) default to Standard and are never rejected</li><li>Gate aggregation follows the <em>quantity</em>, not a config switch, and is deliberately not user-configurable: attack potential (effort) sums under AND, takes the minimum under OR; probability multiplies under AND, unions under OR; a bare ordinal level (no number behind it) takes the bottleneck (min/max) — applying min() to attack potential would claim two weeks of work plus two weeks equals two weeks, which is a math error, not a conservative default. Banding to a <code>FeasibilityLevel</code> happens once, at the end, on the raw aggregated quantity — never band-then-aggregate</li><li>Mixing methods under one gate (an attack-potential child next to a quick-mode child) is a calculator error, not a silently invented number</li></ul></div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">04</span><h2 class="sec-title">Impact — shared with STRIDE</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>Impact is anchored to (Asset × Security Goal), identically in both likelihood modes — a confidentiality loss and an availability loss on the same asset can carry different impact, matching ISO 21434 3.1.22/3.1.24's damage-scenario definition and IEC 62443's consequence analysis</li><li>The tree contributes <em>likelihood only</em>; a leaf's impact never enters the risk — impact belongs to the (asset × goal) damage scenario, not to a tree node, or the one shared impact would fork per leaf</li><li>Impact aggregates by category via MAX across contributing criteria, never averaged — one severe criterion (e.g. safety) can't be diluted into a mild-looking mean</li></ul></div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">05</span><h2 class="sec-title">Sync into the Risk register</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>The tree's likelihood contribution is written by a dedicated <code>syncRisksFromAttackTrees</code> pass, chained after <code>syncRisksFromThreats</code> — not routed through the threat sync, whose <code>reconcileFactorRatings</code> rebuilds factors from enabled <code>activeFactors</code> and would discard it; <code>source: "attack-tree"</code> factor ratings are explicitly exempted from that rebuild</li><li>Asset-anchored trees emit risk contribution per path; threat-anchored trees aggregate into the referenced threat's existing risk; an unrated path contributes nothing</li><li>Both anchors and both likelihood modes feed risk — treatment (accept/mitigate/won't-fix) lives entirely in the Risk tab, the tree stays a before-mitigation instrument</li><li>Emission is fully manual: every rated path is a candidate the analyst confirms, dismisses, or leaves uncertain directly in the assessment dialog — there is no automatic "cheapest path per goal" pre-selection</li></ul></div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">06</span><h2 class="sec-title">Where mitigations live</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li><strong>Attack Tree owns</strong> where a mitigation bites — which node, which paths it eliminates, what becomes the next-cheapest path; the Risk tab only mirrors this read-only</li><li><strong>Risks owns</strong> whether the risk is accepted — treatment, MoSCoW, residual sign-off, ticket, verification; the tree mirrors <code>MitigationStatus</code> / <code>ticketId</code> read-only via <code>extractMitigationReferences</code></li><li>"Risk after mitigation" = feasibility of the cheapest path counting only mitigations marked <code>implemented</code>/<code>verified</code> — computed by the tree, displayed by the Risk tab</li></ul></div>
+  </section>
+
+  <footer>
+    <div class="foot-row">
+      <span class="foot-meta">TARAflow — Dev — Attack Tree</span>
+      <div style="display:flex;gap:20px"><a class="foot-link" href="risks-dev.html">Next: Risk Engine →</a><a class="foot-link" href="threats-dev.html">← Threat Generator</a></div>
+    </div>
+  </footer>
+</div>
+<script>
+  const io = new IntersectionObserver((e) => { e.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body></html>

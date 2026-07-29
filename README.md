@@ -42,11 +42,12 @@ TARAflow treats the assessment as a **connected graph** so that traceability is 
 
 - **Graph-based modeling** — assets, data flows and threats live in a connected graph; relationships are first-class.
 - **DFD-driven threat generation** — draw or import a data-flow diagram; STRIDE threats are proposed per element and per interaction.
+- **Attack-tree threat modeling** — a third threat generator alongside per-element/per-interaction STRIDE: model attacker paths as trees, feasibility-rated per ISO 21434 Annex G or IEC 62443, synced into the risk register with full provenance.
+- **Hazard identification (Bowtie)** — a dedicated safety-analysis workflow feeding physical impact and safety-override rules directly into the risk model.
 - **Quantified risk** — impact × likelihood scoring with configurable factor sets (OWASP, ETSI, EN 50742) and threshold-based risk levels.
-- **Native safety–security integration** — physical impact and safety-override rules feed directly into the risk model.
 - **Asset-aware impact** — per-criterion impact ratings flow from assets into the risk assessment.
 - **Mitigation &amp; verification tracking** — link controls to threats, track implementation progress, tie each mitigation to a verification.
-- **Audit-ready documentation** — generate output that maps cleanly to the standards below.
+- **Audit-ready documentation** — Markdown, AsciiDoc, HTML, PDF and StrictDoc output that maps cleanly to the standards below, generated from the app or headless via a CLI for CI/CD pipelines.
 
 ## Standards &amp; regulatory alignment
 
@@ -74,7 +75,7 @@ TARAflow treats the assessment as a **connected graph** so that traceability is 
 | UI | [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) |
 | Diagramming | draw.io / mxGraph integration for DFD editing |
 | Visualization | D3.js (attack trees &amp; graph views) |
-| Documentation export | Markdown / AsciiDoc / PDF |
+| Documentation export | Markdown / AsciiDoc / HTML / PDF / StrictDoc |
 | i18n | Namespaced translation files (EN / DE) |
 
 > The stack is documented here for transparency; the source itself follows once transferred.
@@ -84,7 +85,7 @@ TARAflow treats the assessment as a **connected graph** so that traceability is 
 > Indicative and subject to change as the project matures.
 
 - [ ] **Public code transfer** — move the stable codebase into this repository
-- [ ] **First tagged release** — installable desktop builds
+- [x] **First tagged release** — installable desktop builds ([latest: v0.7.0-alpha](https://github.com/TARAflow/TARAflow.github.io/releases/latest), Windows/Linux/macOS)
 - [ ] **Reference example** — end-to-end worked case (DFD → threats → risk → mitigation)
 - [ ] **Documentation site** — methodology guide and user manual
 - [ ] **Standards mapping appendix** — explicit clause-level references for IEC 62443 / ISO 21434 / CRA

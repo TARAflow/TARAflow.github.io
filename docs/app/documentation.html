@@ -10,9 +10,9 @@
 <div class="bg-layer"><div class="bg-grid"></div><div class="bg-glow"></div></div>
 <div class="wrap">
   <header class="topbar">
-    <a class="brand" href="../index.html"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="5" cy="13" r="3" stroke="#36e2b4" stroke-width="1.6"/><circle cx="21" cy="6" r="3" stroke="#1ea7d6" stroke-width="1.6"/><circle cx="21" cy="20" r="3" stroke="#1ea7d6" stroke-width="1.6"/><path d="M7.6 11.5L18.4 7M7.6 14.5L18.4 19" stroke="#45505f" stroke-width="1.4"/></svg> TARAflow</a>
+    <a class="brand" href="../../index.html"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="5" cy="13" r="3" stroke="#36e2b4" stroke-width="1.6"/><circle cx="21" cy="6" r="3" stroke="#1ea7d6" stroke-width="1.6"/><circle cx="21" cy="20" r="3" stroke="#1ea7d6" stroke-width="1.6"/><path d="M7.6 11.5L18.4 7M7.6 14.5L18.4 19" stroke="#45505f" stroke-width="1.4"/></svg> TARAflow</a>
     <nav class="nav">
-      <a href="../index.html">Overview</a>
+      <a href="../../index.html">Overview</a>
       <a href="../method.html">Methodology</a>
       <a href="index.html" class="active">App</a>
       <a href="../developers/index.html">Developers</a>
@@ -21,23 +21,27 @@
     </nav>
   </header>
   <div class="page-head">
-    <div class="eyebrow">App / 07</div>
+    <div class="eyebrow">App / 08</div>
     <h1>Documentation Export</h1>
     <p>Generate audit-ready documentation from the live TARA model. Every export includes full traceability from mitigation back to the originating DFD element.</p>
   </div>
   
   <section>
     <div class="sec-head reveal"><span class="sec-num">01</span><h2 class="sec-title">Export Formats</h2></div>
-    <div class="reveal"><ul class="bullet-list"><li>PDF — formatted report suitable for submission to auditors or customers</li><li>HTML — interactive report with cross-links</li><li>AsciiDoc — source for integration into product documentation</li><li>Markdown — GitHub-compatible, CI-friendly</li></ul></div>
+    <div class="reveal"><ul class="bullet-list"><li>PDF — formatted report suitable for submission to auditors or customers</li><li>HTML — interactive report with cross-links</li><li>AsciiDoc — source for integration into product documentation</li><li>Markdown — GitHub-compatible, CI-friendly</li><li>StrictDoc (.sdoc) — structured requirements-engineering format for toolchains built around it</li></ul></div>
   </section>
   <section>
     <div class="sec-head reveal"><span class="sec-num">02</span><h2 class="sec-title">Traceability</h2></div>
     <div class="reveal"><ul class="bullet-list"><li>Every mitigation links to the threat it addresses</li><li>Every threat links to the DFD element and asset it originates from</li><li>Every verification links to the mitigation it validates</li><li>Norm references included per mitigation (IEC 62443 CR, ISO 21434, CRA article)</li></ul></div>
   </section>
+  <section>
+    <div class="sec-head reveal"><span class="sec-num">03</span><h2 class="sec-title">Headless generation (CLI)</h2></div>
+    <div class="reveal"><ul class="bullet-list"><li>The same Markdown, AsciiDoc, HTML, PDF and StrictDoc output can be generated from the command line, without the desktop app or Electron — built for CI/CD pipelines (e.g. Jenkins) and Docker/Podman containers</li><li>Reads a saved <code>.tara.json</code> project file directly; no project needs to be open in the UI</li><li>Distributed as a standalone <code>.deb</code> package, decoupled from the desktop installer</li></ul></div>
+  </section>
   <footer>
     <div class="foot-row">
       <span class="foot-meta">TARAflow — App — Documentation</span>
-      <div style="display:flex;gap:20px"><a class="foot-link" href="audit.html">Next: Audit Trail →</a><a class="foot-link" href="attacktree.html">← Attack Tree</a></div>
+      <div style="display:flex;gap:20px"><a class="foot-link" href="audit.html">Next: Audit Trail →</a><a class="foot-link" href="risks.html">← Risk Assessment</a></div>
     </div>
   </footer>
 </div>
