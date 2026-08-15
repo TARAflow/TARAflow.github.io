@@ -1,0 +1,56 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Hazard Identification"
+description: "An optional safety-analysis tab, alongside the security workflow: model each hazard as a Bowtie and triage which hazards a cyberattack can actually reach."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 02</div>
+  <h1>Hazard Identification</h1>
+  <p>An optional safety-analysis tab, alongside the security workflow: model each hazard as a Bowtie — contributing causes on the left, the hazard with its gate in the middle, endangered safety goals on the right — and triage which hazards a cyberattack can actually reach.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Enabling the tab</h2></div>
+  <ul class="bullet-list">
+    <li>Off by default — a project only gets a Hazard tab once marked safety-relevant via the switch in the Overview tab (below the Criticality switch)</li>
+    <li>Existing projects are unaffected; no migration required</li>
+    <li>When enabled, Hazard also joins the Overview progress bar alongside the other phases</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">The Bowtie model</h2></div>
+  <p style="color:var(--ink-dim);font-size:0.92rem;margin-bottom:16px;max-width:640px;">Each hazard item is a Bowtie: assets that <strong>contribute to</strong> it on the left, the hazard with a combination gate in the middle, and safety goals it <strong>endangers</strong> on the right.</p>
+  <ul class="bullet-list">
+    <li><strong>Causes</strong> — contributing assets, each rated direct or indirect and (optionally) by hazard distance</li>
+    <li><strong>Gate</strong> — <code>combinationType</code>: <em>ANY</em> (OR — a single cause is enough) or <em>ALL</em> (AND — causes must combine); only meaningful once a hazard has two or more causes</li>
+    <li><strong>Targets</strong> — endangered safety goals, each rated on a severity scale specific to its target type (human / environment / infrastructure)</li>
+    <li>Assets can be created inline from the Bowtie editor without leaving the dialog</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Review workflow</h2></div>
+  <ul class="bullet-list">
+    <li>A master-detail review workspace, not a plain edit dialog: a sidebar lists every hazard with its review status and completeness, the detail pane holds the decision and the Bowtie</li>
+    <li>Every hazard is first triaged on one question — <em>is this reachable by a cyberattack?</em> — answered as in scope, out of scope (with a required reason), or unknown</li>
+    <li>Only in-scope hazards need a Bowtie modeled; out-of-scope hazards stay in the safety record but are excluded from threat derivation, never deleted</li>
+    <li>Commit-on-close: there is no separate Save button — closing the dialog (OK, Escape, or clicking outside) commits the draft</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Import</h2></div>
+  <ul class="bullet-list">
+    <li>Bring in hazards from an existing safety analysis (CSV, Excel/ODS, or a TARAflow JSON export) via a profile-based importer with an interactive column-mapping dialog</li>
+    <li>Affected-persons data is bridged into deduplicated human assets with structured, per-role severity — not collapsed into one flat rating</li>
+    <li>Provenance from the source file (extra columns that don't map to a known field) is retained on the imported item</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/overview.html' | relative_url }}">← Overview</a>
+  <a href="{{ '/app/dfd.html' | relative_url }}">Next: DFD Modeling →</a>
+</div>

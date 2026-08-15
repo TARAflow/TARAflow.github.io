@@ -1,0 +1,64 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Dev — CLI Report Generator"
+description: "taraflow-report — a headless entry point that generates the exact same documentation as the Documentation tab, from a saved .tara.json file, with no UI and no Electron."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developers / 09</div>
+  <h1>CLI Report Generator</h1>
+  <p><code>taraflow-report</code> — a headless entry point that generates the exact same documentation as the Documentation tab, from a saved <code>.tara.json</code> file, with no UI and no Electron. Built for CI/CD pipelines and containers where launching the desktop app isn't practical.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Entry-point separation, not a runtime switch</h2></div>
+  <ul class="bullet-list">
+    <li>Two independent entry points share only the pure generation core: <code>main.tsx</code> (Electron/browser renderer) and <code>bin/taraflow-report.ts</code> (plain Node) — there is no branch in <code>main.tsx</code>/<code>app.tsx</code> that decides "am I headless?"</li>
+    <li><strong>The purity boundary (invariant):</strong> no module in the generation path (<code>features/documentation/{models,utils}/**</code>) may import a feature barrel (<code>features/*/index.ts</code>), <code>react</code>, <code>react-dom</code>, <code>@mui/*</code>, draw.io, or any module with a top-level <code>window</code>/<code>document</code> reference. <code>import type</code> edges are exempt — they're erased at build time and carry no runtime weight</li>
+    <li>The boundary is enforced with a <code>dependency-cruiser</code> rule (<code>tools/depcruise-doc.cjs</code>), introduced as a warning first and promoted to a CI-failing error once the existing barrel imports are cleaned up</li>
+    <li>The renderer's own PDF path (<code>pdf-generator-renderer.ts</code>, window/IPC-based) and the UI's <code>doc-generator.ts</code> factory are never touched — the CLI gets its own factory (<code>cli-generators.ts</code>) that imports the four pure generators directly, never through the barrel that would drag in the renderer's PDF module</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">What changes vs. what's additive</h2></div>
+  <ul class="bullet-list">
+    <li>Exactly one category of change touches existing files: swapping barrel imports for deep-path imports in the generation path (e.g. DFD formatters, risk mitigation helpers, threat catalog resolvers, shared tag utilities) — runtime-identical, the renderer resolves the same functions as before</li>
+    <li>Everything else is additive: new files under <code>bin/</code> (CLI entry, arg parsing) and <code>cli/</code> (Node-side i18n init, project loader, <code>Project → DocProjectData</code> mapper)</li>
+    <li>The i18n singleton is reused as-is in Node once initialized with a filesystem resource backend instead of the browser's — namespaces actually used by templates/mappers must all be registered, or raw i18n keys leak into the report instead of labels</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Loading a project outside the app</h2></div>
+  <ul class="bullet-list">
+    <li>No <code>storage-service</code> dependency (that's Electron/browser-coupled) — a plain <code>fs.readFile</code> + <code>JSON.parse</code>, followed by the same schema migrations the app runs on load (risk data, asset configuration, factor ratings)</li>
+    <li>The project's <code>computed</code> maps (e.g. <code>impactLabels</code>) must be present as empty <code>Map</code>s, never <code>undefined</code> — the base generator accesses them with a nullish-coalescing fallback on the value, not on the map itself</li>
+    <li><code>attackTree</code> (singular, in <code>DocProjectData</code>) maps from <code>project.attackTrees</code> (plural) — a naming mismatch worth knowing about before it causes a silent empty section</li>
+    <li>The on-disk DFD thumbnail is already a base64 SVG — reports embed it directly, no headless draw.io instance needed</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Build &amp; packaging</h2></div>
+  <ul class="bullet-list">
+    <li>Its own <code>tsconfig.cli.json</code> (extends the base config) keeps the renderer's build untouched; path aliases (<code>features/*</code>, <code>shared</code>, <code>i18n</code>) are resolved via <code>tsx</code> + <code>tsconfig-paths</code>, or bundled with <code>esbuild --platform=node</code> using an alias plugin mirroring the same <code>tsconfig</code> paths</li>
+    <li>Distributed as a standalone <code>.deb</code> package (depends only on <code>nodejs</code>), decoupled from the Electron desktop installer — installs <code>taraflow-report</code> straight to <code>/usr/bin</code></li>
+    <li>PDF output reuses the already-present <code>puppeteer</code> dependency directly in Node (HTML string → Puppeteer → PDF), deliberately not the renderer's Canvas-based PNG path — the DFD thumbnail SVG is embedded in the HTML and rasterized by Puppeteer</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">CI guardrail</h2></div>
+  <ul class="bullet-list">
+    <li>The <code>dependency-cruiser</code> rule runs as a hard CI failure: any reintroduced barrel/<code>react</code>/draw.io import in the generation path breaks the build immediately, not just a lint warning</li>
+    <li>A smoke test generates a report from a fixture project and asserts the output is non-empty and contains the expected chapter titles</li>
+    <li>The CLI binary itself runs against that fixture as a CI job, not just its library code in isolation</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/developers/integration-dev.html' | relative_url }}">← Integrations</a>
+  <span></span>
+</div>

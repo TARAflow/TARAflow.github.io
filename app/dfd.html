@@ -1,0 +1,42 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — DFD Modeling"
+description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-flow diagram, then parametrize each element with type, technology, protocol, and security properties."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 03</div>
+  <h1>DFD Modeling</h1>
+  <p>TARAflow uses draw.io as its DFD editor. Import or draw your data-flow diagram, then parametrize each element with type, technology, protocol, and security properties.</p>
+</div>
+
+<section id="element-types">
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Element Types</h2></div>
+  <div class="card-grid-2">
+    <div class="card"><div class="tag-label">Process [P-xx]</div><h3>Process</h3><p>Software component, service, or controller. Properties: technology (bootloader, rtos_task, driver, protocol_stack), malwareProtection, accountManagement.</p></div>
+    <div class="card"><div class="tag-label">DataStore [DS-xx]</div><h3>DataStore</h3><p>Persistent storage. Properties: technology (flash, eeprom, ram, database), encryption, backupMechanism.</p></div>
+    <div class="card"><div class="tag-label">DataFlow [DF-xx]</div><h3>DataFlow</h3><p>Communication channel. Properties: protocol, encryptionInTransit, location (field_cable, on_board), safetyFunction, accessMode.</p></div>
+    <div class="card"><div class="tag-label">ExternalEntity [EE-xx]</div><h3>ExternalEntity</h3><p>Actor outside the system boundary. Properties: entityType (human, external_system, sensor).</p></div>
+    <div class="card"><div class="tag-label">TrustBoundary [TB-xx]</div><h3>TrustBoundary</h3><p>Logical security zone boundary. Threats are generated at crossing points.</p></div>
+    <div class="card"><div class="tag-label">PhysicalBoundary [PB-xx]</div><h3>PhysicalBoundary</h3><p>Physical enclosure boundary. Properties: tamperProtection, physicalAccessControl, physicalMobility.</p></div>
+    <div class="card"><div class="tag-label">ChipBoundary [CB-xx]</div><h3>ChipBoundary</h3><p>Hardware security boundary. Properties: chipType, debugInterfaceLocked, sideChannelProtection, cryptoStandard.</p></div>
+    <div class="card"><div class="tag-label">Interface [IF-xx]</div><h3>Interface / PhysicalInterface</h3><p>Physical or logical interface port. Properties: implementedControls (logicalAccessControl, debugProtection, physicalAccessProtection, abuseProtection, monitoringControl).</p></div>
+  </div>
+</section>
+
+<section id="completeness">
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">DFD Completeness Rules</h2></div>
+  <ul class="bullet-list">
+    <li>All system components, data flows, and trust boundaries must be present</li>
+    <li>All elements must be named and numbered (P-xx, DS-xx, DF-xx, EE-xx)</li>
+    <li>Assets and Interfaces must be placed on the correct elements</li>
+    <li>Consistent with architecture — version-controlled in repository</li>
+    <li>Re-assessment trigger when context or architecture changes</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/hazard.html' | relative_url }}">← Hazard Identification</a>
+  <a href="{{ '/app/assets.html' | relative_url }}">Next: Assets →</a>
+</div>

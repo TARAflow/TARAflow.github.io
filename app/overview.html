@@ -1,0 +1,34 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Overview & Setup"
+description: "Create a project, set the system context, choose criticality, and configure regulatory tags. These settings drive template filtering and report generation throughout the assessment."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 01</div>
+  <h1>Overview &amp; Setup</h1>
+  <p>Create a project, set the system context, choose criticality, and configure regulatory tags. These settings drive template filtering and report generation throughout the assessment.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Project Setup</h2></div>
+  <ul class="bullet-list">
+    <li>Project name, version, and responsible roles</li>
+    <li>System description — scope and deployment context</li>
+    <li>Criticality: standard or critical system (affects workflow variant selection)</li>
+    <li>Industry tags: OT, Medical, Automotive, IoT, Cloud</li>
+    <li>Platform tags: Embedded, Linux, RTOS, Bare-Metal, Cloud, Mobile</li>
+    <li>Regulatory tags: IEC 62443, ISO 21434, CRA, EN 50742 — drive mitigation catalog filtering</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Context Profile</h2></div>
+  <p style="font-size:0.92rem;color:var(--ink-dim);max-width:640px;">The context profile is used throughout the assessment: platform tags filter embedded-specific threat templates; regulatory tags surface norm-relevant mitigations; criticality determines whether Variant A (STRIDE-first) or Variant B (Attack-Tree-first) is the default workflow.</p>
+</section>
+
+<div class="foot-nav">
+  <span></span>
+  <a href="{{ '/app/hazard.html' | relative_url }}">Next: Hazard Identification →</a>
+</div>

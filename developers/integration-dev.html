@@ -1,0 +1,37 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Dev — Integrations"
+description: "Ticket adapter pattern for Jira, ADO, GitHub Issues, and future systems."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developers / 08</div>
+  <h1>Integrations</h1>
+  <p>Ticket adapter pattern for Jira, ADO, GitHub Issues, and future systems.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">ITicketAdapter</h2></div>
+  <ul class="bullet-list">
+    <li>Interface: createTicket(mitigation) → TicketRef, getTicketStatus(ref) → Status, updateTicket(ref, patch)</li>
+    <li>BaseTicketAdapter: shared credential resolution via keytar, error handling, retry</li>
+    <li>JiraAdapter, ADOAdapter, GitHubAdapter — concrete implementations</li>
+    <li>Polarion, GitLab adapters: planned via same interface</li>
+    <li>No plaintext secrets — credentials stored in OS keychain via keytar</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">RichText Ticket Cards</h2></div>
+  <ul class="bullet-list">
+    <li>Ticket body is generated from a template: threat description, risk level, mitigation text, verification criteria, DFD element reference, norm references</li>
+    <li>POST body assembled in the adapter — Jira uses Atlassian Document Format (ADF), ADO uses HTML, GitHub uses Markdown</li>
+    <li>Ticket ID and URL stored back on MitigationDraft.ticketRef for status sync</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/developers/risks-dev.html' | relative_url }}">← Risk Engine</a>
+  <a href="{{ '/developers/cli-report-dev.html' | relative_url }}">Next: CLI Report Generator →</a>
+</div>

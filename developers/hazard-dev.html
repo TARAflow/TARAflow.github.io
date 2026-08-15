@@ -1,0 +1,67 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Dev — Hazard Model"
+description: "Data model, sync boundary with the DFD/Asset stores, and the review-workspace UI for the optional safety-analysis tab."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developers / 03</div>
+  <h1>Hazard Model</h1>
+  <p>Data model, sync boundary with the DFD/Asset stores, and the review-workspace UI for the optional safety-analysis tab.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Data model</h2></div>
+  <ul class="bullet-list">
+    <li><code>HazardItem</code> (<code>shared/models/hazard-types.ts</code>) — lean; relations stored separately as <code>ContributesToRelation</code> / <code>EndangersRelation</code> (a <code>HazardRelation</code> union), joined by branded <code>HazardItemId</code></li>
+    <li><code>HazardCombinationType</code> — <code>ANY</code> (OR, default) | <code>ALL</code> (AND) — the Bowtie gate; only meaningful with ≥2 contributing causes</li>
+    <li><code>HazardImpact</code> (<code>shared/models/hazard-impact.ts</code>) — discriminated union over <code>human | environment | infrastructure</code>, each with its own severity scale (<code>SEVERITY_SCALE_BY_TARGET</code>); <code>HumanHarmSeverity = Exclude&lt;SafetyImpact,"none"&gt;</code></li>
+    <li>Asset references on relations are plain <code>AssetReference.id</code> strings, not the branded asset id type</li>
+    <li><code>Project.hazards: HazardData | null</code> — <code>HazardData = { hazards, relations, lastModified, configuration? }</code>; <code>null</code> for pre-existing / non-safety projects, no migration required</li>
+    <li>Schema v2 inserted Hazard as its own <code>PhaseId</code> (id 1) — all later phase ids shifted; every call site references phases via <code>PhaseId.X</code>, never a bare literal</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Gating &amp; progress</h2></div>
+  <ul class="bullet-list">
+    <li>Gate flag lives in <code>ProjectInfoData.safetyRelevant</code> (not a separate settings object), toggled via a switch in the Overview tab; default <code>false</code></li>
+    <li>Tab visibility: filtered out of <code>phase-tab-bar</code>'s workflow sort when off, with a render-guard + redirect to Overview in <code>workspace-layout</code> as a second line of defense</li>
+    <li><code>PROGRESS_PHASE_IDS</code> / <code>getProgressPhaseIds(safetyRelevant)</code> in <code>phase-types.ts</code> is the single source of truth for which phases count toward the progress bar — Hazard only counts when the toggle is on; Documentation/Audit/Integration are excluded from all workflows</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Asset creation &amp; the DFD sync boundary</h2></div>
+  <ul class="bullet-list">
+    <li>No separate <code>AssetStore</code> — <code>dfd.assets</code> stays the canonical store; asset creation from the Hazard tab goes through a shared pure primitive, <code>shared/services/asset-creation.ts</code></li>
+    <li>Bowtie <code>onSave(draft, sessionAssets)</code> buffers created assets on the tab (<code>pendingCreatedAssets</code>) until autosave folds them into <code>dfd.assets</code> via <code>addCreatedAssets</code> (<code>features/dfd/services/dfd-asset-creation.ts</code>); dialog-cancel discards the buffered assets, no leak</li>
+    <li><strong>Known sharp edge:</strong> the Hazard write path bypasses the normal DFD→Assets sync (<code>syncFromDFD</code>) unless <code>workspace-layout</code>'s <code>handleHazardsUpdate</code> explicitly re-invokes it after <code>addCreatedAssets</code> — two stores (<code>project.dfd.assets</code> / <code>project.assets.assets</code>) exist today, which is the interim state pending a tracked single-source-of-truth consolidation</li>
+    <li><code>environment</code> is a 9th <code>AssetGroup</code> (prefix <code>EN</code>), added specifically to give hazard causes/targets outside the DFD (e.g. ambient conditions) somewhere to live</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Review workspace</h2></div>
+  <ul class="bullet-list">
+    <li><code>hazard-dialog.tsx</code> is a master-detail review workspace, not a single edit form — a sidebar over every hazard, a detail pane with the scope decision, hazard fields, and a Bowtie editor</li>
+    <li><code>systemRelevance: "in_scope" | "out_of_scope" | "unknown"</code> is the hazard-level rollup that gates whether a Bowtie needs modeling — it is the coarse, hazard-level counterpart to the still-parked edge-level Security-Safety Independence analysis (Phase 6), vocabulary-compatible with it</li>
+    <li>Progressive disclosure: hazard fields are always visible; the Bowtie collapses (not disabled) until scope is <code>in_scope</code></li>
+    <li>No Save/Cancel — commit-on-close: OK, Escape, and backdrop click all call a single <code>commitAndClose</code>; a missing required label closes without persisting</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Import bridge</h2></div>
+  <ul class="bullet-list">
+    <li>Profile-based, format-agnostic: CSV (<code>papaparse</code>), XLSX/XLSM/XLS/ODS (SheetJS <code>xlsx</code>), and a native TARAflow-JSON adapter, all registered against one <code>CanonicalField</code> contract in <code>safety-hazard-importer.ts</code></li>
+    <li><code>hazard-bridge.ts</code> maps legacy <code>SafetyHazard</code> records into the native graph — <code>affectedPersons</code> becomes deduplicated human assets connected via structured, per-role <code>endangers</code> edges (<code>SEVERITY_TO_HUMAN</code>), deliberately not a single flattened severity value</li>
+    <li>Unrecognized source columns are retained as <code>importMeta</code> (provenance), not dropped</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/developers/dfd-dev.html' | relative_url }}">← DFD Engine</a>
+  <a href="{{ '/developers/assets-dev.html' | relative_url }}">Next: Asset Model →</a>
+</div>

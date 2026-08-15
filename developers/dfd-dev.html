@@ -1,0 +1,39 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Dev — DFD Engine"
+description: "The DFD engine bridges draw.io XML to the typed graph model used by the threat generator."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developers / 02</div>
+  <h1>DFD Engine</h1>
+  <p>The DFD engine bridges draw.io XML to the typed graph model used by the threat generator.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">DFDGraphReference</h2></div>
+  <ul class="bullet-list">
+    <li>elementsById: Map&lt;string, DFDElementReference&gt; — all elements by ID</li>
+    <li>connectionsById: Map&lt;string, DFDConnectionReference&gt; — all DataFlows by ID</li>
+    <li>effectiveElementTrustBoundary: Map&lt;string, string&gt; — innermost TB per element (prevents duplicates in nested TBs)</li>
+    <li>elementPhysicalBoundaries, elementChipBoundaries — PB/CB membership maps</li>
+    <li>chipBoundaryElements, physicalBoundaryElements — reverse maps</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">toReferenceGraph()</h2></div>
+  <ul class="bullet-list">
+    <li>Parses draw.io XML via the bridge IPC channel</li>
+    <li>Resolves parent IDs to determine TB/PB/CB membership geometrically</li>
+    <li>Maps element.properties from draw.io custom properties to typed DFDElementReference.properties</li>
+    <li>Computes effectiveElementTrustBoundary using the innermost-TB rule</li>
+    <li>Called in workspace-layout.tsx; result stored as project.dfdGraph</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/developers/architecture.html' | relative_url }}">← Architecture</a>
+  <a href="{{ '/developers/hazard-dev.html' | relative_url }}">Next: Hazard Model →</a>
+</div>

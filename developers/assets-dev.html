@@ -1,0 +1,37 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Dev — Asset Model"
+description: "The asset model uses a discriminated union for typed asset properties and an auto-derivation engine for CIANAAA security goals."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developers / 04</div>
+  <h1>Asset Model</h1>
+  <p>The asset model uses a discriminated union for typed asset properties and an auto-derivation engine for CIANAAA security goals.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">AssetProperties</h2></div>
+  <ul class="bullet-list">
+    <li>Discriminated union on assetType: data | function | system | physical | service | process</li>
+    <li>Each type carries type-specific properties (e.g. DataAsset: dataClassification, encryptionRequired)</li>
+    <li>Common base: id, name, description, linkedElementIds[], securityGoals[] (CIANAAA)</li>
+    <li>Impact factors: financial, operational, regulatory, recoverability — drive initialImpact</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">CIANAAA Derivation</h2></div>
+  <ul class="bullet-list">
+    <li>Each asset has securityGoals[]: { type: CIANAAAGoal, level: CIANAAALevel }</li>
+    <li>level ≠ none → goal is active → contributes to STRIDE category set via CIANAAA_TO_STRIDE</li>
+    <li>maxLevel() across active goals for a STRIDE category → initialImpact on threat</li>
+    <li>Asset-to-element sync: bidirectional — element changes propagate to asset linkedElementIds</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/developers/hazard-dev.html' | relative_url }}">← Hazard Model</a>
+  <a href="{{ '/developers/threats-dev.html' | relative_url }}">Next: Threat Generator →</a>
+</div>

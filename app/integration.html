@@ -1,0 +1,37 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Integrations"
+description: "Export mitigations as tickets to Jira, Azure DevOps, or GitHub Issues. Receive status updates when tickets are closed and reflect them back in the risk model."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 10</div>
+  <h1>Integrations</h1>
+  <p>Export mitigations as tickets to Jira, Azure DevOps, or GitHub Issues. Receive status updates when tickets are closed and reflect them back in the risk model.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Supported Systems</h2></div>
+  <ul class="bullet-list">
+    <li>Jira — project and issue type configurable, rich text description, custom fields</li>
+    <li>Azure DevOps — work item creation with area path and iteration</li>
+    <li>GitHub Issues — label mapping, milestone assignment</li>
+    <li>Polarion (planned)</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Workflow</h2></div>
+  <ul class="bullet-list">
+    <li>Select mitigations from the risk table and export as tickets</li>
+    <li>Ticket includes: threat description, risk level, proposed mitigation, verification criteria, DFD reference</li>
+    <li>Status sync: when ticket is closed, mitigation is marked implemented in TARAflow</li>
+    <li>Credential storage via system keychain (keytar) — no plaintext secrets in project files</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/audit.html' | relative_url }}">← Audit Trail</a>
+  <span></span>
+</div>

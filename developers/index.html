@@ -1,0 +1,27 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Developers"
+description: "Technical reference for contributors and integrators. Covers the application architecture, threat generator pipeline, catalog structure, i18n system, and extension points."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developer Docs</div>
+  <h1>TARAflow<br>Architecture</h1>
+  <p>Technical reference for contributors and integrators. Covers the application architecture, threat generator pipeline, catalog structure, i18n system, and extension points.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Sections</span><h2 class="sec-title">Developer Docs</h2></div>
+  <div class="module-grid">
+    <a class="module" href="{{ '/developers/architecture.html' | relative_url }}"><div class="module-num">Dev / 01</div><h3>Architecture</h3><p>Electron + React + TypeScript stack, feature modules, shared types, data flow.</p></a>
+    <a class="module" href="{{ '/developers/dfd-dev.html' | relative_url }}"><div class="module-num">Dev / 02</div><h3>DFD Engine</h3><p>Draw.io integration, DFDGraphReference, effectiveElementTrustBoundary, edge parsing.</p></a>
+    <a class="module" href="{{ '/developers/hazard-dev.html' | relative_url }}"><div class="module-num">Dev / 03</div><h3>Hazard Model</h3><p>HazardItem/Bowtie data model, DFD/Asset sync boundary, review-workspace UI, import bridge.</p></a>
+    <a class="module" href="{{ '/developers/assets-dev.html' | relative_url }}"><div class="module-num">Dev / 04</div><h3>Asset Model</h3><p>AssetProperties discriminated union, CIANAAA derivation engine, asset-to-element sync.</p></a>
+    <a class="module" href="{{ '/developers/threats-dev.html' | relative_url }}"><div class="module-num">Dev / 05</div><h3>Threat Generator</h3><p>UnifiedStrategy, catalog domain structure, i18n hierarchy, closed-loop mapper.</p></a>
+    <a class="module" href="{{ '/developers/attacktree-dev.html' | relative_url }}"><div class="module-num">Dev / 06</div><h3>Attack Tree</h3><p>Path identity, dual likelihood model (ISO 21434 / IEC 62443), gate aggregation, risk sync.</p></a>
+    <a class="module" href="{{ '/developers/risks-dev.html' | relative_url }}"><div class="module-num">Dev / 07</div><h3>Risk Engine</h3><p>Risk scoring, factor model, MoSCoW, before/after, RiskStatus architecture.</p></a>
+    <a class="module" href="{{ '/developers/integration-dev.html' | relative_url }}"><div class="module-num">Dev / 08</div><h3>Integrations</h3><p>ITicketAdapter pattern, Jira/ADO/GitHub adapters, keytar credential storage.</p></a>
+    <a class="module" href="{{ '/developers/cli-report-dev.html' | relative_url }}"><div class="module-num">Dev / 09</div><h3>CLI Report Generator</h3><p>Headless documentation generation, entry-point separation, the generation-path purity boundary.</p></a>
+  </div>
+</section>

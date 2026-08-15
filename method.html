@@ -1,0 +1,190 @@
+---
+layout: default
+title: "TARAflow — Methodology"
+description: "Asset relationships, the knowledge graph model, Hazard Items, Safety Annotation, and the four-phase methodology behind TARAflow."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Methodology</div>
+  <h1>Asset Relationships &amp; the Knowledge Graph</h1>
+  <p>TARAflow's graph has two connected levels: DFD elements linked by data flows, and assets linked both to those elements and to each other. This page covers how that graph is built, how Hazard Items and Safety Annotation extend it, and the four-phase methodology that uses it.</p>
+</div>
+
+<section id="two-levels">
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Two levels, one graph</h2></div>
+  <div class="code-block">Level 1:      DFD elements  --(Data Flows)--  DFD elements
+                   |  element-to-asset relationships (typed)
+Level 2:
+  Vertical    Data Assets           --,  static structure
+  (abstraction)  Function Assets    --|  (what / with what / where)
+                 System Assets      --|
+                 Infrastructure Assets|
+                                      |--(asset-to-asset relationships)--
+  Orthogonal  Process Assets        --|  dynamic context
+  (context)   Physical Assets       --|  (how / with what / who)
+              Service Assets        --|
+              Human Assets          --|
+              Environment Assets    --'  protection target (environment)
+
+  Hazard      Hazard Item  <--contributes_to-- Assets
+  (not an asset)           --endangers--> Human / Environment / Infrastructure</div>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin-top:14px;">Level 2 is a heterogeneous graph — which relationship types are allowed depends on the combination of source category × target category, the same principle as Level 1 where DFD element types (Process, DataStore, ExternalEntity...) have type-dependent connection rules.</p>
+</section>
+
+<section id="element-asset">
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Element-to-Asset: the Active-Impact model</h2></div>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:16px;">Every relationship between a DFD element and an asset follows one pattern: <strong>DFD element → acts on → Asset.</strong> Two perspectives make the threat analysis complete:</p>
+  <table class="stride-table" style="margin-bottom:18px;">
+    <thead><tr><th>Relationship</th><th>Focus</th><th>TARA relevance</th></tr></thead>
+    <tbody>
+      <tr><td class="tmono">uses</td><td class="tdim">Interaction</td><td class="tdim">Where is the attack vector? (Likelihood)</td></tr>
+      <tr><td class="tmono">depends_on</td><td class="tdim">Availability</td><td class="tdim">How severe is the damage on failure? (Impact)</td></tr>
+    </tbody>
+  </table>
+  <ul class="bullet-list">
+    <li><strong>uses</strong> (with qualifiers) — how could an attacker compromise the system through this element?</li>
+    <li><strong>depends_on</strong> — what cascading effects occur if this asset becomes unavailable?</li>
+  </ul>
+</section>
+
+<section id="is-an">
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">is_an — the exclusive, definitional relation</h2></div>
+  <ul class="bullet-list">
+    <li>A DFD element is either an instance of the asset (<code>is_an</code>) <strong>or</strong> it has impact relationships to the same asset — never both, to the same asset. Relationships to <em>other</em> assets remain unrestricted.</li>
+    <li>Formally: <code>is_an(A, X)</code> ⇒ no further relationships between A and X are allowed.</li>
+    <li>Not transitively inherited itself: <code>is_an(A, X)</code> does not inherit X's own relationships onto A.</li>
+    <li>Mathematically, <code>is_an</code> creates a logically unambiguous bridge used for transitive derivation elsewhere in the graph (see Phase 2 below).</li>
+  </ul>
+  <div class="notice-box">
+    <p><strong>Example:</strong> External Entity "Administrator" <code>is_an</code> Human Asset "System Admin Role" (no further relations to this asset allowed). Process "User Management" <code>creates</code> Data Asset "Admin Audit Logs" (not <code>is_an</code> — it's a byproduct of logging admin actions). Data Asset "Admin Audit Logs" then <code>affects_privacy</code> Human Asset "System Admin Role".</p>
+  </div>
+</section>
+
+<section id="categories">
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Asset categories &amp; abstraction hierarchy</h2></div>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:14px;">Four vertical categories form a static abstraction hierarchy — the higher the level, the less implementation detail is known or needed.</p>
+  <div class="code-block">Infrastructure    <- highest level, least precision (environment / arena)
+  | houses
+System            <- blackbox component (what does the Function provide?)
+  | realizes
+Function          <- capability (what must the system be able to do?)
+  | relies on
+Data              <- lowest level, highest precision (atomic values)</div>
+  <p style="font-size:0.88rem; color:var(--ink-dim); margin:14px 0;">Where an analyst enters the hierarchy determines their perspective — a product developer thinks in Function/Data, an integrator in System, an operator/CISO in Infrastructure. Same method, different scope.</p>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:10px;">Four orthogonal categories cut across every vertical level instead of sitting inside the hierarchy:</p>
+  <div class="card-grid-2">
+    <div class="card"><div class="tag-label">Process</div><h3>Orchestrator</h3><p>Temporal sequence of steps, a know-how asset — a manufacturing recipe, a GMP production instruction, a treatment protocol.</p></div>
+    <div class="card"><div class="tag-label">Physical</div><h3>Passive value</h3><p>A material asset with no embedded system — valuables, a museum painting, a prototype, a physical key.</p></div>
+    <div class="card"><div class="tag-label">Service</div><h3>External/internal</h3><p>A service outside the system's own boundary — a cloud service, an OTA update server, external maintenance.</p></div>
+    <div class="card"><div class="tag-label">Human</div><h3>Protection subject &amp; actor</h3><p>Operator, patient, administrator — both something to protect and someone who acts.</p></div>
+  </div>
+</section>
+
+<section id="function-vs-process">
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Function vs. Process</h2></div>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin-bottom:14px;">These two are frequently confused. Three questions decide it:</p>
+  <div class="code-block">1. Do you know the temporal order of the steps?
+   No -> Function
+
+2. Is the asset's value in the runtime sequence?
+   (would a sequencing attack or race condition be a relevant threat?)
+   No -> Function
+
+3. Is the flow instantiated at runtime?
+   (is there a concrete "running instance" that can be started/stopped?)
+   No -> Function
+   Yes -> Process</div>
+  <p style="font-size:0.86rem; color:var(--ink-mute); margin-top:12px;">Edge case: even simple, linear flows with no security-relevant sequencing are Process assets if they exist as a runtime instance (e.g. cronjobs, batch processes) — question 3 is what decides it.</p>
+</section>
+
+<section id="asset-to-asset">
+  <div class="sec-head"><span class="sec-tag">06</span><h2 class="sec-title">Asset-to-Asset: a two-tier ruleset</h2></div>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:14px;">Asset-to-asset relationships describe causality that exists independently of the data flow — safety, privacy and physical dependencies between assets that don't naturally express themselves through a DFD element.</p>
+  <ul class="bullet-list">
+    <li><strong>Core Rules</strong> — generic, domain-independent, built into the tool, analytically active (feeds STRIDE, Safety, criticality)</li>
+    <li><strong>Domain Extensions</strong> — domain-specific, configurable in the project profile or defined manually; documentary by default, optionally analytically active with a mandatory rationale</li>
+  </ul>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin:16px 0 8px;">Completeness is the goal of the rulebook, not of every model — a handful of <strong>core relationships</strong> cover most real projects:</p>
+  <table class="stride-table">
+    <thead><tr><th>Relationship</th><th>From → To</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td class="tmono">depends_on</td><td class="tdim">System/Service/Process → *</td><td class="tdim">Availability dependency (DoS)</td></tr>
+      <tr><td class="tmono">required_by</td><td class="tdim">Data → Process/Function</td><td class="tdim">Input dependency (Tampering)</td></tr>
+      <tr><td class="tmono">contributes_to</td><td class="tdim">Asset → Hazard Item</td><td class="tdim">Contribution to a hazard (carries relevance)</td></tr>
+      <tr><td class="tmono">endangers</td><td class="tdim">Hazard Item → Human/Environment/Infrastructure</td><td class="tdim">Endangers a protection target (carries impact)</td></tr>
+      <tr><td class="tmono">affects_privacy</td><td class="tdim">Data/Process → Human</td><td class="tdim">Privacy relevance</td></tr>
+      <tr><td class="tmono">configures</td><td class="tdim">Data → Function/System</td><td class="tdim">Configuration dependency</td></tr>
+      <tr><td class="tmono">runs_on</td><td class="tdim">Process → System</td><td class="tdim">Execution context</td></tr>
+      <tr><td class="tmono">implements</td><td class="tdim">System/Process → Function</td><td class="tdim">Architecture assignment</td></tr>
+      <tr><td class="tmono">hosted_on</td><td class="tdim">System → Infrastructure</td><td class="tdim">Physical embedding</td></tr>
+    </tbody>
+  </table>
+  <div class="notice-box">
+    <p><strong>Rule of thumb:</strong> <code>depends_on</code> = "if X fails, I fail too." <code>required_by</code> = "I need X as input to function." <code>consumed_by</code> = "X is transformed by me."</p>
+  </div>
+</section>
+
+<section id="hazard-item">
+  <div class="sec-head"><span class="sec-tag">07</span><h2 class="sec-title">Hazard Item — the explicit hazard node</h2></div>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:14px;">A Hazard Item is its own node type, on an orthogonal level alongside Physical, Process, Service, Human and Environment — but it is <strong>not an asset</strong>. An asset is something worth protecting; a Hazard Item is the hazard itself, the convergence point where one or more hazard-causing assets meet, and from which one or more protection targets are endangered.</p>
+  <div class="code-block">Asset --contributes_to [relevance]--> Hazard Item --endangers [impact]--> Protection target</div>
+  <ul class="bullet-list" style="margin:14px 0;">
+    <li><strong>contributes_to</strong> (Asset → Hazard Item) carries <code>relevance</code> (direct/indirect) — does this asset control or enable the physical action behind the hazard?</li>
+    <li><strong>endangers</strong> (Hazard Item → protection target) carries <code>impact</code> — what harm threatens the target?</li>
+  </ul>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin-bottom:10px;">The endangered target's type derives the impact dimension automatically:</p>
+  <table class="stride-table" style="margin-bottom:16px;">
+    <thead><tr><th>Target node</th><th>Derived dimension</th><th>Scale / norm</th></tr></thead>
+    <tbody>
+      <tr><td class="tmono">Human</td><td class="tdim">Safety</td><td class="tdim">reversible · irreversible · fatality (ISO 12100)</td></tr>
+      <tr><td class="tmono">Environment</td><td class="tdim">Environmental</td><td class="tdim">minor · moderate · severe (Seveso / environmental liability)</td></tr>
+      <tr><td class="tmono">Infrastructure</td><td class="tdim">Asset destruction</td><td class="tdim">minor · major · critical</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.9rem; color:var(--ink-dim);"><code>combinationType</code> decides how multiple contributing causes combine: <strong>ANY</strong> (default, OR-gate — a single cause is enough, e.g. over-pressure <em>or</em> over-heating → tank explosion) or <strong>ALL</strong> (AND-gate, combinatorial — e.g. sodium <em>and</em> water → exothermic reaction). Multiple <code>contributes_to</code> inputs never imply combinatorics automatically; it's always explicit via <code>combinationType</code>.</p>
+  <p style="font-size:0.88rem; color:var(--ink-mute); margin-top:12px;">The Hazard Item always exists in the data model, but isn't always shown: with exactly one derivable input it stays collapsed (the analyst just draws a direct <code>endangers</code> edge, and the tool creates the Hazard Item internally); a second <code>contributes_to</code> input on the same hazard automatically expands it, since the combinatorics need to be visible.</p>
+</section>
+
+<section id="safety-annotation">
+  <div class="sec-head"><span class="sec-tag">08</span><h2 class="sec-title">Safety Annotation Layer</h2></div>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:14px;">TARAflow integrates safety aspects through an optional annotation layer that introduces no new modeling logic — it enriches existing relationships with safety context.</p>
+  <ul class="bullet-list" style="margin-bottom:16px;">
+    <li><strong>Optional</strong> — only needed for safety-relevant systems</li>
+    <li><strong>Qualitative</strong> — explanatory ratings, no complex calculations</li>
+    <li><strong>Non-invasive</strong> — doesn't change the core security analysis</li>
+    <li><strong>Norm-compliant</strong> — enables EN 50742 / ISO 12100 compliance</li>
+  </ul>
+  <div class="code-block">safety: {
+  relevance: "none" | "indirect" | "direct";
+  impact?: "none" | "reversible_injury" | "irreversible_injury" | "fatality";
+  physicalHazardPotential?: "low" | "medium" | "high";  // ISO 12100 / EN 50742
+  protectionTarget?: boolean;   // specifically for Human Assets
+  rationale?: string;
+}</div>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin:16px 0 8px;">This pattern is uniform across every DFD element and asset relationship. It also drives threat prioritization directly:</p>
+  <div class="code-block">If (asset.safety.relevance === 'direct' || asset.safety.impact === 'fatality')
+  -> Risk Priority = CRITICAL (independent of business impact)
+  -> Requires additional mitigations
+  -> Explicit documentation in the Safety chapter</div>
+  <p style="font-size:0.88rem; color:var(--ink-mute); margin-top:12px;">What Safety Annotation is <em>not</em>: a replacement for formal safety analysis (FMEA, FTA), an SRSL calculation, an ISO 13849 Performance Level determination, or automatic safety certification. It <em>is</em> a documented bridge between cybersecurity and functional safety, with traceable prioritization of security measures.</p>
+</section>
+
+<section id="methodical-chain">
+  <div class="sec-head"><span class="sec-tag">09</span><h2 class="sec-title">The methodical chain: Threat → Impact → Injury</h2></div>
+  <div class="code-block">Threat -> Impact -> [Hazardous Situation] -> Injury / Harm</div>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin-top:12px;">The hazardous situation sits conceptually between impact and injury; it's modeled as the Hazard Item above, and in the simplest case (one input, derivable hazard) stays collapsed rather than needing its own explicit field. TARAflow works conservatively: once a threat produces an impact on a safety-relevant asset, the resulting hazardous situation is treated as <strong>given</strong> — a worst-case assumption.</p>
+</section>
+
+<section id="phases">
+  <div class="sec-head"><span class="sec-tag">10</span><h2 class="sec-title">Four phases, one growing graph</h2></div>
+  <div class="workflow-steps">
+    <div class="wstep"><div class="wstep-left"><div class="wnum">1</div><div class="wline"></div></div><div class="wstep-right"><h4>Foundation &amp; pragmatic modeling</h4><p>Classic STRIDE threat modeling with tool support. Safety annotation is available but entirely optional and non-invasive. Builds a consistent base graph (DFD + assets + relationships) and a first threat identification — not yet a full automatic derivation.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">2</div><div class="wline"></div></div><div class="wstep-right"><h4>Rule-based completion &amp; derivation</h4><p><code>is_an</code>-based derivations activate; relationships are extended transitively where semantically valid (e.g. a Process inherits relationships from a Data Store via <code>is_an</code>). A validation engine flags incomplete nodes, invalid relationship types, and semantically contradictory modeling — every automatic derivation is explained to the user.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">3</div><div class="wline"></div></div><div class="wstep-right"><h4>Deterministic threat derivation</h4><p>Likelihood-related relationships (<code>uses</code>, <code>transports</code>) and impact-related relationships (<code>depends_on</code>, <code>affects_*</code>) are strictly separated. Full path computation from attack vectors to damage targets, using only explicit and derived relationships — no heuristic assumptions.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">4</div></div><div class="wstep-right"><h4>Analysis support &amp; governance <span style="color:var(--ink-mute); font-weight:400;">(optional)</span></h4><p>Prioritization and filtering of threat paths, traceable documentation of modeling decisions, support for reviews, audits and standards conformance, versioning and comparison of graphs over the system's lifecycle.</p></div></div>
+  </div>
+</section>
+
+<div class="notice-box">
+  <p><strong>Source:</strong> this page summarizes <code>taraflow-asset-beziehungen.md</code> and <code>taraflow-asset-zu-asset-beziehungen.md</code> from the project's internal documentation. Both documents go substantially deeper (full relationship catalogs per asset-category pair, transitivity algebra, validation rules, and TypeScript interfaces) — this page covers the concepts needed to understand the model, not the full specification.</p>
+</div>

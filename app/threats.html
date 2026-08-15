@@ -1,0 +1,70 @@
+---
+layout: default
+section: app
+title: "TARAflow — Threats"
+description: "TARAflow generates STRIDE threats automatically from your DFD. Every threat is linked to the element or interaction it originates from, to the asset it endangers, and to the mitigations and verifications that address it."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 05</div>
+  <h1>Threats</h1>
+  <p>TARAflow generates STRIDE threats automatically from your DFD. Every threat is linked to the element or interaction it originates from, to the asset it endangers, and to the mitigations and verifications that address it.</p>
+</div>
+
+<section id="methods">
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Generation Methods</h2></div>
+  <div class="method-tabs">
+    <div class="method-tab"><div class="mt-label">Per Element</div><h4>Element-level threats</h4><p>One threat per STRIDE category per DFD element. Focuses on internal vulnerabilities: what can go wrong inside this component.</p></div>
+    <div class="method-tab"><div class="mt-label">Per Interaction</div><h4>Communication threats</h4><p>Threats from sender and receiver perspective on each DataFlow. Focuses on communication risks: spoofing, tampering, eavesdropping on the channel.</p></div>
+    <div class="method-tab"><div class="mt-label">Manual</div><h4>Custom threats</h4><p>Add threats that the generator cannot derive from the model — scenario-specific, compliance-driven, or expert knowledge.</p></div>
+  </div>
+  <div class="notice-box">
+    <p><strong>Choosing a method:</strong> Per-element is efficient and well-suited for standard systems. Per-interaction gives better coverage for communication-heavy architectures (fieldbus, REST APIs, embedded buses). Both methods can be used in the same project — they populate separate tables.</p>
+  </div>
+</section>
+
+<section id="stride">
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">STRIDE Categories</h2></div>
+  <div style="overflow-x:auto">
+    <table class="stride-table">
+      <thead><tr><th>Category</th><th>Threat type</th><th>Typical element</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><span class="s-cat s">S — Spoofing</span></td><td class="tdim">Identity impersonation</td><td class="tmono">ExternalEntity, Process, Interface</td><td class="tdim">Rogue device claiming PLC address on fieldbus</td></tr>
+        <tr><td><span class="s-cat t">T — Tampering</span></td><td class="tdim">Data or code modification</td><td class="tmono">DataFlow, DataStore, ChipBoundary</td><td class="tdim">Modified Modbus setpoint injected on OT network</td></tr>
+        <tr><td><span class="s-cat r">R — Repudiation</span></td><td class="tdim">Denying an action</td><td class="tmono">Process, DataStore, Interface</td><td class="tdim">Embedded controller denies having sent a command</td></tr>
+        <tr><td><span class="s-cat i">I — Info Disclosure</span></td><td class="tdim">Unauthorized data exposure</td><td class="tmono">DataStore, DataFlow, ChipBoundary</td><td class="tdim">Firmware extracted via unlocked JTAG interface</td></tr>
+        <tr><td><span class="s-cat d">D — Denial of Service</span></td><td class="tdim">Availability disruption</td><td class="tmono">Process, DataFlow, Interface</td><td class="tdim">Fieldbus flooded, safety controller misses heartbeat</td></tr>
+        <tr><td><span class="s-cat e">E — Elevation of Privilege</span></td><td class="tdim">Unauthorized access gain</td><td class="tmono">Process, ChipBoundary, Interface</td><td class="tdim">Attacker connects JTAG probe, reads crypto keys from RAM</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="workflow">
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Review Workflow</h2></div>
+  <div class="workflow-steps">
+    <div class="wstep"><div class="wstep-left"><div class="wnum">1</div><div class="wline"></div></div><div class="wstep-right"><h4>Generate</h4><p>Click "Generate Threats" to run the generator for all DFD elements. TARAflow creates one threat per applicable STRIDE category per element, filtered by element type, technology, and protocol properties.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">2</div><div class="wline"></div></div><div class="wstep-right"><h4>Review &amp; Prioritize</h4><p>Each generated threat has a description, cause, attack scenario, and proposed mitigations pre-filled from the catalog. Review each threat and mark it as relevant, not relevant, or deferred.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">3</div><div class="wline"></div></div><div class="wstep-right"><h4>Link Assets</h4><p>Threats are automatically linked to the assets on the source DFD element. Verify the asset links and adjust if needed — asset CIANAAA goals determine which STRIDE categories were generated.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">4</div><div class="wline"></div></div><div class="wstep-right"><h4>Assign Mitigations</h4><p>Each threat comes with catalog mitigations pre-proposed. Mitigations already reflected in DFD element properties are automatically marked as implemented. Add, remove, or replace mitigations as needed.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">5</div></div><div class="wstep-right"><h4>Sync after DFD changes</h4><p>When the DFD changes — new elements, renamed components, moved boundaries — TARAflow detects which threats are orphaned or missing and offers a one-click sync. Manual threat assignments are preserved.</p></div></div>
+  </div>
+</section>
+
+<section id="domains">
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Domain Coverage</h2></div>
+  <p style="font-size:0.92rem;color:var(--ink-dim);margin-bottom:20px;">The threat catalog is organized by domain. TARAflow selects templates based on element type, technology, protocol, and system class — you see threats relevant to your system, not a generic flat list.</p>
+  <div class="domain-grid">
+    <div class="domain-pill"><div class="dp-name">General</div><div class="dp-desc">Process, DataStore, DataFlow, ExternalEntity — baseline STRIDE for any system.</div></div>
+    <div class="domain-pill"><div class="dp-name">Embedded / OT</div><div class="dp-desc">Fieldbus protocols (Modbus, CAN, Profibus), bootloaders, RTOS tasks, firmware tampering.</div></div>
+    <div class="domain-pill"><div class="dp-name">Cloud</div><div class="dp-desc">API boundaries, service-to-service, JWT/token threats, cloud-specific DoS.</div></div>
+    <div class="domain-pill"><div class="dp-name">Mobile</div><div class="dp-desc">App binary tampering, repackaging, client-side storage threats.</div></div>
+    <div class="domain-pill"><div class="dp-name">Physical</div><div class="dp-desc">ChipBoundary (JTAG, side-channel, Secure Boot), PhysicalBoundary (tamper, depot attacks).</div></div>
+    <div class="domain-pill"><div class="dp-name">Gap</div><div class="dp-desc">Property-triggered threats: missing fail-safe state, no backup, unsigned firmware update.</div></div>
+  </div>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/assets.html' | relative_url }}">← Assets</a>
+  <a href="{{ '/app/attacktree.html' | relative_url }}">Next: Attack Tree →</a>
+</div>

@@ -1,0 +1,43 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Assets"
+description: "Assets are the items of value in your system — data, functions, infrastructure, and physical components. Assigning CIANAAA protection goals to assets drives which STRIDE categories are generated for linked elements."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 04</div>
+  <h1>Assets</h1>
+  <p>Assets are the items of value in your system — data, functions, infrastructure, and physical components. Assigning CIANAAA protection goals to assets drives which STRIDE categories are generated for linked elements.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Asset Groups</h2></div>
+  <div class="card-grid-2">
+    <div class="card"><div class="tag-label">Data</div><h3>Data Assets</h3><p>Configurations, firmware images, cryptographic keys, process parameters, user credentials.</p></div>
+    <div class="card"><div class="tag-label">Function</div><h3>Function Assets</h3><p>Control logic, safety functions, service availability, processing capability.</p></div>
+    <div class="card"><div class="tag-label">System</div><h3>System Assets</h3><p>Embedded controller, gateway, server — the platform as a whole.</p></div>
+    <div class="card"><div class="tag-label">Physical</div><h3>Physical Assets</h3><p>PCB, enclosure, cable routing — subject to physical attack vectors.</p></div>
+    <div class="card"><div class="tag-label">Service</div><h3>Service Assets</h3><p>Cloud services, APIs, communication infrastructure.</p></div>
+    <div class="card"><div class="tag-label">Process</div><h3>Process Assets</h3><p>Business processes, operational procedures, maintenance workflows.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">CIANAAA Protection Goals</h2></div>
+  <ul class="bullet-list">
+    <li>Confidentiality → Spoofing (S), Information Disclosure (I)</li>
+    <li>Integrity → Tampering (T)</li>
+    <li>Availability → Denial of Service (D)</li>
+    <li>Non-repudiation → Repudiation (R)</li>
+    <li>Authenticity → Spoofing (S), Elevation (E)</li>
+    <li>Authorization → Elevation (E)</li>
+    <li>Auditability → Repudiation (R)</li>
+    <li>Only active goals (level ≠ none) contribute to threat generation</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/dfd.html' | relative_url }}">← DFD Modeling</a>
+  <a href="{{ '/app/threats.html' | relative_url }}">Next: Threats →</a>
+</div>

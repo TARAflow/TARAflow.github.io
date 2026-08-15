@@ -1,0 +1,47 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Documentation"
+description: "Generate audit-ready documentation from the live TARA model. Every export includes full traceability from mitigation back to the originating DFD element."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 08</div>
+  <h1>Documentation Export</h1>
+  <p>Generate audit-ready documentation from the live TARA model. Every export includes full traceability from mitigation back to the originating DFD element.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Export Formats</h2></div>
+  <ul class="bullet-list">
+    <li>PDF — formatted report suitable for submission to auditors or customers</li>
+    <li>HTML — interactive report with cross-links</li>
+    <li>AsciiDoc — source for integration into product documentation</li>
+    <li>Markdown — GitHub-compatible, CI-friendly</li>
+    <li>StrictDoc (.sdoc) — structured requirements-engineering format for toolchains built around it</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Traceability</h2></div>
+  <ul class="bullet-list">
+    <li>Every mitigation links to the threat it addresses</li>
+    <li>Every threat links to the DFD element and asset it originates from</li>
+    <li>Every verification links to the mitigation it validates</li>
+    <li>Norm references included per mitigation (IEC 62443 CR, ISO 21434, CRA article)</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Headless generation (CLI)</h2></div>
+  <ul class="bullet-list">
+    <li>The same Markdown, AsciiDoc, HTML, PDF and StrictDoc output can be generated from the command line, without the desktop app or Electron — built for CI/CD pipelines (e.g. Jenkins) and Docker/Podman containers</li>
+    <li>Reads a saved <code>.tara.json</code> project file directly; no project needs to be open in the UI</li>
+    <li>Distributed as a standalone <code>.deb</code> package, decoupled from the desktop installer</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/risks.html' | relative_url }}">← Risk Assessment</a>
+  <a href="{{ '/app/audit.html' | relative_url }}">Next: Audit Trail →</a>
+</div>

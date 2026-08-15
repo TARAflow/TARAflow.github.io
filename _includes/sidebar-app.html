@@ -1,0 +1,33 @@
+<aside class="sidebar">
+  <div class="sidebar-label">App Guide</div>
+  <a class="sidebar-item{% if page.url contains 'overview.html' %} active{% endif %}" href="{{ '/app/overview.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">01</span><span class="si-title">Overview &amp; Setup</span></span><span class="si-desc">Project context, criticality, regulatory tags</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'hazard.html' %} active{% endif %}" href="{{ '/app/hazard.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">02</span><span class="si-title">Hazard Identification <span style="color:var(--ink-mute); font-weight:400;">· optional</span></span></span><span class="si-desc">Bowtie modeling, safety-only tab</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'dfd.html' %} active{% endif %}" href="{{ '/app/dfd.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">03</span><span class="si-title">DFD Modeling</span></span><span class="si-desc">Draw.io editor, element types, boundaries</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'assets.html' %} active{% endif %}" href="{{ '/app/assets.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">04</span><span class="si-title">Assets</span></span><span class="si-desc">Asset groups, CIANAAA protection goals</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'threats.html' %} active{% endif %}" href="{{ '/app/threats.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">05</span><span class="si-title">Threats</span></span><span class="si-desc">STRIDE generation, review workflow</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'attacktree.html' %} active{% endif %}" href="{{ '/app/attacktree.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">06</span><span class="si-title">Attack Tree <span style="color:var(--ink-mute); font-weight:400;">· optional</span></span></span><span class="si-desc">AND/OR paths, feasibility, STRIDE sync</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'risks.html' %} active{% endif %}" href="{{ '/app/risks.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">07</span><span class="si-title">Risk Assessment</span></span><span class="si-desc">Impact × likelihood, MoSCoW, before/after</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'documentation.html' %} active{% endif %}" href="{{ '/app/documentation.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">08</span><span class="si-title">Documentation</span></span><span class="si-desc">PDF, HTML, AsciiDoc, Markdown, StrictDoc</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'audit.html' %} active{% endif %}" href="{{ '/app/audit.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">09</span><span class="si-title">Audit Trail</span></span><span class="si-desc">Change log, sign-off, re-assessment</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'integration.html' %} active{% endif %}" href="{{ '/app/integration.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">10</span><span class="si-title">Integrations</span></span><span class="si-desc">Jira, Azure DevOps, GitHub Issues</span>
+  </a>
+</aside>

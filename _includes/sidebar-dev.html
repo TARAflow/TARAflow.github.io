@@ -1,0 +1,30 @@
+<aside class="sidebar">
+  <div class="sidebar-label">Developer Docs</div>
+  <a class="sidebar-item{% if page.url contains 'architecture.html' %} active{% endif %}" href="{{ '/developers/architecture.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">01</span><span class="si-title">Architecture</span></span><span class="si-desc">Electron + React stack, feature boundaries</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'dfd-dev.html' %} active{% endif %}" href="{{ '/developers/dfd-dev.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">02</span><span class="si-title">DFD Engine</span></span><span class="si-desc">Draw.io bridge, DFDGraphReference</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'hazard-dev.html' %} active{% endif %}" href="{{ '/developers/hazard-dev.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">03</span><span class="si-title">Hazard Model</span></span><span class="si-desc">Bowtie data model, DFD/Asset sync boundary</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'assets-dev.html' %} active{% endif %}" href="{{ '/developers/assets-dev.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">04</span><span class="si-title">Asset Model</span></span><span class="si-desc">Discriminated union, CIANAAA derivation</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'threats-dev.html' %} active{% endif %}" href="{{ '/developers/threats-dev.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">05</span><span class="si-title">Threat Generator</span></span><span class="si-desc">UnifiedStrategy, catalog, i18n hierarchy</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'attacktree-dev.html' %} active{% endif %}" href="{{ '/developers/attacktree-dev.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">06</span><span class="si-title">Attack Tree</span></span><span class="si-desc">Path identity, dual likelihood, gate aggregation</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'risks-dev.html' %} active{% endif %}" href="{{ '/developers/risks-dev.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">07</span><span class="si-title">Risk Engine</span></span><span class="si-desc">Scoring, factor model, MoSCoW</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'integration-dev.html' %} active{% endif %}" href="{{ '/developers/integration-dev.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">08</span><span class="si-title">Integrations</span></span><span class="si-desc">ITicketAdapter, Jira/ADO/GitHub adapters</span>
+  </a>
+  <a class="sidebar-item{% if page.url contains 'cli-report-dev.html' %} active{% endif %}" href="{{ '/developers/cli-report-dev.html' | relative_url }}">
+    <span class="si-row"><span class="si-num">09</span><span class="si-title">CLI Report Generator</span></span><span class="si-desc">Headless docs, entry-point separation</span>
+  </a>
+</aside>

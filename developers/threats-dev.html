@@ -1,0 +1,255 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Dev — Threat Generator"
+description: "Architecture of the threat generation pipeline: UnifiedStrategy, catalog domain structure, context matching, i18n hierarchy, closed-loop mitigation mapper, and element/interaction sync services."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developers / 05</div>
+  <h1>Threat Generator</h1>
+  <p>Architecture of the threat generation pipeline: UnifiedStrategy, catalog domain structure, context matching, i18n hierarchy, closed-loop mitigation mapper, and element/interaction sync services.</p>
+</div>
+
+<section id="pipeline">
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Generation Pipeline</h2></div>
+  <div class="pipeline">
+    <div class="pipe-step">
+      <div class="pipe-left"><div class="pipe-badge">DFDGraph</div><div class="pipe-line"></div></div>
+      <div class="pipe-right">
+        <h4>Input: DFDGraphReference</h4>
+        <p><code>project.dfdGraph</code> — typed graph built by <code>toReferenceGraph()</code> from the draw.io XML. Contains <code>elementsById</code>, <code>connectionsById</code>, <code>effectiveElementTrustBoundary</code>, and CB/PB membership maps.</p>
+      </div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-left"><div class="pipe-badge">STRIDE Matrix</div><div class="pipe-line"></div></div>
+      <div class="pipe-right">
+        <h4>Base STRIDE categories</h4>
+        <p><code>STRIDE_PER_ELEMENT_TYPE</code> defines the base set per element type. <code>ExternalEntity → [S,R]</code>, <code>Process → [S,T,R,I,D,E]</code>, <code>DataFlow → [T,I,D]</code>, etc. These are the hard ceiling — no module can add categories outside this set.</p>
+      </div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-left"><div class="pipe-badge warn">UnifiedStrategy</div><div class="pipe-line"></div></div>
+      <div class="pipe-right">
+        <h4>Category resolution: two modules</h4>
+        <p><strong>Module 1 — Element Properties:</strong> stride-modifier functions narrow or extend categories based on element properties (technology, protocol, operationalState, etc.).<br><br>
+        <strong>Module 2 — CIANAAA:</strong> derives STRIDE categories from active asset security goals via <code>CIANAAA_TO_STRIDE</code>. Result is intersected with <code>baseCategories</code> — CIANAAA cannot add outside the matrix.</p>
+      </div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-left"><div class="pipe-badge">Eliminate</div><div class="pipe-line"></div></div>
+      <div class="pipe-right">
+        <h4>shouldEliminateThreat()</h4>
+        <p>Pre-filter: certain property values make a threat scenario physically or logically impossible. <code>debugProtection=fused_off → [T,I,E] eliminated</code>, <code>operationalState=permanent_disabled → all eliminated</code>. Only unambiguous, deterministic cases are eliminated here.</p>
+      </div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-left"><div class="pipe-badge">Catalog</div><div class="pipe-line"></div></div>
+      <div class="pipe-right">
+        <h4>Template selection: findElementTemplate()</h4>
+        <p>For each surviving (element, STRIDE) pair, <code>findElementTemplate()</code> selects the best-matching template via <code>matchesContext()</code>. Matches on: elementType, technology, protocol, systemClass, platform, location, safetyFunction, accessMode, and more. Most-specific match wins.</p>
+      </div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-left"><div class="pipe-badge muted">i18n</div><div class="pipe-line"></div></div>
+      <div class="pipe-right">
+        <h4>Localized texts: domain-prefixed lookup</h4>
+        <p>Threat description, cause, and attack text are resolved via <code>getLocalizedElementThreat(template.id, template.domain ?? "general")</code>. Key format: <code>{domain}.{templateId}.threat</code>. Falls back to <code>general</code> with a <code>console.error</code> if domain-specific text is missing.</p>
+      </div>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-left"><div class="pipe-badge muted">Mitigations</div></div>
+      <div class="pipe-right">
+        <h4>Closed-loop: getImplementedMitigationHints()</h4>
+        <p>Inspects element properties and returns <code>MitigationDraft[]</code> with <code>alreadyImplemented: true</code> for controls already present on the element. Merged with template mitigations — existing entries get flagged, new hints are appended. Threat is always generated; nothing is suppressed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="catalog">
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Catalog Structure</h2></div>
+  <div class="two-col">
+    <div>
+      <p style="font-size:0.87rem; color:var(--ink-dim); margin-bottom:14px;">Templates are split by domain and STRIDE category. Each JSON file contains only <code>elementTemplates</code> or <code>interactionTemplates</code> arrays. Every template carries a <code>domain</code> field used as the i18n lookup prefix.</p>
+      <div class="file-tree">
+<span class="ft-dir">catalog/threats/</span>
+  <span class="ft-dir">per-element/</span>
+    <span class="ft-dir">general/</span>   <span class="ft-comment">&lt;- Process, DS, DF, EE</span>
+      threats-spoofing.json
+      threats-tampering.json
+      ...
+    <span class="ft-dir">embedded/</span>  <span class="ft-comment">&lt;- CB, OT protocols</span>
+    <span class="ft-dir">cloud/</span>
+    <span class="ft-dir">mobile/</span>
+  <span class="ft-dir">per-interaction/</span>
+    <span class="ft-dir">general/</span>
+    <span class="ft-dir">embedded/</span>
+    <span class="ft-dir">cloud/</span>
+  <span class="ft-dir">shared/</span>
+    threats-gap.json    <span class="ft-comment">&lt;- property gap threats</span>
+    threats-interface.json
+    threats-physical.json  <span class="ft-comment">&lt;- PB + CB physical</span></div>
+    </div>
+    <div>
+      <p style="font-size:0.87rem; color:var(--ink-dim); margin-bottom:14px;">Template schema — every field is required except <code>context</code> keys, which are optional matchers:</p>
+      <div class="code-block"><span class="cm">// ElementTemplate</span>
+{
+  <span class="cs">"id"</span>: <span class="cv">"T-004"</span>,
+  <span class="cs">"domain"</span>: <span class="cv">"embedded"</span>,
+  <span class="cs">"strideCategory"</span>: <span class="cv">"T"</span>,
+  <span class="cs">"elementTypes"</span>: [<span class="cv">"Process"</span>],
+  <span class="cs">"context"</span>: {
+    <span class="cs">"technology"</span>: [
+      <span class="cv">"bootloader"</span>, <span class="cv">"rtos_task"</span>
+    ]
+  },
+  <span class="cs">"mitigations"</span>: [<span class="cv">"M-CB-T-001"</span>],
+  <span class="cs">"verifications"</span>: [<span class="cv">"V-CB-T-001"</span>],
+  <span class="cs">"isCustom"</span>: <span class="ck">false</span>
+}</div>
+    </div>
+  </div>
+  <div class="info-box">
+    <div class="ib-label">// Convention</div>
+    <p>IDs are unique within a domain/STRIDE file (S-001, T-001, …). IDs in <code>shared/</code> are globally unique across all shared files. The <code>domain</code> field drives i18n key construction — <code>embedded.T-004.threat</code>.</p>
+  </div>
+</section>
+
+<section id="i18n">
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">i18n Architecture</h2></div>
+  <div class="two-col">
+    <div>
+      <div class="file-tree">
+<span class="ft-dir">locales/en/threats/</span>
+  index.ts  <span class="ft-comment">&lt;- ELEMENT_THREAT_TEXTS</span>
+             <span class="ft-comment">   INTERACTION_THREAT_TEXTS</span>
+  <span class="ft-dir">per-element/</span>
+    <span class="ft-dir">general/</span>
+      index.ts  <span class="ft-comment">&lt;- GENERAL_ELEMENT_THREATS</span>
+      threats-spoofing.json
+      ...
+    <span class="ft-dir">embedded/</span>
+    <span class="ft-dir">cloud/</span>
+    <span class="ft-dir">mobile/</span>
+  <span class="ft-dir">per-interaction/</span>
+    <span class="ft-dir">general/</span>
+    <span class="ft-dir">embedded/</span>
+    <span class="ft-dir">cloud/</span>
+  <span class="ft-dir">shared/</span>
+    index.ts
+    threats-gap.json
+    threats-interface.json
+    threats-physical.json</div>
+    </div>
+    <div>
+      <p style="font-size:0.87rem; color:var(--ink-dim); margin-bottom:12px;">Each domain index spreads inner keys to produce a flat domain-keyed object:</p>
+      <div class="code-block"><span class="cm">// per-element/embedded/index.ts</span>
+<span class="ck">export const</span> <span class="cv">EMBEDDED_ELEMENT_THREATS</span> = {
+  embedded: {
+    ...threatsSpoofing.embedded,
+    ...threatsTampering.embedded,
+    <span class="cm">// ...</span>
+  },
+};
+
+<span class="cm">// root index.ts merges all domains</span>
+<span class="ck">export const</span> <span class="cv">ELEMENT_THREAT_TEXTS</span> = {
+  ...SHARED_ELEMENT_THREATS,  <span class="cm">// gap/interface/physical</span>
+  ...PER_ELEMENT_THREATS,     <span class="cm">// general/embedded/cloud/mobile</span>
+};</div>
+      <p style="font-size:0.85rem; color:var(--ink-dim); margin-top:12px;">i18n.ts imports <code>ELEMENT_THREAT_TEXTS</code> as the <code>element-threats-attacks</code> namespace. Lookup key: <code>{domain}.{templateId}.threat</code>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="strategy">
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">UnifiedStrategy</h2></div>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin-bottom:20px;"><code>UnifiedStrategy</code> replaces the old Classic/Hybrid/Relation split. It is a two-module additive pipeline with a hard invariant: <strong>baseCategories are law</strong>.</p>
+  <div class="code-block"><span class="cm">// Module 1: Element Properties</span>
+<span class="ck">const</span> propsResult = applyElementProperties(element, baseCategories);
+
+<span class="cm">// Module 2: CIANAAA Security Goals</span>
+<span class="ck">const</span> cianaaaResult = applyCIANAAA(element.id, project);
+
+<span class="cm">// Combine — CIANAAA cannot add outside baseCategories</span>
+<span class="ck">if</span> (cianaaaResult.applied) {
+  <span class="ck">const</span> combined = <span class="ct">new Set</span>([
+    ...cianaaaResult.categories,
+    ...(propsResult.applied ? propsResult.categories : []),
+  ]);
+  finalCategories = <span class="ct">Array</span>.from(combined)
+    .filter(c => baseCategories.includes(c));  <span class="cm">// leftarrow hard filter</span>
+}</div>
+  <div class="warn-box" style="margin-top:18px">
+    <div class="wb-label">// Invariant</div>
+    <p><code>baseCategories</code> are the hard ceiling from <code>STRIDE_PER_ELEMENT_TYPE</code>. Neither the CIANAAA module nor the properties module may introduce a STRIDE category that is not in the base set for the element type. This was the root cause of spurious DataFlow Repudiation threats — fixed in v0.2.0-alpha.</p>
+  </div>
+</section>
+
+<section id="sync">
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Sync Services</h2></div>
+  <div class="card-grid-2">
+    <div class="card">
+      <div class="tag-label">element-sync.ts</div>
+      <h3>ElementThreatSync</h3>
+      <p>Detects orphaned threats (element deleted), missing elements (new element without threats), changed displayIds, and TB renames. Delegates new threat generation to <code>elementThreatGenerator.generateThreatsForSingleElement()</code> — does not call localization directly. Manual threats are preserved.</p>
+    </div>
+    <div class="card">
+      <div class="tag-label">interaction-sync.ts</div>
+      <h3>InteractionThreatSync</h3>
+      <p>Same pattern for interaction threats. Detects orphaned DataFlow threats and missing connections. Delegates to <code>interactionThreatGenerator.generateThreatsForProject()</code> and filters to only add threats for missing items. Source/target name changes are patched in-place without regeneration.</p>
+    </div>
+  </div>
+  <div class="info-box" style="margin-top:18px">
+    <div class="ib-label">// Architecture rule</div>
+    <p><code>features/threats</code> and <code>features/dfd</code> must never import from each other. Shared types live in <code>src/shared</code>. The sync services receive a <code>DFDAnalysisContext</code> (from the DFD feature) as a parameter — they do not import DFD modules.</p>
+  </div>
+</section>
+
+<section id="closedloop">
+  <div class="sec-head"><span class="sec-tag">06</span><h2 class="sec-title">Closed-Loop Mapper</h2></div>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin-bottom:18px;"><code>implemented-controls-mapper.ts</code> translates element property values into <code>MitigationDraft[]</code> entries with <code>alreadyImplemented: true</code>. The generator merges these with template mitigations — existing IDs get flagged, new hints are appended.</p>
+  <div class="code-block"><span class="cm">// Property → Mitigation mapping examples</span>
+
+<span class="cm">// Interface.implementedControls.logicalAccessControl = "mfa"</span>
+<span class="cv">M-IF-S-003</span>  alreadyImplemented: <span class="ck">true</span>
+
+<span class="cm">// Interface.implementedControls.debugProtection = "fused_off"</span>
+<span class="cv">M-IF-E-001</span>  alreadyImplemented: <span class="ck">true</span>
+<span class="cv">M-IF-DBG-003</span> alreadyImplemented: <span class="ck">true</span>
+
+<span class="cm">// DataFlow.physicalPathProtection = "conduit"</span>
+<span class="cv">M-T-001</span>  alreadyImplemented: <span class="ck">true</span>
+<span class="cv">M-D-001</span>  alreadyImplemented: <span class="ck">true</span>
+
+<span class="cm">// Merge: existing template mitigation gets flagged</span>
+<span class="cm">// New hints not in template are appended</span>
+<span class="ck">function</span> <span class="cv">mergeMitigationHints</span>(
+  templateMitigations: MitigationDraft[],
+  hints: MitigationDraft[]
+): MitigationDraft[]</div>
+</section>
+
+<section id="extending">
+  <div class="sec-head"><span class="sec-tag">07</span><h2 class="sec-title">Adding a Template</h2></div>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin-bottom:16px;">Checklist for adding a new threat template:</p>
+  <ul class="bullet-list" style="margin-bottom:18px;">
+    <li>Add the JSON entry to the correct <code>catalog/threats/per-element/{domain}/threats-{stride}.json</code></li>
+    <li>Set <code>"domain"</code> field to match the directory name</li>
+    <li>Add EN text to <code>locales/en/threats/per-element/{domain}/threats-{stride}.json</code> under the <code>"{domain}"</code> key</li>
+    <li>Add DE text to <code>locales/de/threats/per-element/{domain}/threats-{stride}.json</code></li>
+    <li>Verify mitigation IDs exist in the mitigation catalog — broken references silently render as empty strings</li>
+    <li>Add <code>affectsProperties</code> entries to the referenced mitigations if they map to element properties</li>
+    <li>Run the project in dev and check the Console for <code>[ThreatCatalog] Missing</code> errors</li>
+  </ul>
+  <div class="warn-box">
+    <div class="wb-label">// ID uniqueness</div>
+    <p>IDs must be unique within their domain/STRIDE file. Shared files (<code>gap</code>, <code>interface</code>, <code>physical</code>) must have globally unique IDs across all three. The catalog index merges all arrays into a flat list — duplicate IDs will cause the last one to silently win.</p>
+  </div>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/developers/assets-dev.html' | relative_url }}">← Asset Model</a>
+  <a href="{{ '/developers/attacktree-dev.html' | relative_url }}">Next: Attack Tree →</a>
+</div>

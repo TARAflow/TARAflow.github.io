@@ -1,0 +1,50 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Dev — Architecture"
+description: "TARAflow is an Electron desktop application with a React/TypeScript frontend. The codebase is organized into feature modules with strict import boundaries."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developers / 01</div>
+  <h1>Architecture</h1>
+  <p>TARAflow is an Electron desktop application with a React/TypeScript frontend. The codebase is organized into feature modules with strict import boundaries.</p>
+</div>
+
+<section id="stack">
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Stack</h2></div>
+  <ul class="bullet-list">
+    <li>Electron (main process) — native OS integration, keytar for credential storage, file I/O</li>
+    <li>React 18 + TypeScript — UI, MUI DataGrid, draw.io iFrame integration</li>
+    <li>Vitest — unit tests for geometry, generators, catalog service</li>
+    <li>i18next — runtime i18n with EN/DE namespaces</li>
+    <li>draw.io (diagrams.net) — embedded as iFrame for DFD editing</li>
+  </ul>
+</section>
+
+<section id="boundaries">
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Feature Boundaries</h2></div>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:14px;">Every feature is a full vertical slice — <strong>no feature may depend on another feature</strong>, not just the DFD/Threats pair. Anything needed across features lives in <code>shared</code> instead.</p>
+  <ul class="bullet-list">
+    <li><code>features/dfd</code> — DFD modeling, draw.io bridge, DFDGraphReference</li>
+    <li><code>features/threats</code> — threat generation, catalog, risk, attack tree</li>
+    <li><code>features/assets</code> — asset model, CIANAAA, impact factors</li>
+    <li><code>features/documentation</code> — the generator engine covered in <a href="{{ '/developers/cli-report-dev.html' | relative_url }}">CLI Report Generator</a></li>
+    <li><code>shared</code> — all types and utilities used across features (DFDElementReference, StrideCategory, etc.)</li>
+    <li><strong>Rule:</strong> no <code>features/*</code> module may import from another <code>features/*</code> module — only from <code>shared</code></li>
+  </ul>
+</section>
+
+<section id="processes">
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Main process vs. Renderer process</h2></div>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:14px;">Electron's two-process model maps directly onto two top-level folders:</p>
+  <div class="card-grid-2">
+    <div class="card"><div class="tag-label">Main process</div><h3>electron/</h3><p>Native OS integration, file I/O, keytar credential storage, IPC handlers — everything that needs Node/OS access.</p></div>
+    <div class="card"><div class="tag-label">Renderer process</div><h3>src/</h3><p>The React/TypeScript UI, feature modules, shared types — everything that runs in the Chromium window.</p></div>
+  </div>
+</section>
+
+<div class="foot-nav">
+  <span></span>
+  <a href="{{ '/developers/dfd-dev.html' | relative_url }}">Next: DFD Engine →</a>
+</div>

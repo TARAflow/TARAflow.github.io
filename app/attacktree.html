@@ -1,0 +1,33 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Attack Tree"
+description: "Model AND/OR attack trees for high-impact assets. Assess probability and feasibility per leaf node, and link tree paths back to the threat table."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 06</div>
+  <h1>Attack Tree</h1>
+  <p>Model AND/OR attack trees for high-impact assets. Assess probability and feasibility per leaf node, and link tree paths back to the threat table.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Attack Tree Workflow</h2></div>
+  <ul class="bullet-list">
+    <li>Derive attack goals from high-impact assets (Variant B) or high-risk threats (Variant A, Phase 5A)</li>
+    <li>Model AND/OR trees: AND-nodes require all child conditions, OR-nodes require any one</li>
+    <li>Assess probability and feasibility per leaf — escalates to parent nodes</li>
+    <li>Link attack tree leaves to STRIDE threats in the threat table for traceability</li>
+    <li>Validate Won't-fix decisions: if attack tree shows a viable path, reconsider</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Integration with STRIDE</h2></div>
+  <p style="font-size:0.88rem;color:var(--ink-dim);">The feedback loop between STRIDE and Attack Trees checks: all attack paths covered by at least one STRIDE threat? Missing STRIDE categories? Inconsistent likelihood estimates between tree leaves and threat scores? Iterate Phase 3 until the cross-check is clean.</p>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/threats.html' | relative_url }}">← Threats</a>
+  <a href="{{ '/app/risks.html' | relative_url }}">Next: Risk Assessment →</a>
+</div>

@@ -1,0 +1,12 @@
+title: TARAflow
+description: >-
+  TARAflow is a model-driven, relationship-based TARA tool for embedded,
+  automotive and cyber-physical systems.
+url: "https://taraflow.github.io"
+markdown: kramdown
+plugins: []
+exclude:
+  - README.md
+  - README-FIRST.md
+  - Gemfile
+  - Gemfile.lock

@@ -1,0 +1,37 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Risk Assessment"
+description: "Score likelihood per threat, compute Risk = Impact × Likelihood, prioritize mitigations with MoSCoW, and compare risk before and after controls."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 07</div>
+  <h1>Risk Assessment</h1>
+  <p>Score likelihood per threat, compute Risk = Impact × Likelihood, prioritize mitigations with MoSCoW, and compare risk before and after controls.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Risk Scoring</h2></div>
+  <ul class="bullet-list">
+    <li>Impact is derived from asset CIANAAA levels (financial, operational, regulatory, recoverability factors)</li>
+    <li>Likelihood is scored using OWASP Risk Rating factors: skill level, motive, opportunity, threat agent size, ease of exploit, intrusion detection</li>
+    <li>Risk = Impact × Likelihood on a configurable N×N matrix</li>
+    <li>Risk levels: Low / Medium / High / Critical — threshold configurable per project</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Prioritization</h2></div>
+  <ul class="bullet-list">
+    <li>MoSCoW: Must fix / Should fix / Could fix / Won't fix</li>
+    <li>Before/after toggle: compare risk score before and after proposed mitigations</li>
+    <li>Won't fix decisions require a cost-benefit justification (Phase 5 governance)</li>
+    <li>Risk register exportable to documentation and ticket systems</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/attacktree.html' | relative_url }}">← Attack Tree</a>
+  <a href="{{ '/app/documentation.html' | relative_url }}">Next: Documentation →</a>
+</div>

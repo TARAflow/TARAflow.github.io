@@ -1,0 +1,39 @@
+---
+layout: default
+section: dev
+title: "TARAflow — Dev — Risk Engine"
+description: "Risk scoring, factor model, MoSCoW treatment, and before/after impact comparison."
+---
+
+<div class="page-head">
+  <div class="eyebrow">Developers / 07</div>
+  <h1>Risk Engine</h1>
+  <p>Risk scoring, factor model, MoSCoW treatment, and before/after impact comparison.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Risk Model</h2></div>
+  <ul class="bullet-list">
+    <li>Risk = Impact × Likelihood on a configurable N×N severity matrix</li>
+    <li>Impact: derived from asset CIANAAA levels + safety override</li>
+    <li>Likelihood: OWASP Risk Rating factors (6 threat-agent + 6 vulnerability factors)</li>
+    <li>reconcileFactorRatings(): re-computes aggregate likelihood when individual factors change</li>
+    <li>Safety Override: direct relevance + fatal impact → CRITICAL, independent of numeric score</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Risk Treatment</h2></div>
+  <ul class="bullet-list">
+    <li>MitigationStatus: proposed | accepted | implemented | verified</li>
+    <li>ImplementationProgress: not_started | in_progress | complete</li>
+    <li>RiskMitigationStatusDialog: separate concern from MitigationStatus</li>
+    <li>Before/after: riskBefore stored at assessment time, riskAfter re-computed after mitigations</li>
+    <li>Won't-fix: requires CBA justification stored in audit trail</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/developers/attacktree-dev.html' | relative_url }}">← Attack Tree</a>
+  <a href="{{ '/developers/integration-dev.html' | relative_url }}">Next: Integrations →</a>
+</div>

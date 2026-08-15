@@ -1,0 +1,41 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Audit Trail"
+description: "Every change in TARAflow is logged with timestamp, actor, action, and a brief summary. The audit trail supports sign-off workflows and re-assessment governance."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 09</div>
+  <h1>Audit Trail</h1>
+  <p>Every change in TARAflow is logged with timestamp, actor, action, and a brief summary. The audit trail supports sign-off workflows and re-assessment governance.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Audit Log Entry</h2></div>
+  <ul class="bullet-list">
+    <li>Entry ID and ISO 8601 timestamp</li>
+    <li>Actor role (Name/Team/Role)</li>
+    <li>Action: create | update | delete | approve | link | re-assess</li>
+    <li>Object: DFD element, Asset, Threat, Risk, Measure — with ID</li>
+    <li>Version: old → new</li>
+    <li>Change summary — brief description</li>
+    <li>References: Ticket, Commit, Validation link/hash</li>
+    <li>Integrity (optional): signature/checksum</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Sign-off &amp; Governance</h2></div>
+  <ul class="bullet-list">
+    <li>Risk owner sign-off per threat table</li>
+    <li>Won't-fix decisions require documented justification</li>
+    <li>Re-assessment triggers defined per project: architecture change, new CVE, regulatory change, annual review</li>
+    <li>Governance board output links back to audit entries for traceability</li>
+  </ul>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/documentation.html' | relative_url }}">← Documentation</a>
+  <a href="{{ '/app/integration.html' | relative_url }}">Next: Integrations →</a>
+</div>

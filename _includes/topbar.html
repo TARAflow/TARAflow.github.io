@@ -1,0 +1,13 @@
+<header class="topbar">
+  <a class="brand" href="{{ '/' | relative_url }}">
+    <img src="{{ '/assets/img/mark.svg' | relative_url }}" alt="">
+    TARAflow
+  </a>
+  <nav class="topbar-nav">
+    <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="active"{% endif %}>Overview</a>
+    <a href="{{ '/method.html' | relative_url }}"{% if page.url == '/method.html' %} class="active"{% endif %}>Methodology</a>
+    <a href="{{ '/app/index.html' | relative_url }}"{% if page.section == 'app' %} class="active"{% endif %}>App</a>
+    <a href="{{ '/developers/index.html' | relative_url }}"{% if page.section == 'dev' %} class="active"{% endif %}>Developers</a>
+    <a href="https://github.com/TARAflow/TARAflow" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+</header>

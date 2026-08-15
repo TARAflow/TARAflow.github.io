@@ -1,0 +1,28 @@
+---
+layout: default
+section: app
+title: "TARAflow — App Overview"
+description: "Step-by-step guide to each module — from project setup through DFD modeling, asset definition, threat generation, risk assessment, and documentation export."
+---
+
+<div class="page-head">
+  <div class="eyebrow">User Guide</div>
+  <h1>TARAflow App</h1>
+  <p>Step-by-step guide to each module — from project setup through DFD modeling, asset definition, threat generation, risk assessment, and documentation export.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Modules</span><h2 class="sec-title">All Sections</h2></div>
+  <div class="module-grid">
+    <a class="module" href="{{ '/app/overview.html' | relative_url }}"><div class="module-num">01</div><h3>Overview &amp; Setup</h3><p>Project initialization, context, criticality, and regulatory tags.</p></a>
+    <a class="module" href="{{ '/app/hazard.html' | relative_url }}"><div class="module-num">02</div><h3>Hazard Identification</h3><p>Optional safety analysis: Bowtie modeling, cyber-reachability triage, import from existing safety records.</p></a>
+    <a class="module" href="{{ '/app/dfd.html' | relative_url }}"><div class="module-num">03</div><h3>DFD Modeling</h3><p>Draw.io integration, element types, Trust Boundaries, PhysicalBoundary, ChipBoundary.</p></a>
+    <a class="module" href="{{ '/app/assets.html' | relative_url }}"><div class="module-num">04</div><h3>Assets</h3><p>Asset inventory, CIANAAA goals, impact factors, element-to-asset relationships.</p></a>
+    <a class="module" href="{{ '/app/threats.html' | relative_url }}"><div class="module-num">05</div><h3>Threats</h3><p>STRIDE generation, per-element and per-interaction, manual threats, review workflow.</p></a>
+    <a class="module" href="{{ '/app/attacktree.html' | relative_url }}"><div class="module-num">06</div><h3>Attack Tree</h3><p>Attack-path threat modeling, feasibility per ISO 21434 Annex G or IEC 62443, synced into risk.</p></a>
+    <a class="module" href="{{ '/app/risks.html' | relative_url }}"><div class="module-num">07</div><h3>Risk Assessment</h3><p>Likelihood scoring, risk matrix, MoSCoW prioritization, before/after comparison.</p></a>
+    <a class="module" href="{{ '/app/documentation.html' | relative_url }}"><div class="module-num">08</div><h3>Documentation</h3><p>Export to PDF, HTML, AsciiDoc, Markdown, StrictDoc — full traceability included, headless CLI available.</p></a>
+    <a class="module" href="{{ '/app/audit.html' | relative_url }}"><div class="module-num">09</div><h3>Audit Trail</h3><p>Versioned change log, sign-off workflow, re-assessment triggers.</p></a>
+    <a class="module" href="{{ '/app/integration.html' | relative_url }}"><div class="module-num">10</div><h3>Integrations</h3><p>Jira, Azure DevOps, GitHub Issues — mitigation ticket export and status sync.</p></a>
+  </div>
+</section>
