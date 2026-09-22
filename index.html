@@ -16,6 +16,8 @@ description: "TARAflow is a model-driven, relationship-based TARA tool for embed
   .btn-primary:hover{transform:translateY(-2px); box-shadow:0 8px 22px rgba(22,48,94,0.2);}
   .btn-ghost{color:var(--ink); border:1px solid var(--line-2); background:transparent;}
   .btn-ghost:hover{border-color:var(--blue); color:var(--blue); transform:translateY(-2px);}
+  .ver-badge{display:inline-flex; align-items:center; font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.04em; color:var(--blue); border:1px solid var(--line-2); border-radius:999px; padding:5px 11px; text-decoration:none; transition:border-color .16s;}
+  .ver-badge:hover{border-color:var(--blue);}
   .standards{display:flex; flex-wrap:wrap; gap:8px; padding-top:20px; border-top:1px solid var(--line);}
   .standards .label{font-family:'IBM Plex Mono',monospace; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-mute); width:100%; margin-bottom:2px;}
   .tag{font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--ink-dim); border:1px solid var(--line-2); border-radius:3px; padding:5px 10px; background:var(--panel);}
@@ -61,6 +63,7 @@ description: "TARAflow is a model-driven, relationship-based TARA tool for embed
       <div class="cta-row">
         <a class="btn btn-primary" href="https://github.com/TARAflow/TARAflow" target="_blank" rel="noopener">View source on GitHub</a>
         <a class="btn btn-ghost" href="{{ '/method.html' | relative_url }}">Explore methodology</a>
+        <a id="latest-release" class="ver-badge" href="https://github.com/TARAflow/TARAflow/releases/latest" target="_blank" rel="noopener" hidden></a>
       </div>
       <div class="standards">
         <span class="label">// Standards &amp; regulatory alignment</span>
@@ -121,6 +124,16 @@ description: "TARAflow is a model-driven, relationship-based TARA tool for embed
   </div>
 </section>
 
+<section id="iso21434">
+  <div class="sec-head"><span class="sec-tag">Automotive</span><h2 class="sec-title">ISO/SAE 21434 support</h2></div>
+  <div class="features">
+    <div class="feature"><div class="fnum">A</div><h3>Asset-driven relevance</h3><p>In ISO mode a threat is relevant when it relates to an asset. STRIDE per-element and per-interaction threats enumerate; the risk is carried by the attack paths, not by the enumeration.</p></div>
+    <div class="feature"><div class="fnum">B</div><h3>Attack feasibility — Annex G / ISO 18045</h3><p>The five attack-potential factors (time, expertise, knowledge, window, equipment) sum to a Table G.7 feasibility band, per leaf and per attack path.</p></div>
+    <div class="feature"><div class="fnum">C</div><h3>SFOP impact</h3><p>Safety, Financial, Operational and Privacy impact (ISO 15.5) — mandatory and locked in ISO mode, on both the risk and the asset side.</p></div>
+    <div class="feature"><div class="fnum">D</div><h3>Conformant documentation</h3><p>A traceability matrix and attack-path threat-scenario chapters, generated to Markdown, HTML, PDF and StrictDoc.</p></div>
+  </div>
+</section>
+
 <section id="use-cases">
   <div class="sec-head"><span class="sec-tag">Applicability</span><h2 class="sec-title">Where it's used</h2></div>
   <div class="domain-grid">
@@ -154,3 +167,30 @@ description: "TARAflow is a model-driven, relationship-based TARA tool for embed
     </div>
   </div>
 </section>
+
+<script>
+  // Show the latest published release (falls back to the newest tag) so the
+  // homepage version never needs manual editing. GitHub API is unauthenticated
+  // (60 req/h per IP) — fine for a static site; failures degrade silently.
+  (function () {
+    var el = document.getElementById("latest-release");
+    if (!el) return;
+    var api = "https://api.github.com/repos/TARAflow/TARAflow";
+    function show(tag) {
+      if (!tag) return;
+      el.textContent = tag;
+      el.removeAttribute("hidden");
+    }
+    fetch(api + "/releases/latest", {
+      headers: { Accept: "application/vnd.github+json" },
+    })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (d && d.tag_name) { show(d.tag_name); return; }
+        return fetch(api + "/tags")
+          .then(function (r) { return r.ok ? r.json() : []; })
+          .then(function (t) { if (t && t.length) show(t[0].name); });
+      })
+      .catch(function () {});
+  })();
+</script>
