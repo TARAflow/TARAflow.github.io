@@ -2,13 +2,13 @@
 layout: default
 section: app
 title: "TARAflow — App — Assets"
-description: "Assets are the items of value in your system — data, functions, infrastructure, and physical components. Assigning CIANAAA protection goals to assets drives which STRIDE categories are generated for linked elements."
+description: "Assets are the items of value in your system — data, functions, infrastructure, and physical components. TARAflow derives CIANAAA security goals from the DFD relations and the asset impact; the analyst confirms, adjusts or excludes them. The goals drive threat generation and the risk impact."
 ---
 
 <div class="page-head">
   <div class="eyebrow">App / 04</div>
   <h1>Assets</h1>
-  <p>Assets are the items of value in your system — data, functions, infrastructure, and physical components. Assigning CIANAAA protection goals to assets drives which STRIDE categories are generated for linked elements.</p>
+  <p>Assets are the items of value in your system — data, functions, infrastructure, and physical components. TARAflow derives CIANAAA security goals from the DFD relations and the asset impact; the analyst confirms, adjusts or excludes them. The goals drive threat generation and the risk impact.</p>
 </div>
 
 <section>
@@ -24,16 +24,37 @@ description: "Assets are the items of value in your system — data, functions, 
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">CIANAAA Protection Goals</h2></div>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">CIANAAA Security Goals</h2></div>
   <ul class="bullet-list">
-    <li>Confidentiality → Spoofing (S), Information Disclosure (I)</li>
-    <li>Integrity → Tampering (T)</li>
-    <li>Availability → Denial of Service (D)</li>
-    <li>Non-repudiation → Repudiation (R)</li>
-    <li>Authenticity → Spoofing (S), Elevation (E)</li>
-    <li>Authorization → Elevation (E)</li>
-    <li>Auditability → Repudiation (R)</li>
-    <li>Only active goals (level ≠ none) contribute to threat generation</li>
+    <li>Confidentiality (C) → Information Disclosure (I)</li>
+    <li>Integrity (I) → Tampering (T)</li>
+    <li>Availability (A) → Denial of Service (D)</li>
+    <li>Non-repudiation (N) → Repudiation (R)</li>
+    <li>Authentication (AuthN) → Spoofing (S)</li>
+    <li>Authorization (AuthZ) → Elevation of Privilege (E)</li>
+    <li>Accountability (Acc) → Repudiation (R)</li>
+    <li>A STRIDE category is generated only if it is technically possible for the element <em>and</em> violates an active goal (level ≠ none)</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Derived Goals, Analyst Decisions</h2></div>
+  <ul class="bullet-list">
+    <li>Goals are suggested from the asset's DFD relations (e.g. data transported or stored); the level follows the asset impact — every card says why this goal and why this level</li>
+    <li>The analyst adjusts a level, adds a goal or excludes one — always with a rationale; an exclusion stays visible in the table and the report</li>
+    <li>The suggestion a decision was made against is recorded; when its basis changes later, the goal is flagged for review</li>
+    <li>An unassessed goal never shows as "Low": it says "assessment required" and points to the impact rating</li>
+    <li>Impact per goal: a goal can rate a criterion lower than the asset (e.g. safety for integrity) — never higher</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Review and Cross-Checks</h2></div>
+  <ul class="bullet-list">
+    <li>Goal chips in the asset table: level and state at a glance, decisions marked</li>
+    <li>Findings panel below the table opens the asset where a finding is fixed; "Needs review only" filter</li>
+    <li>Threat ↔ goal cross-checks: threats that violate no active goal, goals no threat violates, threats per goal</li>
+    <li>Report: security-goal table with level, state, basis and damage-scenario consequence</li>
   </ul>
 </section>
 

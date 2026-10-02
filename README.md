@@ -85,7 +85,7 @@ TARAflow treats the assessment as a **connected graph** so that traceability is 
 > Indicative and subject to change as the project matures.
 
 - [ ] **Public code transfer** — move the stable codebase into this repository
-- [x] **First tagged release** — installable desktop builds ([latest: v0.7.0-alpha](https://github.com/TARAflow/TARAflow.github.io/releases/latest), Windows/Linux/macOS)
+- [x] **First tagged release** — installable desktop builds ([latest release](https://github.com/TARAflow/TARAflow/releases/latest), Windows/Linux/macOS)
 - [ ] **Reference example** — end-to-end worked case (DFD → threats → risk → mitigation)
 - [ ] **Documentation site** — methodology guide and user manual
 - [ ] **Standards mapping appendix** — explicit clause-level references for IEC 62443 / ISO 21434 / CRA

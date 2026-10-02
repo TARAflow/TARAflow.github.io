@@ -14,15 +14,25 @@ description: "Score likelihood per threat, compute Risk = Impact × Likelihood, 
 <section>
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Risk Scoring</h2></div>
   <ul class="bullet-list">
-    <li>Impact is derived from asset CIANAAA levels (financial, operational, regulatory, recoverability factors)</li>
-    <li>Likelihood is scored using OWASP Risk Rating factors: skill level, motive, opportunity, threat agent size, ease of exploit, intrusion detection</li>
+    <li>Impact comes from the security goals the threat violates on its linked assets, including per-goal impact</li>
+    <li>Likelihood is scored using OWASP Risk Rating factors (skill level, motive, opportunity, size, ease of discovery and exploit, awareness, intrusion detection), ISO/IEC 18045 attack potential (ISO/SAE 21434) or ETSI TVRA — each level named by the situation it stands for</li>
     <li>Risk = Impact × Likelihood on a configurable N×N matrix</li>
     <li>Risk levels: Low / Medium / High / Critical — threshold configurable per project</li>
   </ul>
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Prioritization</h2></div>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Impact Aggregation</h2></div>
+  <ul class="bullet-list">
+    <li>Harm floor (standard, EN 50742): safety, physical damage and environment are never diluted — the impact is the highest of them or the weighted mean of the other factors</li>
+    <li>Maximum (ISO/SAE 21434, ETSI TVRA): the worst impact category, unweighted; ISO projects also show the risk per category (S/F/O/P)</li>
+    <li>Impact weights default to the asset criterion weights and can be overridden per factor</li>
+    <li>Switching the aggregation shows every risk that changes before it is applied; the risk dialog and the report explain how each impact was formed</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Prioritization</h2></div>
   <ul class="bullet-list">
     <li>MoSCoW: Must fix / Should fix / Could fix / Won't fix</li>
     <li>Before/after toggle: compare risk score before and after proposed mitigations</li>
