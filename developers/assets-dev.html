@@ -2,21 +2,21 @@
 layout: default
 section: dev
 title: "TARAflow — Dev — Asset Model"
-description: "The asset model uses a discriminated union for typed asset properties and an auto-derivation engine for CIANAAA security goals."
+description: "The asset model: assets in nine groups, element and asset-to-asset relations with one write path each, and an auto-derivation engine for CIANAAA security goals."
 ---
 
 <div class="page-head">
   <div class="eyebrow">Developers / 04</div>
   <h1>Asset Model</h1>
-  <p>The asset model uses a discriminated union for typed asset properties and an auto-derivation engine for CIANAAA security goals.</p>
+  <p>The asset model: assets in nine groups, two kinds of relations with one write path each, and an auto-derivation engine for CIANAAA security goals.</p>
 </div>
 
 <section>
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">AssetProperties</h2></div>
   <ul class="bullet-list">
-    <li>Discriminated union on assetType: data | function | system | physical | service | process</li>
-    <li>Each type carries type-specific properties (e.g. DataAsset: dataClassification, encryptionRequired)</li>
-    <li>Common base: id, name, description, linkedElementIds[], securityGoals[] (CIANAAA)</li>
+    <li>assetGroup: data | function | system | infrastructure (vertical) · process | physical | service | human | environment (orthogonal)</li>
+    <li>id is an opaque UUID (stable across a group change); displayId is the readable, group-prefixed label (DA-001, FU-002), regenerated on a group change</li>
+    <li>properties: one flat, shared AssetProperties schema; linkedDFDElements and the physical impact are derived from the DFD and the hazard model</li>
     <li>Impact factors: financial, operational, regulatory, recoverability — drive initialImpact</li>
   </ul>
 </section>
@@ -28,6 +28,17 @@ description: "The asset model uses a discriminated union for typed asset propert
     <li>level ≠ none → goal is active → contributes to STRIDE category set via CIANAAA_TO_STRIDE</li>
     <li>maxLevel() across active goals for a STRIDE category → initialImpact on threat</li>
     <li>Asset-to-element sync: bidirectional — element changes propagate to asset linkedElementIds</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Relations</h2></div>
+  <ul class="bullet-list">
+    <li>Element → asset: stored on the DFD element or flow (assetRelations); allowed types per element type and asset group (getAllowedRelations); the relation takes its asset's group</li>
+    <li>Asset → asset: canonical edge list assets.relations[] (A2ARelation with own id, source, target, type and attributes such as stepOrder or degradationMode), schema 8</li>
+    <li>One write path for asset links: A2A operations (add / remove / update) through the relations service (applyA2AOps) — the relation dialog, the asset graph and the asset import all use it</li>
+    <li>Rules in shared/models/asset-a2a-rules.ts: allowed types per group pair, core types, target classes (valid / reverse-only / invalid), mirror pairs, inverse names</li>
+    <li>validateA2ARelations reports links the rules no longer allow; nothing is removed by validation</li>
   </ul>
 </section>
 

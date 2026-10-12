@@ -41,6 +41,7 @@ TARAflow treats the assessment as a **connected graph** so that traceability is 
 ## Features
 
 - **Graph-based modeling** — assets, data flows and threats live in a connected graph; relationships are first-class.
+- **Asset graph** — a view of the asset relationships across layers (data → function → system → infrastructure, plus process, service, physical, human and environment), with a focus view, search, and an edit mode to connect assets and relate DFD elements under the same rules as the rest of the tool.
 - **DFD-driven threat generation** — draw or import a data-flow diagram; STRIDE threats are proposed per element and per interaction.
 - **Attack-tree threat modeling** — a third threat generator alongside per-element/per-interaction STRIDE: model attacker paths as trees, feasibility-rated per ISO 21434 Annex G or IEC 62443, synced into the risk register with full provenance.
 - **Hazard identification (Bowtie)** — a dedicated safety-analysis workflow feeding physical impact and safety-override rules directly into the risk model.

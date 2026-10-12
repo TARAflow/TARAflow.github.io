@@ -17,9 +17,12 @@ description: "Assets are the items of value in your system — data, functions, 
     <div class="card"><div class="tag-label">Data</div><h3>Data Assets</h3><p>Configurations, firmware images, cryptographic keys, process parameters, user credentials.</p></div>
     <div class="card"><div class="tag-label">Function</div><h3>Function Assets</h3><p>Control logic, safety functions, service availability, processing capability.</p></div>
     <div class="card"><div class="tag-label">System</div><h3>System Assets</h3><p>Embedded controller, gateway, server — the platform as a whole.</p></div>
+    <div class="card"><div class="tag-label">Infrastructure</div><h3>Infrastructure Assets</h3><p>Control cabinet, server room, power supply — what systems are housed in and powered by.</p></div>
+    <div class="card"><div class="tag-label">Process</div><h3>Process Assets</h3><p>An ordered sequence of steps with a trigger and an end state — a firmware update, a manufacturing recipe, a maintenance procedure.</p></div>
     <div class="card"><div class="tag-label">Physical</div><h3>Physical Assets</h3><p>PCB, enclosure, cable routing — subject to physical attack vectors.</p></div>
     <div class="card"><div class="tag-label">Service</div><h3>Service Assets</h3><p>Cloud services, APIs, communication infrastructure.</p></div>
-    <div class="card"><div class="tag-label">Process</div><h3>Process Assets</h3><p>Business processes, operational procedures, maintenance workflows.</p></div>
+    <div class="card"><div class="tag-label">Human</div><h3>Human Assets</h3><p>Operators, maintenance staff, patients — people whose safety or privacy is at stake.</p></div>
+    <div class="card"><div class="tag-label">Environment</div><h3>Environment Assets</h3><p>Surroundings that can be harmed — protection targets reached through the hazard chain.</p></div>
   </div>
 </section>
 
@@ -55,6 +58,25 @@ description: "Assets are the items of value in your system — data, functions, 
     <li>Findings panel below the table opens the asset where a finding is fixed; "Needs review only" filter</li>
     <li>Threat ↔ goal cross-checks: threats that violate no active goal, goals no threat violates, threats per goal</li>
     <li>Report: security-goal table with level, state, basis and damage-scenario consequence</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Asset Links</h2></div>
+  <ul class="bullet-list">
+    <li>Assets relate to each other — data <em>required by</em> a function, a function <em>implemented by</em> a system, a process that <em>invokes</em> functions in steps; which types are allowed depends on the two asset groups</li>
+    <li>Asset links are stored in the project and are part of the audit diff</li>
+    <li>Asset table and asset dialog show them read from the listed asset ("requires DA-002" at the target); a link the rules no longer allow, e.g. after a group change, is reported — never deleted silently</li>
+    <li>Modeled in the DFD asset panel or directly in the <a href="{{ '/app/dfd.html#asset-graph' | relative_url }}">asset graph</a></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">06</span><h2 class="sec-title">Export and Import</h2></div>
+  <ul class="bullet-list">
+    <li>Export the asset configuration and/or the assets, with the asset links between them</li>
+    <li>Import adds assets — nothing is deleted</li>
+    <li>An asset that is already in the project (same ID, or same group and name) is listed with <strong>Keep</strong> or <strong>Replace</strong>; replacing keeps the asset's identity, so DFD relations, risks and hazard references stay valid</li>
   </ul>
 </section>
 

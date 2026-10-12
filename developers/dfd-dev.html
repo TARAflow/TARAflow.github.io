@@ -33,6 +33,17 @@ description: "The DFD engine bridges draw.io XML to the typed graph model used b
   </ul>
 </section>
 
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Asset Graph (features/dfd/asset-graph)</h2></div>
+  <ul class="bullet-list">
+    <li>buildAssetGraph: pure preparation of nodes, edges, stubs and counts for the layer and focus view</li>
+    <li>layoutAssetGraph: d3-force with one lane per layer and a fixed-seed random source — deterministic; known positions are fixed, only new nodes move</li>
+    <li>Positions are view state: kept per session and in browser storage per project id, never in the project file</li>
+    <li>Edit mode writes nothing itself: asset links go through A2AOpsContext → commitA2AOps → relations service; assets, asset properties and element relations through the DFD tab's existing callbacks</li>
+    <li>Undo / redo names links by (source, target, type), not by id — a restored link gets a new id and is still found</li>
+  </ul>
+</section>
+
 <div class="foot-nav">
   <a href="{{ '/developers/architecture.html' | relative_url }}">← Architecture</a>
   <a href="{{ '/developers/hazard-dev.html' | relative_url }}">Next: Hazard Model →</a>
