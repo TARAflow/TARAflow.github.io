@@ -15,7 +15,7 @@ description: "TARAflow generates STRIDE threats automatically from your DFD. Eve
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Generation Methods</h2></div>
   <div class="method-tabs">
     <div class="method-tab"><div class="mt-label">Per Element</div><h4>Element-level threats</h4><p>One threat per STRIDE category per DFD element. Focuses on internal vulnerabilities: what can go wrong inside this component.</p></div>
-    <div class="method-tab"><div class="mt-label">Per Interaction</div><h4>Communication threats</h4><p>Threats from sender and receiver perspective on each DataFlow. Focuses on communication risks: spoofing, tampering, eavesdropping on the channel.</p></div>
+    <div class="method-tab"><div class="mt-label">Per Interaction</div><h4>Communication threats</h4><p>Threats from sender and receiver perspective on each DataFlow. Focuses on communication risks: spoofing, tampering, eavesdropping on the channel. Physical boundaries and interfaces have no flows of their own — in both methods their threats come from the element templates made for them.</p></div>
     <div class="method-tab"><div class="mt-label">Manual</div><h4>Custom threats</h4><p>Add threats that the generator cannot derive from the model — scenario-specific, compliance-driven, or expert knowledge.</p></div>
   </div>
   <div class="notice-box">
