@@ -136,13 +136,13 @@ Data              <- lowest level, highest precision (atomic values)</div>
   <table class="stride-table" style="margin-bottom:16px;">
     <thead><tr><th>Target node</th><th>Derived dimension</th><th>Scale / norm</th></tr></thead>
     <tbody>
-      <tr><td class="tmono">Human</td><td class="tdim">Safety</td><td class="tdim">reversible · irreversible · fatality (ISO 12100)</td></tr>
+      <tr><td class="tmono">Human</td><td class="tdim">Safety</td><td class="tdim">reversible minor · reversible major · irreversible minor · irreversible major · fatal (see §08)</td></tr>
       <tr><td class="tmono">Environment</td><td class="tdim">Environmental</td><td class="tdim">minor · moderate · severe (Seveso / environmental liability)</td></tr>
       <tr><td class="tmono">Infrastructure</td><td class="tdim">Asset destruction</td><td class="tdim">minor · major · critical</td></tr>
     </tbody>
   </table>
   <p style="font-size:0.9rem; color:var(--ink-dim);"><code>combinationType</code> decides how multiple contributing causes combine: <strong>ANY</strong> (default, OR-gate — a single cause is enough, e.g. over-pressure <em>or</em> over-heating → tank explosion) or <strong>ALL</strong> (AND-gate, combinatorial — e.g. sodium <em>and</em> water → exothermic reaction). Multiple <code>contributes_to</code> inputs never imply combinatorics automatically; it's always explicit via <code>combinationType</code>.</p>
-  <p style="font-size:0.88rem; color:var(--ink-mute); margin-top:12px;">The Hazard Item always exists in the data model, but isn't always shown: with exactly one derivable input it stays collapsed (the analyst just draws a direct <code>endangers</code> edge, and the tool creates the Hazard Item internally); a second <code>contributes_to</code> input on the same hazard automatically expands it, since the combinatorics need to be visible.</p>
+  <p style="font-size:0.88rem; color:var(--ink-mute); margin-top:12px;">A Hazard Item is modeled explicitly. For a single cause without a hazard register, the Safety Annotation (§08) is enough — it does not create a hidden Hazard Item. Annotation and Hazard Item are two separate modeling paths.</p>
 </section>
 
 <section id="safety-annotation">
@@ -156,29 +156,53 @@ Data              <- lowest level, highest precision (atomic values)</div>
   </ul>
   <div class="code-block">safety: {
   relevance: "none" | "indirect" | "direct";
-  impact?: "none" | "reversible_injury" | "irreversible_injury" | "fatality";
+  impact?: "none" | "reversible_minor" | "reversible_major"
+         | "irreversible_minor" | "irreversible_major" | "fatal";
   physicalHazardPotential?: "low" | "medium" | "high";  // ISO 12100 / EN 50742
   protectionTarget?: boolean;   // specifically for Human Assets
   rationale?: string;
 }</div>
-  <p style="font-size:0.9rem; color:var(--ink-dim); margin:16px 0 8px;">This pattern is uniform across every DFD element and asset relationship. It also drives threat prioritization directly:</p>
-  <div class="code-block">If (asset.safety.relevance === 'direct' || asset.safety.impact === 'fatality')
-  -> Risk Priority = CRITICAL (independent of business impact)
-  -> Requires additional mitigations
-  -> Explicit documentation in the Safety chapter</div>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin:16px 0 8px;">Annotation, Hazard Item and asset share one harm scale. Irreversible harm is split as in IEC 62061; <code>fatal</code> stays separate so that ISO 26262 maps without loss:</p>
+  <table class="stride-table" style="margin-bottom:16px;">
+    <thead><tr><th>Level</th><th>IEC 62061</th><th>ISO 26262</th><th>EN 50742</th></tr></thead>
+    <tbody>
+      <tr><td class="tmono">reversible_minor</td><td class="tdim">Se1</td><td class="tdim">S1</td><td class="tdim">reversible</td></tr>
+      <tr><td class="tmono">reversible_major</td><td class="tdim">Se2</td><td class="tdim">S1</td><td class="tdim">reversible</td></tr>
+      <tr><td class="tmono">irreversible_minor</td><td class="tdim">Se3</td><td class="tdim">S2</td><td class="tdim">non-reversible</td></tr>
+      <tr><td class="tmono">irreversible_major</td><td class="tdim">Se4</td><td class="tdim">S2</td><td class="tdim">non-reversible</td></tr>
+      <tr><td class="tmono">fatal</td><td class="tdim">Se4</td><td class="tdim">S3</td><td class="tdim">fatal</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin:16px 0 8px;"><strong>Annotation or Hazard Item?</strong> Both are valid and can coexist in one project:</p>
+  <table class="stride-table" style="margin-bottom:16px;">
+    <thead><tr><th></th><th>Safety Annotation</th><th>Hazard Item</th></tr></thead>
+    <tbody>
+      <tr><td class="tmono">Causes</td><td class="tdim">one relation = one single cause</td><td class="tdim">any number, combined explicitly</td></tr>
+      <tr><td class="tmono">Combination</td><td class="tdim">ANY only (worst case over relations)</td><td class="tdim"><code>combinationType</code> ANY or ALL</td></tr>
+      <tr><td class="tmono">Protection target</td><td class="tdim">implicit (the related asset)</td><td class="tdim">explicit <code>endangers</code> edge</td></tr>
+      <tr><td class="tmono">Use for</td><td class="tdim">quick start, simple single causes</td><td class="tdim">combinatorics, several targets, FMEA / hazard register import</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin:16px 0 8px;">An asset's safety rating: a manual override (with rationale) wins; otherwise the <strong>worse</strong> of Hazard Item and annotation applies. An asset rated by both paths gets a validation warning — model it in one place. The worse rating applies meanwhile, so ignoring the warning never under-rates safety.</p>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin:16px 0 8px;">Safety drives threat prioritization through the <strong>Safety Override Rule</strong>:</p>
+  <div class="code-block">impact                       direct      indirect
+irreversible_major | fatal   CRITICAL    HIGH+      <- override, independent of business impact
+irreversible_minor           HIGH+       HIGH
+reversible_minor | _major    HIGH        MED+</div>
+  <p style="font-size:0.88rem; color:var(--ink-mute); margin-top:12px;">Direct relevance alone does not trigger the override — it needs severe irreversible or fatal harm. An asset's safety relevance is derived from its annotations and Hazard Items, not entered as a separate flag.</p>
   <p style="font-size:0.88rem; color:var(--ink-mute); margin-top:12px;">What Safety Annotation is <em>not</em>: a replacement for formal safety analysis (FMEA, FTA), an SRSL calculation, an ISO 13849 Performance Level determination, or automatic safety certification. It <em>is</em> a documented bridge between cybersecurity and functional safety, with traceable prioritization of security measures.</p>
 </section>
 
 <section id="methodical-chain">
   <div class="sec-head"><span class="sec-tag">09</span><h2 class="sec-title">The methodical chain: Threat → Impact → Injury</h2></div>
   <div class="code-block">Threat -> Impact -> [Hazardous Situation] -> Injury / Harm</div>
-  <p style="font-size:0.9rem; color:var(--ink-dim); margin-top:12px;">The hazardous situation sits conceptually between impact and injury; it's modeled as the Hazard Item above, and in the simplest case (one input, derivable hazard) stays collapsed rather than needing its own explicit field. TARAflow works conservatively: once a threat produces an impact on a safety-relevant asset, the resulting hazardous situation is treated as <strong>given</strong> — a worst-case assumption.</p>
+  <p style="font-size:0.9rem; color:var(--ink-dim); margin-top:12px;">The hazardous situation sits conceptually between impact and injury; it's modeled as the Hazard Item above; in the simplest case (one cause, one target) the Safety Annotation is enough and the hazardous situation stays implicit. TARAflow works conservatively: once a threat produces an impact on a safety-relevant asset, the resulting hazardous situation is treated as <strong>given</strong> — a worst-case assumption.</p>
 </section>
 
 <section id="phases">
   <div class="sec-head"><span class="sec-tag">10</span><h2 class="sec-title">Four phases, one growing graph</h2></div>
   <div class="workflow-steps">
-    <div class="wstep"><div class="wstep-left"><div class="wnum">1</div><div class="wline"></div></div><div class="wstep-right"><h4>Foundation &amp; pragmatic modeling</h4><p>Classic STRIDE threat modeling with tool support. Safety annotation is available but entirely optional and non-invasive. Builds a consistent base graph (DFD + assets + relationships) and a first threat identification — not yet a full automatic derivation.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">1</div><div class="wline"></div></div><div class="wstep-right"><h4>Foundation &amp; pragmatic modeling</h4><p>Classic STRIDE threat modeling with tool support. Safety annotations and Hazard Items are available but entirely optional. Builds a consistent base graph (DFD + assets + relationships) and a first threat identification — not yet a full automatic derivation.</p></div></div>
     <div class="wstep"><div class="wstep-left"><div class="wnum">2</div><div class="wline"></div></div><div class="wstep-right"><h4>Rule-based completion &amp; derivation</h4><p><code>is_an</code>-based derivations activate; relationships are extended transitively where semantically valid (e.g. a Process inherits relationships from a Data Store via <code>is_an</code>). A validation engine flags incomplete nodes, invalid relationship types, and semantically contradictory modeling — every automatic derivation is explained to the user.</p></div></div>
     <div class="wstep"><div class="wstep-left"><div class="wnum">3</div><div class="wline"></div></div><div class="wstep-right"><h4>Deterministic threat derivation</h4><p>Likelihood-related relationships (<code>uses</code>, <code>transports</code>) and impact-related relationships (<code>depends_on</code>, <code>affects_*</code>) are strictly separated. Full path computation from attack vectors to damage targets, using only explicit and derived relationships — no heuristic assumptions.</p></div></div>
     <div class="wstep"><div class="wstep-left"><div class="wnum">4</div></div><div class="wstep-right"><h4>Analysis support &amp; governance <span style="color:var(--ink-mute); font-weight:400;">(optional)</span></h4><p>Prioritization and filtering of threat paths, traceable documentation of modeling decisions, support for reviews, audits and standards conformance, versioning and comparison of graphs over the system's lifecycle.</p></div></div>

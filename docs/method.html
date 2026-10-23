@@ -451,7 +451,7 @@
             <li>Only present when the project is marked safety-relevant</li>
             <li>Model each hazard as a Bowtie: contributing causes → hazard (with AND/OR gate) → endangered safety goals</li>
             <li>Triage every hazard: reachable by a cyberattack (in scope), not cyber-caused (out of scope), or unknown</li>
-            <li>In-scope hazards feed the Safety Annotation Layer used in Asset and Risk impact</li>
+            <li>In-scope hazards rate their cause assets in Asset and Risk impact, alongside the Safety Annotation Layer (worse rating applies)</li>
           </ul>
         </div>
       </div>
@@ -675,10 +675,11 @@
       <div class="concept-card">
         <h4>Safety Annotation Layer</h4>
         <p>
-          Relationships between assets carry safety annotations: relevance (direct / indirect)
-          and impact (reversible / irreversible / fatal). A safety override rule automatically
-          escalates threats to CRITICAL when the combination of direct relevance and fatal
-          impact is present — independent of CIANAAA scoring.
+          Relationships carry safety annotations: relevance (direct / indirect) and impact on a
+          five-level scale (reversible minor / major, irreversible minor / major, fatal). A safety
+          override rule automatically escalates to CRITICAL when direct relevance meets
+          irreversible-major or fatal harm — independent of CIANAAA scoring. Combined causes
+          (AND) are modeled as Hazard Items.
         </p>
       </div>
 
