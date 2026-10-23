@@ -44,6 +44,21 @@ description: "The DFD engine bridges draw.io XML to the typed graph model used b
   </ul>
 </section>
 
+<section>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Leveled DFDs (features/dfd/services/leveled)</h2></div>
+  <ul class="bullet-list">
+    <li>Each draw.io page is parsed separately; the page tree and the identity links (definition ↔ context copy) live in <code>dfd.pages</code> of the project, not as XML attributes</li>
+    <li>Effective model (<code>effective-model.ts</code>): the leaves of the decomposition and, per logical flow, one resolved pair of endpoints stitched from all its occurrences — the deepest endpoint on one containment chain wins; otherwise the flow falls back to the parent level, never "pick one". Derived on every load, never persisted</li>
+    <li>Flow state: <code>resolved</code> | <code>fallback</code> (with reasons) | <code>excluded</code>; <code>refines</code> balances a parent flow, <code>abstract</code> excludes it only once a valid refinement exists</li>
+    <li>Interfaces inherit physical and chip boundaries along the flow's interface chain</li>
+    <li><code>leveled-analysis.ts</code>: one parse and one effective model per DFD state, cached; every consumer — save path, validator, table groups, asset roll-up, reporter — asks there</li>
+    <li>Findings (<code>leveled-findings.ts</code>) never block editing, saving or generation: "error" only marks the DFD phase incomplete</li>
+    <li>Table groups (<code>table-groups.ts</code>): an element belongs to the top-level decomposed multiprocess it lies in, a flow to that group only if both resolved ends lie inside it</li>
+    <li>Asset roll-up (<code>asset-rollup.ts</code>): a decomposed multiprocess holds no relations of its own; its view is the distinct (asset, relation type) pairs of its parts, read-only</li>
+    <li>Schema 9 is the version fence: older releases refuse a file whose pages they would silently merge</li>
+  </ul>
+</section>
+
 <div class="foot-nav">
   <a href="{{ '/developers/architecture.html' | relative_url }}">← Architecture</a>
   <a href="{{ '/developers/hazard-dev.html' | relative_url }}">Next: Hazard Model →</a>

@@ -2,7 +2,7 @@
 layout: default
 section: app
 title: "TARAflow — App — DFD Modeling"
-description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-flow diagram, parametrize each element, and see and model how the assets behind it relate in the asset graph."
+description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-flow diagram on one or several levels, parametrize each element, and see and model how the assets behind it relate in the asset graph."
 ---
 
 <div class="page-head">
@@ -25,8 +25,26 @@ description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-
   </div>
 </section>
 
+<section id="leveled">
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Leveled DFDs</h2></div>
+  <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:16px;">A large system rarely fits on one diagram. A project can hold several draw.io pages: a <strong>Top</strong> page and a child page for every multiprocess you decompose. It stays one model — one element namespace, one asset register, one threat and risk register.</p>
+  <div class="card-grid-2">
+    <div class="card"><div class="tag-label">Pages</div><h3>Decompose a multiprocess</h3><p>A new multiprocess can get its own child page; deleting the multiprocess removes the page. Page info sits on draw.io's page tabs, a button opens the child page.</p></div>
+    <div class="card"><div class="tag-label">Identity</div><h3>One element, many pages</h3><p>An element is defined once and appears elsewhere as a context copy. Numbers are hierarchical — <code>P-2.1</code> lies under <code>MP-2</code> — and a page can be renumbered with its child pages.</p></div>
+    <div class="card"><div class="tag-label">Context</div><h3>Insert and sync context</h3><p>"Insert as context" places existing elements on a child page; "Sync context" keeps the copies in line with the parent page.</p></div>
+    <div class="card"><div class="tag-label">Analysis</div><h3>Analysed on the leaves</h3><p>Threats are generated for the parts, not the decomposed multiprocess. A flow drawn on a parent level is resolved to the part that handles it; <code>refines</code> links keep parent and child flows balanced.</p></div>
+  </div>
+  <ul class="bullet-list" style="margin-top:16px;">
+    <li>Incomplete decomposition never blocks work: a flow that cannot be resolved is analysed conservatively on the parent level and listed as such — nothing is dropped silently</li>
+    <li>The DFD validation reports leveled findings: dangling references, unbalanced flows, duplicated definitions, assets not yet assigned to a part</li>
+    <li>An existing multi-page draw.io file is taken over in the adoption dialog, pasted copies are assigned there too</li>
+    <li>One thumbnail per page; previews and the asset graph filter by page</li>
+    <li>A classic single-page DFD works as before</li>
+  </ul>
+</section>
+
 <section id="views">
-  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Three Views of One Model</h2></div>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Three Views of One Model</h2></div>
   <div class="card-grid-2">
     <div class="card"><div class="tag-label">Diagram</div><h3>Draw</h3><p>The draw.io diagram with the side panel for the selected element and the asset panel.</p></div>
     <div class="card"><div class="tag-label">Description</div><h3>Describe</h3><p>One accordion per element with the same forms — for working through a model element by element.</p></div>
@@ -36,7 +54,7 @@ description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-
 </section>
 
 <section id="asset-graph">
-  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Asset Graph</h2></div>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Asset Graph</h2></div>
   <ul class="bullet-list">
     <li>Layer view: one lane per vertical layer (data → function → system → infrastructure), process, service, physical, human and environment in a side column; presets such as Architecture, Flow or Protection targets</li>
     <li>Links to hidden layers appear as counters on the node — a click shows the layer</li>
@@ -44,12 +62,13 @@ description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-
     <li>Relation type filter and search; a hit in a hidden layer or outside the focus says why and offers to show it</li>
     <li>Cards for assets (relations grouped by type) and links (type, step, rationale, degraded mode); "Show in graph" from the asset table and "Show in table" back</li>
     <li>Stable layout: nodes move only on "Rearrange"; positions are remembered locally per project, never in the project file</li>
+    <li>Leveled DFDs: filter by page; a decomposed multiprocess shows the assets of its parts as a read-only roll-up ("via P-2.1, DS-2.1")</li>
     <li>Keyboard: Tab and arrow keys select, Enter focuses, Delete removes (edit mode), Esc closes</li>
   </ul>
 </section>
 
 <section id="asset-graph-edit">
-  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Modeling in the Asset Graph</h2></div>
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Modeling in the Asset Graph</h2></div>
   <ul class="bullet-list">
     <li>Edit mode is visibly marked; view mode is the default</li>
     <li>Connect two assets by dragging from a node's handle — while dragging, every asset is marked as valid, valid only the other way round, or not allowed; the chooser offers only the allowed types, core types first</li>
@@ -61,10 +80,10 @@ description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-
 </section>
 
 <section id="completeness">
-  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">DFD Completeness Rules</h2></div>
+  <div class="sec-head"><span class="sec-tag">06</span><h2 class="sec-title">DFD Completeness Rules</h2></div>
   <ul class="bullet-list">
     <li>All system components, data flows, and trust boundaries must be present</li>
-    <li>All elements must be named and numbered (P-xx, DS-xx, DF-xx, EE-xx)</li>
+    <li>All elements must be named and numbered (P-xx, DS-xx, DF-xx, EE-xx; on child pages hierarchically, e.g. P-2.1)</li>
     <li>Assets and Interfaces must be placed on the correct elements</li>
     <li>Consistent with architecture — version-controlled in repository</li>
     <li>Re-assessment trigger when context or architecture changes</li>

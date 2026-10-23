@@ -68,6 +68,7 @@ description: "Assets are the items of value in your system — data, functions, 
     <li>Asset links are stored in the project and are part of the audit diff</li>
     <li>Asset table and asset dialog show them read from the listed asset ("requires DA-002" at the target); a link the rules no longer allow, e.g. after a group change, is reported — never deleted silently</li>
     <li>Modeled in the DFD asset panel or directly in the <a href="{{ '/app/dfd.html#asset-graph' | relative_url }}">asset graph</a></li>
+    <li>Leveled DFDs: the asset table is grouped per decomposed multiprocess; the multiprocess itself shows the assets of its parts as a roll-up, and relations it held before the decomposition stay "not yet assigned to a part" until a part takes them over</li>
   </ul>
 </section>
 

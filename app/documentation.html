@@ -33,10 +33,20 @@ description: "Generate audit-ready documentation from the live TARA model. Every
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Headless generation (CLI)</h2></div>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Leveled DFDs</h2></div>
+  <ul class="bullet-list">
+    <li>One DFD section and figure per page, in every format</li>
+    <li>The decomposition tree and an element overview per page</li>
+    <li>The flows analysed on a parent level are listed</li>
+    <li>Threat and risk tables grouped like the app, with statistics per chapter</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Headless generation (CLI)</h2></div>
   <ul class="bullet-list">
     <li>The same Markdown, AsciiDoc, HTML, PDF and StrictDoc output can be generated from the command line, without the desktop app or Electron — built for CI/CD pipelines (e.g. Jenkins) and Docker/Podman containers</li>
-    <li>Reads a saved <code>.tara.json</code> project file directly; no project needs to be open in the UI</li>
+    <li>Reads a saved <code>.tara.json</code> project file directly; no project needs to be open in the UI — leveled DFDs get the same analysis as in the app</li>
     <li>Distributed as a standalone <code>.deb</code> package, decoupled from the desktop installer</li>
   </ul>
 </section>

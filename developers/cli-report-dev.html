@@ -36,7 +36,8 @@ description: "taraflow-report — a headless entry point that generates the exac
     <li>No <code>storage-service</code> dependency (that's Electron/browser-coupled) — a plain <code>fs.readFile</code> + <code>JSON.parse</code>, followed by the same schema migrations the app runs on load (risk data, asset configuration, factor ratings)</li>
     <li>The project's <code>computed</code> maps (e.g. <code>impactLabels</code>) must be present as empty <code>Map</code>s, never <code>undefined</code> — the base generator accesses them with a nullish-coalescing fallback on the value, not on the map itself</li>
     <li><code>attackTree</code> (singular, in <code>DocProjectData</code>) maps from <code>project.attackTrees</code> (plural) — a naming mismatch worth knowing about before it causes a silent empty section</li>
-    <li>The on-disk DFD thumbnail is already a base64 SVG — reports embed it directly, no headless draw.io instance needed</li>
+    <li>The on-disk DFD thumbnail is already a base64 SVG — reports embed it directly, no headless draw.io instance needed; leveled DFDs store one thumbnail per page</li>
+    <li>The DFD XML is parsed with <code>@xmldom/xmldom</code> in Node, so the CLI runs the same leveled analysis (effective model, table groups, parent-level flows) as the app</li>
   </ul>
 </section>
 

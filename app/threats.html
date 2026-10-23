@@ -47,12 +47,22 @@ description: "TARAflow generates STRIDE threats automatically from your DFD. Eve
     <div class="wstep"><div class="wstep-left"><div class="wnum">2</div><div class="wline"></div></div><div class="wstep-right"><h4>Review &amp; Prioritize</h4><p>Each generated threat has a description, cause, attack scenario, and proposed mitigations pre-filled from the catalog. Review each threat and mark it as relevant, not relevant, or deferred.</p></div></div>
     <div class="wstep"><div class="wstep-left"><div class="wnum">3</div><div class="wline"></div></div><div class="wstep-right"><h4>Link Assets</h4><p>Threats are automatically linked to the assets on the source DFD element. Verify the asset links and adjust if needed — asset CIANAAA goals determine which STRIDE categories were generated.</p></div></div>
     <div class="wstep"><div class="wstep-left"><div class="wnum">4</div><div class="wline"></div></div><div class="wstep-right"><h4>Assign Mitigations</h4><p>Each threat comes with catalog mitigations pre-proposed. Mitigations already reflected in DFD element properties are automatically marked as implemented. Add, remove, or replace mitigations as needed.</p></div></div>
-    <div class="wstep"><div class="wstep-left"><div class="wnum">5</div></div><div class="wstep-right"><h4>Sync after DFD changes</h4><p>When the DFD changes — new elements, renamed components, moved boundaries — TARAflow detects which threats are orphaned or missing and offers a one-click sync. Manual threat assignments are preserved. When generation rules or security goals change, threats the current rules no longer produce are listed for review — keep (marked as retained) or remove; nothing is dropped silently.</p></div></div>
+    <div class="wstep"><div class="wstep-left"><div class="wnum">5</div></div><div class="wstep-right"><h4>Sync after DFD changes</h4><p>When the DFD changes — new elements, renamed components, moved boundaries — TARAflow detects which threats are orphaned or missing and offers a one-click sync. Manual threat assignments are preserved. Before regenerating, a reconciliation lists new, unchanged, changed and obsolete threats; a threat whose references changed keeps its rating and is flagged for review. When generation rules or security goals change, threats the current rules no longer produce are listed for review — keep (marked as retained) or remove; nothing is dropped silently.</p></div></div>
   </div>
 </section>
 
+<section id="leveled">
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Leveled DFDs</h2></div>
+  <ul class="bullet-list">
+    <li>Threat tables are grouped per decomposed multiprocess, with a summary per group; everything else is "Top level"</li>
+    <li>A flow between two multiprocesses belongs to the side it attacks</li>
+    <li>Filter by page and by analysis state</li>
+    <li>A banner lists the flows analysed on a parent level — their threats are provisional until the flow is drawn on the child page</li>
+  </ul>
+</section>
+
 <section id="domains">
-  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Domain Coverage</h2></div>
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Domain Coverage</h2></div>
   <p style="font-size:0.92rem;color:var(--ink-dim);margin-bottom:20px;">The threat catalog is organized by domain. TARAflow selects templates based on element type, technology, protocol, and system class — you see threats relevant to your system, not a generic flat list.</p>
   <div class="domain-grid">
     <div class="domain-pill"><div class="dp-name">General</div><div class="dp-desc">Process, DataStore, DataFlow, ExternalEntity — baseline STRIDE for any system.</div></div>
