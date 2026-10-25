@@ -47,6 +47,10 @@ description: "An optional safety-analysis tab, alongside the security workflow: 
     <li>Bring in hazards from an existing safety analysis (CSV, Excel/ODS, or a TARAflow JSON export) via a profile-based importer with an interactive column-mapping dialog</li>
     <li>Affected-persons data is bridged into deduplicated human assets with structured, per-role severity — not collapsed into one flat rating</li>
     <li>Provenance from the source file (extra columns that don't map to a known field) is retained on the imported item</li>
+    <li>EN ISO 12100 / EN ISO 13849-1 risk assessments import completely: severity on the five-level person-harm scale with a value-map editor, default affected persons for sheets without a person column, lifecycle phase, hazard zone, protective measures and their type, risk graph S/F/P, PLr, PL achieved and safety function</li>
+    <li>The customer's rating stays traceable — probability, RPN and the source values are kept; a warning flags a severity that contradicts the risk graph; a missing severity is never turned into an injury</li>
+    <li>The hazard category is suggested from free-text hazard types (German and English keywords); ambiguous values are left to the analyst</li>
+    <li>Import profiles are stored in the project. A revised sheet is recognised, moved or renamed columns are followed, and the rows are reconciled — new, changed, unchanged, removed — after a preview, instead of being appended; changed and removed hazards are flagged until reviewed, and nothing the analyst edited is overwritten</li>
   </ul>
 </section>
 

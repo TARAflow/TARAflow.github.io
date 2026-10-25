@@ -74,6 +74,15 @@ description: "TARAflow generates STRIDE threats automatically from your DFD. Eve
   </div>
 </section>
 
+<section id="controls">
+  <div class="sec-head"><span class="sec-tag">06</span><h2 class="sec-title">Controls by Attack Vector</h2></div>
+  <ul class="bullet-list">
+    <li>Attack-path risks get the catalog controls that fit the path's attack vector first (network / adjacent / local / physical), then vector-independent ones — a physical-access path is no longer offered rate limiting</li>
+    <li>The project context gates the proposals: in-vehicle controls only in the Automotive domain, embedded-only controls only on an embedded platform; without a vector the proposals are as before</li>
+    <li>20 additional controls with verifications — firewall default deny, egress filtering, RBAC / ABAC, SELinux / AppArmor, seccomp, read-only verified root file system, SecOC, CAN IDS, authenticated diagnostics, signed OTA with anti-rollback, SBOM-based patch management and more</li>
+  </ul>
+</section>
+
 <div class="foot-nav">
   <a href="{{ '/app/assets.html' | relative_url }}">← Assets</a>
   <a href="{{ '/app/attacktree.html' | relative_url }}">Next: Attack Tree →</a>

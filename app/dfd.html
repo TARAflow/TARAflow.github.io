@@ -58,10 +58,12 @@ description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-
   <ul class="bullet-list">
     <li>Layer view: one lane per vertical layer (data → function → system → infrastructure), process, service, physical, human and environment in a side column; presets such as Architecture, Flow or Protection targets</li>
     <li>Links to hidden layers appear as counters on the node — a click shows the layer</li>
-    <li>Focus view around one asset (depth 1–3), including the DFD elements that relate to it</li>
+    <li>Focus view around one asset or hazard (depth 1–3), including the DFD elements that relate to it — they can be switched off in the focus view too</li>
+    <li>Hazard items as read-only nodes in their own lane above the protection targets, coloured by their worst severity, with <code>contributes_to</code> and <code>endangers</code> edges (severity as label); a card with causes and targets and "Open in Hazard tab"; on with the presets All and Protection targets</li>
     <li>Relation type filter and search; a hit in a hidden layer or outside the focus says why and offers to show it</li>
     <li>Cards for assets (relations grouped by type) and links (type, step, rationale, degraded mode); "Show in graph" from the asset table and "Show in table" back</li>
-    <li>Stable layout: nodes move only on "Rearrange"; positions are remembered locally per project, never in the project file</li>
+    <li>Mouse as in draw.io: drag a node to move it, Ctrl / ⌘ + drag pans the view, the wheel zooms. Nodes of the data … infrastructure lanes move along their lane; side-column nodes snap to a row, including a free row above the top lane</li>
+    <li>Stable layout: nodes move only when you drag them or on "Rearrange"; positions are remembered locally per project, never in the project file</li>
     <li>Leveled DFDs: filter by page; a decomposed multiprocess shows the assets of its parts as a read-only roll-up ("via P-2.1, DS-2.1")</li>
     <li>Keyboard: Tab and arrow keys select, Enter focuses, Delete removes (edit mode), Esc closes</li>
   </ul>
