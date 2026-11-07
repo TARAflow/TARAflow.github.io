@@ -2,34 +2,46 @@
 layout: default
 section: app
 title: "TARAflow — App — Attack Tree"
-description: "Model AND/OR attack trees for high-impact assets. Assess probability and feasibility per leaf node, and link tree paths back to the threat table."
+description: "Write AND/OR attack trees in a text DSL, rate their leaves and let the paths feed the risk register."
 ---
 
 <div class="page-head">
   <div class="eyebrow">App / 06</div>
   <h1>Attack Tree</h1>
-  <p>Model AND/OR attack trees for high-impact assets. Assess probability and feasibility per leaf node, and link tree paths back to the threat table.</p>
+  <p>Write AND/OR attack trees in a text DSL, rate their leaves and let the paths feed the risk register — as threats of their own or as the likelihood of an existing threat.</p>
 </div>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Attack Tree Workflow</h2></div>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Anchors</h2></div>
+  <div class="card-grid-2">
+    <div class="card"><div class="tag-label">Asset</div><h3>Asset × security goal</h3><p>Every attack path becomes a threat of its own — one per path and STRIDE category — next to the STRIDE threats in one risk register. The way to attacks the DFD has no element for: supply chain, physical access, social engineering.</p></div>
+    <div class="card"><div class="tag-label">Threat</div><h3>An existing STRIDE threat</h3><p>The tree rates the threat's likelihood (the easiest path wins). Other routes to the same goal can be split off as threats of their own.</p></div>
+    <div class="card"><div class="tag-label">Risk / standalone</div><h3>Analysis only</h3><p>A tree on an existing risk, or one without an anchor, documents the analysis (e.g. vulnerability analysis) and feeds no likelihood.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Modeling and Rating</h2></div>
   <ul class="bullet-list">
-    <li>Derive attack goals from high-impact assets (Variant B) or high-risk threats (Variant A, Phase 5A)</li>
-    <li>Model AND/OR trees: AND-nodes require all child conditions, OR-nodes require any one</li>
+    <li>Trees are written in a text DSL with a live preview; AND nodes need all children, OR nodes any one</li>
     <li>An AND gate is one attack path per combination of its steps, rated with the gate's feasibility over exactly those steps — not one threat and risk per step</li>
-    <li>After renaming a node, <em>Goals &amp; Claims</em> offers to re-link the goal or claim to the renamed path</li>
-    <li>Assess probability and feasibility per leaf — escalates to parent nodes</li>
-    <li>Link attack tree leaves to STRIDE threats in the threat table for traceability</li>
+    <li>Leaves are rated with the five attack-potential factors of ISO/SAE 21434 Annex G (elapsed time, expertise, knowledge, window of opportunity, equipment) or with the quick method; the method is recorded project-wide and printed in the report. ISO/SAE 21434 projects require attack potential</li>
+    <li>Attack potential is added up under AND and the easiest branch wins under OR; the feasibility band (Table G.7) is assigned once, at the end</li>
+    <li>In IEC 62443 / classic projects the attacker's benefit counts toward likelihood; in ISO/SAE 21434 projects feasibility alone is the likelihood</li>
     <li>State the attack vector on any node — <code>av=network|adjacent|local|physical</code> (ISO/SAE 21434 G.9), inherited down the tree; it selects fitting controls and leaves attack potential and feasibility unchanged</li>
     <li>On a 3- or 4-level risk scale the tree likelihood is mapped onto the project's scale</li>
-    <li>The ids AT-n / AT-n.m used by threats, risks and the report appear in the attack-tree tab</li>
-    <li>Validate Won't-fix decisions: if attack tree shows a viable path, reconsider</li>
   </ul>
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Integration with STRIDE</h2></div>
-  <p style="font-size:0.88rem;color:var(--ink-dim);">The feedback loop between STRIDE and Attack Trees checks: all attack paths covered by at least one STRIDE threat? Missing STRIDE categories? Inconsistent likelihood estimates between tree leaves and threat scores? Iterate Phase 3 until the cross-check is clean.</p>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Paths, Threats and Risks</h2></div>
+  <ul class="bullet-list">
+    <li>A path's identity comes from its content (the chain of node names), so reordering or re-rating never moves a decision to another path; renaming a node makes a new path that has to be assessed again</li>
+    <li>The ids AT-n / AT-n.m used by threats, risks and the report appear in the attack-tree tab</li>
+    <li>A path that backs a confirmed threat and disappears or changes is shown in a banner — an assessment is never dropped silently</li>
+    <li>After renaming a node, <em>Goals &amp; Claims</em> offers to re-link the goal or claim to the renamed path</li>
+    <li>The tree contributes likelihood only; impact stays with the damage scenario (asset × security goal). Treatment is decided in the Risk tab</li>
+  </ul>
 </section>
 
 <div class="foot-nav">

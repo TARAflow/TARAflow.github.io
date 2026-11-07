@@ -8,16 +8,24 @@ description: "Score likelihood per threat, compute Risk = Impact × Likelihood, 
 <div class="page-head">
   <div class="eyebrow">App / 07</div>
   <h1>Risk Assessment</h1>
-  <p>Score likelihood per threat, compute Risk = Impact × Likelihood, prioritize mitigations with MoSCoW, and compare risk before and after controls.</p>
+  <p>Score likelihood per threat with the method of the project's preset, combine it with the impact into a risk level, prioritize with MoSCoW, and compare risk before and after controls.</p>
 </div>
 
 <section>
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Risk Scoring</h2></div>
   <ul class="bullet-list">
     <li>Impact comes from the security goals the threat violates on its linked assets, including per-goal impact</li>
-    <li>Likelihood is scored using OWASP Risk Rating factors (skill level, motive, opportunity, size, ease of discovery and exploit, awareness, intrusion detection), ISO/IEC 18045 attack potential (ISO/SAE 21434) or ETSI TVRA — each level named by the situation it stands for</li>
-    <li>Risk = Impact × Likelihood on a configurable N×N matrix</li>
-    <li>Risk levels: Low / Medium / High / Critical — thresholds configurable per project; levels and colours follow your own thresholds everywhere, and the matrix cells agree with the risk chips</li>
+    <li>The likelihood method follows the preset the regulation tag selects — each level named by the situation it stands for:
+      <ul class="bullet-list">
+        <li><strong>Standard</strong> — skill level, motive, opportunity, ease of exploit, weighted mean</li>
+        <li><strong>ISO/SAE 21434</strong> — attack potential per ISO/IEC 18045: elapsed time, expertise, knowledge, window of opportunity, equipment</li>
+        <li><strong>ETSI TVRA</strong> — TS 102 165-1: time, expertise, knowledge, opportunity, equipment, intensity</li>
+        <li><strong>EN 50742 A</strong> — attack potential AP = (EL × WoO) + AC: exposure level and attacker capability per risk, window of opportunity once for the project</li>
+      </ul>
+    </li>
+    <li>Risk = Impact × Likelihood on a configurable 3-, 4- or 5-level matrix</li>
+    <li>Risk levels from Low to Critical, depending on the scale — thresholds configurable per project; levels and colours follow your own thresholds everywhere, and the matrix cells agree with the risk chips</li>
+    <li>EN 50742 A: each risk gets its SRSL (Table B.6) from the attack-potential band and the severity on the safety function — reversible, non-reversible, or fatal as a TARAflow extension; the reference tables are in the risk dialog</li>
     <li>ISO/SAE 21434: the risk value 1–5 (clause 15.8) from the matrix of Annex H.8 replaces I × L — impact on the 4-level scale Negligible / Moderate / Major / Severe × attack feasibility, shown with a word (Minimal / Low / Medium / High / Critical); the heat map is the 4 × 4 matrix of H.8</li>
   </ul>
 </section>
@@ -38,7 +46,8 @@ description: "Score likelihood per threat, compute Risk = Impact × Likelihood, 
     <li>MoSCoW: Must fix / Should fix / Could fix / Won't fix</li>
     <li>ISO/SAE 21434: the attack paths of one tree form a threat scenario — its value and residual are the highest of its paths; treatment options Avoid / Reduce / Share / Retain (15.9); a review list names Retain at a value of 4 or more and Reduce at value 1 — nothing changes automatically</li>
     <li>Before/after toggle: compare risk score before and after proposed mitigations</li>
-    <li>Won't fix decisions require a cost-benefit justification (Phase 5 governance)</li>
+    <li>Treatment options Eliminate / Reduce / Accept / Transfer / Share</li>
+    <li>Won't risks are listed in their own table with their justification; a missing justification is flagged</li>
     <li>Risk register exportable to documentation and ticket systems</li>
   </ul>
 </section>
