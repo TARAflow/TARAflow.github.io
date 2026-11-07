@@ -8,26 +8,33 @@ description: "Ticket adapter pattern for Jira, ADO, GitHub Issues, and future sy
 <div class="page-head">
   <div class="eyebrow">Developers / 08</div>
   <h1>Integrations</h1>
-  <p>Ticket adapter pattern for Jira, ADO, GitHub Issues, and future systems.</p>
+  <p>One ticket adapter per tracker — Jira Cloud and Server / DC, Azure DevOps, GitHub, GitLab, OpenProject — behind a host-bound channel that keeps the token in the main process.</p>
 </div>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">ITicketAdapter</h2></div>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">TicketAdapter</h2></div>
   <ul class="bullet-list">
-    <li>Interface: createTicket(mitigation) → TicketRef, getTicketStatus(ref) → Status, updateTicket(ref, patch)</li>
-    <li>BaseTicketAdapter: shared credential resolution via keytar, error handling, retry</li>
-    <li>JiraAdapter, ADOAdapter, GitHubAdapter — concrete implementations</li>
-    <li>Polarion, GitLab adapters: planned via same interface</li>
-    <li>No plaintext secrets — credentials stored in OS keychain via keytar</li>
+    <li><code>features/integration/adapters/ticket-adapter.ts</code>: <code>testConnection()</code>, <code>fetchTickets(projectKey, issueType)</code>, <code>createTicket(input)</code>, <code>fetchTicketStates(keys)</code> (one batch request), <code>ticketUrl(key)</code></li>
+    <li>Adapters run in the renderer and map the tracker's fields to the shared ticket types in <code>shared/models/ticket-types</code>; what a ticket change does to a mitigation is tracker-independent and lives outside the adapters</li>
+    <li>Implementations: <code>jira-adapter</code>, <code>azure-devops-adapter</code>, <code>github-adapter</code>, <code>gitlab-adapter</code>, <code>openproject-adapter</code>; Polarion planned via the same interface</li>
   </ul>
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">RichText Ticket Cards</h2></div>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Host-bound Channel</h2></div>
+  <ul class="bullet-list">
+    <li>Every HTTP call goes through <code>integration:request</code> with tool, host, account, method and path (<code>adapters/tracker-channel.ts</code> → <code>electron/ipc/integration-handlers.ts</code>)</li>
+    <li>The main process looks up the token in the OS keychain under tool, host and account, sets the authorization itself and refuses any other host — the renderer never sees a token, a foreign base URL in a project file gets none</li>
+    <li>The mitigation status mirrors the ticket in both directions; only a change of the ticket is applied, so what the analyst set stays while the ticket does not change</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">RichText Ticket Cards</h2></div>
   <ul class="bullet-list">
     <li>Ticket body is generated from a template: threat description, risk level, mitigation text, verification criteria, DFD element reference, norm references</li>
-    <li>POST body assembled in the adapter — Jira uses Atlassian Document Format (ADF), ADO uses HTML, GitHub uses Markdown</li>
-    <li>Ticket ID and URL stored back on MitigationDraft.ticketRef for status sync</li>
+    <li>The body format is the adapter's job — Jira uses Atlassian Document Format (ADF), Azure DevOps HTML (JSON Patch), GitHub, GitLab and OpenProject Markdown</li>
+    <li>Ticket id, URL and the last seen ticket status are stored on the selected mitigation (<code>ticketId</code>, <code>ticketUrl</code>, <code>ticketStatus</code>, <code>ticketSyncedAt</code>) for status sync</li>
   </ul>
 </section>
 

@@ -70,7 +70,7 @@ description: "TARAflow generates STRIDE threats automatically from your DFD. Eve
     <div class="domain-pill"><div class="dp-name">Cloud</div><div class="dp-desc">API boundaries, service-to-service, JWT/token threats, cloud-specific DoS.</div></div>
     <div class="domain-pill"><div class="dp-name">Mobile</div><div class="dp-desc">App binary tampering, repackaging, client-side storage threats.</div></div>
     <div class="domain-pill"><div class="dp-name">Physical</div><div class="dp-desc">ChipBoundary (JTAG, side-channel, Secure Boot), PhysicalBoundary (tamper, depot attacks).</div></div>
-    <div class="domain-pill"><div class="dp-name">Gap</div><div class="dp-desc">Property-triggered threats: missing fail-safe state, no backup, unsigned firmware update.</div></div>
+    <div class="domain-pill"><div class="dp-name">Gap</div><div class="dp-desc">Property-triggered threats: missing fail-safe state, no backup, unsigned firmware update. A condition on a missing or weak control also matches while the property is not set yet — an unfinished model never looks safer than a complete one.</div></div>
   </div>
 </section>
 
@@ -81,6 +81,7 @@ description: "TARAflow generates STRIDE threats automatically from your DFD. Eve
     <li>Project mitigations are kept on regeneration, can be merged and are checked by the closed loop; free-text mitigations are no longer offered, existing ones can be converted</li>
     <li>The DFD notification panel separates <em>planned</em> mitigations (information) from mitigations marked done that the DFD contradicts (warning / conflict) — in the Smoke Detector example 1 notification instead of 81</li>
     <li><em>Apply</em> is offered only for a mitigation that is done, and can restore a value that was changed back</li>
+    <li>Project mitigations say which IEC 62443-4-2 requirements they implement — the <a href="{{ '/app/compliance.html' | relative_url }}">Compliance tab</a> counts them</li>
   </ul>
 </section>
 

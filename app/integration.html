@@ -2,21 +2,22 @@
 layout: default
 section: app
 title: "TARAflow — App — Integrations"
-description: "Export mitigations as tickets to Jira, Azure DevOps, or GitHub Issues. Receive status updates when tickets are closed and reflect them back in the risk model."
+description: "Create and link mitigation tickets in Jira, Azure DevOps, GitHub, GitLab or OpenProject, and let the ticket state drive the mitigation status."
 ---
 
 <div class="page-head">
   <div class="eyebrow">App / 11</div>
   <h1>Integrations</h1>
-  <p>Export mitigations as tickets to Jira, Azure DevOps, or GitHub Issues. Receive status updates when tickets are closed and reflect them back in the risk model.</p>
+  <p>Create and link mitigation tickets in Jira, Azure DevOps, GitHub, GitLab or OpenProject. The ticket state drives the mitigation status in the risk model.</p>
 </div>
 
 <section>
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Supported Systems</h2></div>
   <ul class="bullet-list">
-    <li>Jira — one Integration tab: connection test, project and issue type, create and link tickets</li>
-    <li>Azure DevOps — returns with a later release (not connected in 0.16 and 0.17)</li>
-    <li>GitHub Issues, Polarion (planned)</li>
+    <li>Jira Cloud — connection test, project and issue type, create and link tickets</li>
+    <li>Azure DevOps (Azure Boards) — create and link work items and follow their state; the token is bound to your organization</li>
+    <li><strong>Preview</strong> — usable now, confirmed against live instances over time: Jira Server / Data Center, GitHub Issues, GitLab Issues, OpenProject</li>
+    <li>Polarion — planned</li>
   </ul>
 </section>
 
@@ -27,8 +28,16 @@ description: "Export mitigations as tickets to Jira, Azure DevOps, or GitHub Iss
     <li>Ticket includes: threat description, risk level, proposed mitigation, verification criteria, DFD reference</li>
     <li>Ticket states sync when the Risk tab opens or on <em>Sync ticket status</em></li>
     <li>The mitigation status follows its ticket in both directions; a ticket closed as <em>won't fix</em> marks the mitigation rejected with the ticket as reason</li>
-    <li>The API token stays in the OS keychain, bound to the Jira address — a project file can never point it elsewhere</li>
-    <li>Your Jira e-mail is not written into the project file — every team member uses their own account</li>
+    <li>The token stays in the OS keychain, bound to the tracker's address — a project file can never point it elsewhere</li>
+    <li>Your account is not written into the project file — every team member uses their own</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Azure DevOps Setup</h2></div>
+  <ul class="bullet-list">
+    <li>In Integration choose Azure DevOps and enter <code>https://dev.azure.com/&lt;organization&gt;</code></li>
+    <li>Use a personal access token with <em>Work Items: read &amp; write</em></li>
   </ul>
 </section>
 

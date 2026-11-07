@@ -2,20 +2,20 @@
 layout: default
 section: app
 title: "TARAflow — App — Compliance"
-description: "The IEC 62443-4-2 requirement matrix of your component — classic edition or the CRA edition EN IEC 62443-4-2 — derived from the TARA you already have."
+description: "Requirement matrices derived from the TARA you already have — IEC 62443-4-2 (classic or CRA edition) and EN 50742 Approach A."
 ---
 
 <div class="page-head">
   <div class="eyebrow">App / 09</div>
   <h1>Compliance</h1>
-  <p>The requirement matrix of your component — IEC 62443-4-2 in the classic edition (2019) or the CRA edition EN IEC 62443-4-2 — derived from the DFD, the risk treatment and the project data you already have. Rows are checked, not ticked.</p>
+  <p>The requirement matrices of your component — IEC 62443-4-2 in the classic edition (2019) or the CRA edition EN IEC 62443-4-2, and EN 50742 Approach A — derived from the DFD, the risk treatment and the project data you already have. Rows are checked, not ticked.</p>
 </div>
 
 <section>
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Choosing the Matrix</h2></div>
   <ul class="bullet-list">
     <li>The tag decides: <code>IEC 62443</code> for the classic edition with its device categories, <code>EN IEC 62443 (CRA)</code> for the CRA edition (draft prAA:2026, marked as draft)</li>
-    <li>With both tags the two editions appear side by side as sub-tabs</li>
+    <li>With both tags the two editions appear side by side as sub-tabs; the EN 50742 A tag adds a sub-tab of its own</li>
     <li>One statement per requirement holds in both editions — switching between the classic and the CRA tag keeps your statements</li>
   </ul>
 </section>
@@ -34,7 +34,10 @@ description: "The IEC 62443-4-2 requirement matrix of your component — classic
   <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Derived, Not Ticked</h2></div>
   <ul class="bullet-list">
     <li>Every row is checked against the DFD properties, the mitigations of the risk treatment (per element; only done ones count for the achieved value) and supporting measures</li>
-    <li>An unset property is <em>unknown</em>, never <em>not applicable</em></li>
+    <li>An unset property is <em>information missing</em>, never <em>not applicable</em> — the row names the empty field per element, e.g. "information missing on MP-1 (password lifetime limit)"</li>
+    <li>A row met by a statement while the model is still open says so; rows an edition declares void link to a dialog with the reason</li>
+    <li>A requirement the plant provides is covered by a supporting claim — it counts for the value with measures of the system, never for the product's SL-C; claims no requirement uses any more can be deleted</li>
+    <li>Project mitigations say which IEC 62443-4-2 requirements they implement</li>
     <li>What the model cannot show gets a statement with reasoning and evidence; TARAflow tells you when the model changed since</li>
     <li>Hover a requirement number for its title and summary, click it for everything — how TARAflow checks it, the elements concerned, fitting catalog mitigations, your statement. The summaries are in our own words; the standard is authoritative</li>
   </ul>
@@ -46,11 +49,30 @@ description: "The IEC 62443-4-2 requirement matrix of your component — classic
     <li>A to-do list up to the SL-T names, per element, the property to set or check, marks what the planned mitigations close and lists the missing statements</li>
     <li>A click on the element shows it in the diagram; a filter shows the rows by status</li>
     <li>A quick guide walks through the steps</li>
-    <li>The report gets a chapter with the security levels, the statement of applicability (with the source of every row), the CRA view by Annex I letter and the gaps with suggested mitigations — in every format and the CLI</li>
+    <li>The report gets a chapter with one part per active standard: the security levels, the statement of applicability (with the source of every row), the CRA view by Annex I letter and the gaps against the SL-T with the text of the suggested catalog mitigations — in every format and the CLI</li>
   </ul>
   <div class="notice-box">
     <p><strong>Example:</strong> the <em>Pump Station Controller</em> in <a href="https://github.com/TARAflow/TARAflow_Examples" target="_blank" rel="noopener">TARAflow_Examples</a> is an IEC 62443 / CRA example project to try the matrix on.</p>
   </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Model Fields for the Matrix</h2></div>
+  <ul class="bullet-list">
+    <li>Processes, multiprocesses and data flows carry the fields the requirements ask about: user accounts (per person / per role / shared), password rules and lifetime, role-to-permission mapping, default credentials, login lockout, update delivery and defaults, secure by default, deletion of user data, access mode and data minimisation</li>
+    <li>Each field appears only where the settings before it make it meaningful; more IEC 62443-4-2 rows are derived instead of needing a statement (CR 1.1 RE(1), CR 1.5, CR 1.7, CR 1.11, CR 2.1 RE(2), CR 3.10, CR 7.6, CR 7.9)</li>
+    <li>Filter <em>Information missing</em> to see which field each row still waits for</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">06</span><h2 class="sec-title">EN 50742 Approach A</h2></div>
+  <ul class="bullet-list">
+    <li>With the EN 50742 A tag the Compliance tab shows the 23 baseline requirements next to the IEC 62443 editions</li>
+    <li>Checked against the model, the risks (SRSL, mandated §7.4.3 controls) and the project data — hazards, safety functions, window of opportunity, system definition</li>
+    <li>The header shows the highest SRSL per safety function and the interfaces on the path to it, derived from the DFD; a one-way boundary (data diode) ends the path</li>
+    <li>The report has its own part in the requirement matrix chapter</li>
+  </ul>
 </section>
 
 <div class="foot-nav">
