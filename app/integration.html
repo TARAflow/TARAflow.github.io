@@ -25,7 +25,7 @@ description: "Create and link mitigation tickets in Jira, Azure DevOps, GitHub, 
   <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Workflow</h2></div>
   <ul class="bullet-list">
     <li>Select mitigations from the risk table and export as tickets</li>
-    <li>Ticket includes: threat description, risk level, proposed mitigation, verification criteria, DFD reference</li>
+    <li>The ticket text names the threat, attack and cause, the risk score before and after, the mitigation as an EARS requirement (<em>WHEN … the system SHALL …</em>), its notes and the verification criteria, and the risk it belongs to</li>
     <li>Ticket states sync when the Risk tab opens or on <em>Sync ticket status</em></li>
     <li>The mitigation status follows its ticket in both directions; a ticket closed as <em>won't fix</em> marks the mitigation rejected with the ticket as reason</li>
     <li>The token stays in the OS keychain, bound to the tracker's address — a project file can never point it elsewhere</li>

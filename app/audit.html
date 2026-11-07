@@ -2,26 +2,23 @@
 layout: default
 section: app
 title: "TARAflow — App — Audit Trail"
-description: "Every change in TARAflow is logged with timestamp, actor, action, and a brief summary. The audit trail supports sign-off workflows and re-assessment governance."
+description: "The project's history lives in git: path-scoped, signed commits per assessment round, a signer manifest with maintainers, and an engine that verifies the whole trail."
 ---
 
 <div class="page-head">
   <div class="eyebrow">App / 10</div>
   <h1>Audit Trail</h1>
-  <p>Every change in TARAflow is logged with timestamp, actor, action, and a brief summary. The audit trail supports sign-off workflows and re-assessment governance.</p>
+  <p>The project's history lives in git: path-scoped, signed commits per assessment round, a signer manifest that says who may sign, and the Audit Verification Engine that checks the whole trail — in the app, in git hooks and in CI.</p>
 </div>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Audit Log Entry</h2></div>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Commits per Round</h2></div>
   <ul class="bullet-list">
-    <li>Entry ID and ISO 8601 timestamp</li>
-    <li>Actor role (Name/Team/Role)</li>
-    <li>Action: create | update | delete | approve | link | re-assess</li>
-    <li>Object: DFD element, Asset, Threat, Risk, Measure — with ID</li>
-    <li>Version: old → new</li>
-    <li>Change summary — brief description</li>
-    <li>References: Ticket, Commit, Validation link/hash</li>
-    <li>Integrity (optional): signature/checksum</li>
+    <li>The audit repository is found from the project file's location — the repository root may be a parent folder, several projects can share one repository</li>
+    <li>The commit dialog shows the changes phase by phase, lets you pick the branch and the round — Initial Assessment, Detail Review, Refinement, Final Decision, Verification or your own — and can push</li>
+    <li>A commit stages only the project's own files; its message is <code>[TARA] &lt;round&gt;</code> with the trailers Affected-Phases, Batch-Size, Author and Date; changes to the signer manifest are <code>audit:</code> commits</li>
+    <li>The project file is written in one canonical form, so a save without a change leaves git clean and every diff shows only what changed</li>
+    <li>The audit configuration (General, Authentication, Rounds, Signing, Protection) is pre-filled from the repository's git config — remote, author, signing key</li>
   </ul>
 </section>
 
@@ -51,17 +48,21 @@ description: "Every change in TARAflow is logged with timestamp, actor, action, 
     <li>Once an audit repository has a signer manifest, every commit in it is signed, for every project</li>
     <li>The commit dialog tells you before the click when a key or an authorization is missing</li>
     <li>A commit checks out the audit branch before staging; a save after a project switch lands in the right project</li>
+    <li>Signing with SSH (default) or GPG, with a dedicated signing key; the signer manifest <code>.tara/allowed_signers</code> lists who may sign and who is a maintainer — only maintainers may change it</li>
+    <li>A signed commit is refused when the author's e-mail is not in the manifest</li>
     <li>The commit author stays on your machine — it is not written into the project file, every team member uses their own</li>
   </ul>
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Sign-off &amp; Governance</h2></div>
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Audit Verification Engine</h2></div>
   <ul class="bullet-list">
-    <li>Risk owner sign-off per threat table</li>
-    <li>Won't-fix decisions require documented justification</li>
-    <li>Re-assessment triggers defined per project: architecture change, new CVE, regulatory change, annual review</li>
-    <li>Governance board output links back to audit entries for traceability</li>
+    <li>Walks the history from the audit anchor — the first commit that adds the signer manifest, pinned by its hash — to the tip</li>
+    <li>Every commit must be signed by a signer the manifest allowed <em>before</em> that commit; a manifest change must be signed by a maintainer</li>
+    <li>Further checks: linear history, clean working tree, the <code>audit-root</code> tag, the commit message schema, the canonical form of every changed project file, optionally four eyes (<code>Reviewed-by</code>)</li>
+    <li>Findings with stable rule codes and severities; the same engine runs in the Audit tab and as the command-line tool <code>taraflow-verify</code> for CI, where the anchor is pinned in a policy</li>
+    <li>A managed <code>commit-msg</code> git hook checks the message schema — for commits made on the console too</li>
+    <li>The Protection checklist guides the server side: protected branch, signed and linear history, CODEOWNERS for <code>.tara/</code></li>
   </ul>
 </section>
 
