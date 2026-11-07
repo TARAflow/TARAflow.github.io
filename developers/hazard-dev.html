@@ -16,7 +16,7 @@ description: "Data model, sync boundary with the DFD/Asset stores, and the revie
   <ul class="bullet-list">
     <li><code>HazardItem</code> (<code>shared/models/hazard-types.ts</code>) — lean; relations stored separately as <code>ContributesToRelation</code> / <code>EndangersRelation</code> (a <code>HazardRelation</code> union), joined by branded <code>HazardItemId</code></li>
     <li><code>HazardCombinationType</code> — <code>ANY</code> (OR, default) | <code>ALL</code> (AND) — the Bowtie gate; only meaningful with ≥2 contributing causes</li>
-    <li><code>HazardImpact</code> (<code>shared/models/hazard-impact.ts</code>) — discriminated union over <code>human | environment | infrastructure</code>, each with its own severity scale (<code>SEVERITY_SCALE_BY_TARGET</code>); <code>HumanHarmSeverity = Exclude&lt;SafetyImpact,"none"&gt;</code></li>
+    <li><code>HazardImpact</code> (<code>shared/models/hazard-impact.ts</code>) — discriminated union over <code>human | environment | infrastructure</code>, each with its own severity scale (<code>SEVERITY_SCALE_BY_TARGET</code>); <code>HumanHarmSeverity = SafetyImpact</code> — <code>"none"</code> (no injury, S0) is a rating, never counted as harm on the asset; environment and infrastructure use <code>low | medium | high | critical</code></li>
     <li>Asset references on relations are plain <code>AssetReference.id</code> strings, not the branded asset id type</li>
     <li><code>Project.hazards: HazardData | null</code> — <code>HazardData = { hazards, relations, lastModified, configuration? }</code>; <code>null</code> for pre-existing / non-safety projects, no migration required</li>
     <li>Schema v2 inserted Hazard as its own <code>PhaseId</code> (id 1) — all later phase ids shifted; every call site references phases via <code>PhaseId.X</code>, never a bare literal</li>
@@ -26,7 +26,7 @@ description: "Data model, sync boundary with the DFD/Asset stores, and the revie
 <section>
   <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Gating &amp; progress</h2></div>
   <ul class="bullet-list">
-    <li>Gate flag lives in <code>ProjectInfoData.safetyRelevant</code> (not a separate settings object), toggled via a switch in the Overview tab; default <code>false</code></li>
+    <li>Gate flag lives in <code>ProjectInfoData.safetyRelevant</code> (not a separate settings object), toggled via the Safety Analysis switch in the Overview tab; default <code>false</code>; <code>requiresHazardAnalysis(tags)</code> (EN 50742, IEC 81001, IEC TR 60601, IEC 63452, CLC/TS 50701) forces it on when the project is opened</li>
     <li>Tab visibility: filtered out of <code>phase-tab-bar</code>'s workflow sort when off, with a render-guard + redirect to Overview in <code>workspace-layout</code> as a second line of defense</li>
     <li><code>PROGRESS_PHASE_IDS</code> / <code>getProgressPhaseIds(safetyRelevant)</code> in <code>phase-types.ts</code> is the single source of truth for which phases count toward the progress bar — Hazard only counts when the toggle is on; Documentation/Audit/Integration are excluded from all workflows</li>
   </ul>

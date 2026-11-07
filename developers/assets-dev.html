@@ -17,7 +17,7 @@ description: "The asset model: assets in nine groups, element and asset-to-asset
     <li>assetGroup: data | function | system | infrastructure (vertical) · process | physical | service | human | environment (orthogonal)</li>
     <li>id is an opaque UUID (stable across a group change); displayId is the readable, group-prefixed label (DA-001, FU-002), regenerated on a group change</li>
     <li>properties: one flat, shared AssetProperties schema; linkedDFDElements and the physical impact are derived from the DFD and the hazard model</li>
-    <li>Impact factors: financial, operational, regulatory, recoverability — drive initialImpact</li>
+    <li>Impact criteria: financial damage, regulatory compliance, reputation, privacy, operational, affected users, recoverability (business) and safety, physical damage, environmental, supply chain (physical); a new project starts with financial, operational, regulatory, recoverability and affected users — presets seed their own (ISO/SAE 21434: SFOP)</li>
   </ul>
 </section>
 
@@ -27,7 +27,7 @@ description: "The asset model: assets in nine groups, element and asset-to-asset
     <li>Each asset has securityGoals[]: { type: CIANAAAGoal, level: CIANAAALevel }</li>
     <li>level ≠ none → goal is active → contributes to STRIDE category set via CIANAAA_TO_STRIDE</li>
     <li>maxLevel() across active goals for a STRIDE category → initialImpact on threat</li>
-    <li>Asset-to-element sync: bidirectional — element changes propagate to asset linkedElementIds</li>
+    <li>Asset-to-element: the relation lives on the element (<code>assetRelations</code>); the asset's <code>linkedDFDElements</code> is derived from it</li>
   </ul>
 </section>
 

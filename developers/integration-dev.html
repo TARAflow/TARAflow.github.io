@@ -32,7 +32,7 @@ description: "Ticket adapter pattern for Jira, ADO, GitHub Issues, and future sy
 <section>
   <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">RichText Ticket Cards</h2></div>
   <ul class="bullet-list">
-    <li>Ticket body is generated from a template: threat description, risk level, mitigation text, verification criteria, DFD element reference, norm references</li>
+    <li><code>features/risks/services/ticket-text.ts</code> builds title and description as tracker-independent text: threat, attack, cause, risk score before / after, the mitigation as an EARS requirement (<em>WHEN … the system SHALL …</em>), notes, verification criteria and the risk label</li>
     <li>The body format is the adapter's job — Jira uses Atlassian Document Format (ADF), Azure DevOps HTML (JSON Patch), GitHub, GitLab and OpenProject Markdown</li>
     <li>Ticket id, URL and the last seen ticket status are stored on the selected mitigation (<code>ticketId</code>, <code>ticketUrl</code>, <code>ticketStatus</code>, <code>ticketSyncedAt</code>) for status sync</li>
   </ul>

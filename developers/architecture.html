@@ -14,9 +14,9 @@ description: "TARAflow is an Electron desktop application with a React/TypeScrip
 <section id="stack">
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Stack</h2></div>
   <ul class="bullet-list">
-    <li>Electron (main process) — native OS integration, keytar for credential storage, file I/O</li>
-    <li>React 18 + TypeScript — UI, MUI DataGrid, draw.io iFrame integration</li>
-    <li>Vitest — unit tests for geometry, generators, catalog service</li>
+    <li>Electron (main process) — native OS integration, keytar for credential storage, file I/O, git, tracker requests</li>
+    <li>React 18 + TypeScript — UI, MUI and MUI DataGrid, Tailwind, draw.io iFrame integration</li>
+    <li>Vitest — unit, component and integration tests (the integration suite needs a real git binary)</li>
     <li>i18next — runtime i18n with EN/DE namespaces</li>
     <li>draw.io (diagrams.net) — embedded as iFrame for DFD editing</li>
   </ul>
@@ -26,11 +26,19 @@ description: "TARAflow is an Electron desktop application with a React/TypeScrip
   <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Feature Boundaries</h2></div>
   <p style="font-size:0.92rem; color:var(--ink-dim); margin-bottom:14px;">Every feature is a full vertical slice — <strong>no feature may depend on another feature</strong>, not just the DFD/Threats pair. Anything needed across features lives in <code>shared</code> instead.</p>
   <ul class="bullet-list">
-    <li><code>features/dfd</code> — DFD modeling, draw.io bridge, DFDGraphReference</li>
-    <li><code>features/threats</code> — threat generation, catalog, risk, attack tree</li>
-    <li><code>features/assets</code> — asset model, CIANAAA, impact factors</li>
+    <li><code>features/overview</code> — project data, item / system definition, methodology view, source bindings</li>
+    <li><code>features/hazards</code> — hazard items, Bowtie, import</li>
+    <li><code>features/dfd</code> — DFD modeling, draw.io bridge, graph builder, leveled DFDs, asset graph</li>
+    <li><code>features/assets</code> — asset model, CIANAAA, impact criteria</li>
+    <li><code>features/threats</code> — STRIDE generation (per element, per interaction), threat and mitigation catalog</li>
+    <li><code>features/attacktree</code> — DSL, calculator, attack-path threat generator</li>
+    <li><code>features/risks</code> — risk register, likelihood methods, matrix, goals &amp; claims</li>
+    <li><code>features/compliance</code> — requirement matrices (IEC 62443-4-2 editions, EN 50742 A)</li>
     <li><code>features/documentation</code> — the generator engine covered in <a href="{{ '/developers/cli-report-dev.html' | relative_url }}">CLI Report Generator</a></li>
-    <li><code>shared</code> — all types and utilities used across features (DFDElementReference, StrideCategory, etc.)</li>
+    <li><code>features/audit</code> — git commit flow, signer manifest, Audit Verification Engine</li>
+    <li><code>features/integration</code> — issue-tracker adapters</li>
+    <li><code>shared</code> — all types and utilities used across features (DFDElementReference, StrideCategory, regulation presets, etc.)</li>
+    <li><code>app</code> — the composition layer: the workspace, cross-feature bridges (e.g. attack tree → risk likelihood) and schema migrations</li>
     <li><strong>Rule:</strong> no <code>features/*</code> module may import from another <code>features/*</code> module — only from <code>shared</code></li>
   </ul>
 </section>

@@ -8,28 +8,28 @@ description: "Risk scoring, factor model, MoSCoW treatment, and before/after imp
 <div class="page-head">
   <div class="eyebrow">Developers / 07</div>
   <h1>Risk Engine</h1>
-  <p>Risk scoring, factor model, MoSCoW treatment, and before/after impact comparison.</p>
+  <p>Likelihood method per regulation preset, impact aggregation, the safety override, mitigation status and the two sync passes that fill the risk register.</p>
 </div>
 
 <section>
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Risk Model</h2></div>
   <ul class="bullet-list">
-    <li>Risk = Impact × Likelihood on a configurable N×N severity matrix</li>
-    <li>Impact: derived from asset CIANAAA levels + safety override</li>
-    <li>Likelihood: OWASP Risk Rating factors (6 threat-agent + 6 vulnerability factors)</li>
-    <li>reconcileFactorRatings(): re-computes aggregate likelihood when individual factors change</li>
-    <li>Safety Override: direct relevance + fatal impact → CRITICAL, independent of numeric score</li>
+    <li>The regulation preset (<code>shared/models/regulation-preset.ts</code>, derived from the tags by <code>regulationPresetFromTags</code>) sets <code>LikelihoodMethod</code> = <code>weighted-mean</code> (Standard: skill level, motive, opportunity, ease of exploit) | <code>iso-21434</code> | <code>etsi-tvra</code> (score tables) | <code>en-50742-a</code> (AP = EL × WoO + AC → Table B.5 band → SRSL), the likelihood factors and the <code>ImpactAggregation</code> (<code>harm-floor</code> | <code>max</code> | <code>weighted-mean</code>)</li>
+    <li>The matrix combines the axes numerically (likelihood value × impact value → threshold band), never by a shared label index — likelihood, impact and risk output can carry different vocabularies</li>
+    <li>Impact: the asset's impact ratings per criterion (or a per-goal override), the same criterion set for every risk, aggregated per preset</li>
+    <li>Safety Override (<code>deriveAggregatedImpact</code>): irreversible major or fatal → CRITICAL (direct) / HIGH+ (indirect); irreversible minor → HIGH+ / HIGH; reversible → HIGH / MED+</li>
+    <li><code>syncRisksFromThreats</code> and <code>syncRisksFromAttackTrees</code> are independent passes; the latter alone owns the attack-tree likelihood factor, which <code>reconcileFactorRatings()</code> leaves alone</li>
   </ul>
 </section>
 
 <section>
   <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Risk Treatment</h2></div>
   <ul class="bullet-list">
-    <li>MitigationStatus: proposed | accepted | implemented | verified</li>
-    <li>ImplementationProgress: not_started | in_progress | complete</li>
-    <li>RiskMitigationStatusDialog: separate concern from MitigationStatus</li>
-    <li>Before/after: riskBefore stored at assessment time, riskAfter re-computed after mitigations</li>
-    <li>Won't-fix: requires CBA justification stored in audit trail</li>
+    <li><code>MitigationStatus</code>: open | in_progress | in_review | implemented | verified | rejected — mirrors the linked ticket's state in both directions</li>
+    <li><code>ImplementationProgress</code> of a risk is derived from its mitigations (<code>deriveImplementationProgress</code>): not_started … partial … verified</li>
+    <li><code>RiskTreatment</code>: eliminate | reduce | accept | transfer | share — shown with the ISO names Avoid / Reduce / Share / Retain in ISO/SAE 21434 projects</li>
+    <li>MoSCoW must | should | could | wont; Won't risks have their own table, a missing justification is flagged</li>
+    <li>Before/after: <code>calculatedRiskBeforeMitigation</code> and <code>calculatedRiskAfterMitigation</code> on the risk</li>
   </ul>
 </section>
 

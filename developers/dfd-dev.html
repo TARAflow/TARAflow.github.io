@@ -17,19 +17,21 @@ description: "The DFD engine bridges draw.io XML to the typed graph model used b
     <li>elementsById: Map&lt;string, DFDElementReference&gt; — all elements by ID</li>
     <li>connectionsById: Map&lt;string, DFDConnectionReference&gt; — all DataFlows by ID</li>
     <li>effectiveElementTrustBoundary: Map&lt;string, string&gt; — innermost TB per element (prevents duplicates in nested TBs)</li>
-    <li>elementPhysicalBoundaries, elementChipBoundaries — PB/CB membership maps</li>
+    <li>assetsById, outgoingConnections, incomingConnections — assets and topology</li>
+    <li>elementTrustBoundaries / trustBoundaryElements and trustBoundaryHierarchy — TB membership (overlap-based) and nesting</li>
+    <li>elementPhysicalBoundaries, elementChipBoundaries — PB/CB membership maps (no nesting)</li>
     <li>chipBoundaryElements, physicalBoundaryElements — reverse maps</li>
+    <li>dataFlowAnalysis — per flow, the boundaries it crosses</li>
   </ul>
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">toReferenceGraph()</h2></div>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">From draw.io XML to the graph</h2></div>
   <ul class="bullet-list">
-    <li>Parses draw.io XML via the bridge IPC channel</li>
-    <li>Resolves parent IDs to determine TB/PB/CB membership geometrically</li>
-    <li>Maps element.properties from draw.io custom properties to typed DFDElementReference.properties</li>
-    <li>Computes effectiveElementTrustBoundary using the innermost-TB rule</li>
-    <li>Called in workspace-layout.tsx; result stored as project.dfdGraph</li>
+    <li><code>dfd-parser.ts</code> parses the draw.io XML (in the CLI with <code>@xmldom/xmldom</code>); <code>build-dfd-graph.ts</code> is the one entry point for the analysis graph — a single page goes straight to the builder, several pages through the effective model</li>
+    <li><code>dfd-graph-builder.ts</code>: lookup and topology maps, TB membership (overlap-based) and hierarchy, the effective (deepest) TB per element, data-flow analysis, derived exposure levels, and the location of sensors and actuators from their physical boundary</li>
+    <li><code>app/utils/to-reference-graph.ts</code> widens the concrete <code>DFDGraph</code> to the analysis view <code>DFDGraphReference</code> — the single sanctioned cast; <code>workspace-layout.tsx</code> memoizes it and hands it to the features as <code>dfdGraph</code></li>
+    <li>The graph is derived, never persisted — the save path strips it from the project file</li>
   </ul>
 </section>
 

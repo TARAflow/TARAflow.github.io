@@ -18,14 +18,14 @@ description: "Architecture of the threat generation pipeline: UnifiedStrategy, c
       <div class="pipe-left"><div class="pipe-badge">DFDGraph</div><div class="pipe-line"></div></div>
       <div class="pipe-right">
         <h4>Input: DFDGraphReference</h4>
-        <p><code>project.dfdGraph</code> — typed graph built by <code>toReferenceGraph()</code> from the draw.io XML. Contains <code>elementsById</code>, <code>connectionsById</code>, <code>effectiveElementTrustBoundary</code>, and CB/PB membership maps.</p>
+        <p><code>dfdGraph</code> — the analysis view of the graph built by <code>build-dfd-graph.ts</code> from the draw.io XML and widened by <code>toReferenceGraph()</code> (see <a href="{{ '/developers/dfd-dev.html' | relative_url }}">DFD Engine</a>). Contains <code>elementsById</code>, <code>connectionsById</code>, <code>effectiveElementTrustBoundary</code>, and CB/PB membership maps.</p>
       </div>
     </div>
     <div class="pipe-step">
       <div class="pipe-left"><div class="pipe-badge">STRIDE Matrix</div><div class="pipe-line"></div></div>
       <div class="pipe-right">
         <h4>Base STRIDE categories</h4>
-        <p><code>STRIDE_PER_ELEMENT_TYPE</code> defines the base set per element type. <code>ExternalEntity → [S,R]</code>, <code>Process → [S,T,R,I,D,E]</code>, <code>DataFlow → [T,I,D]</code>, etc. These are the hard ceiling — no module can add categories outside this set.</p>
+        <p><code>STRIDE_PER_ELEMENT_TYPE</code> defines the base set per element type. <code>ExternalEntity → [S,R]</code>, <code>Process → [S,T,R,I,D,E]</code>, <code>DataFlow → [T,I,D]</code>, <code>DataStore → [T,R,I,D]</code>, <code>ChipBoundary → [T,I,E]</code>, <code>Sensor</code> / <code>Actuator → [S,T,D]</code>. These are the hard ceiling — no module can add categories outside this set.</p>
       </div>
     </div>
     <div class="pipe-step">
@@ -47,7 +47,7 @@ description: "Architecture of the threat generation pipeline: UnifiedStrategy, c
       <div class="pipe-left"><div class="pipe-badge">Catalog</div><div class="pipe-line"></div></div>
       <div class="pipe-right">
         <h4>Template selection: findElementTemplate()</h4>
-        <p>For each surviving (element, STRIDE) pair, <code>findElementTemplate()</code> selects the best-matching template via <code>matchesContext()</code>. Matches on: elementType, technology, protocol, systemClass, platform, location, safetyFunction, accessMode, and more. Most-specific match wins.</p>
+        <p>For each surviving (element, STRIDE) pair, <code>findElementTemplate()</code> selects the best-matching template via <code>matchesContext()</code>. Matches on: elementType, technology, protocol, systemClass, platform, location, safetyFunction, accessMode, and more. Most-specific match wins. A key that names a missing or weak control also matches while the property is unset (<code>contextMatch()</code> counts these assumptions) — a template matched by facts is chosen before one matched by an assumption.</p>
       </div>
     </div>
     <div class="pipe-step">
@@ -212,12 +212,15 @@ description: "Architecture of the threat generation pipeline: UnifiedStrategy, c
   <p style="font-size:0.9rem; color:var(--ink-dim); margin-bottom:18px;"><code>implemented-controls-mapper.ts</code> translates element property values into <code>MitigationDraft[]</code> entries with <code>alreadyImplemented: true</code>. The generator merges these with template mitigations — existing IDs get flagged, new hints are appended.</p>
   <div class="code-block"><span class="cm">// Property → Mitigation mapping examples</span>
 
-<span class="cm">// Interface.implementedControls.logicalAccessControl = "mfa"</span>
-<span class="cv">M-IF-S-003</span>  alreadyImplemented: <span class="ck">true</span>
+<span class="cm">// Interface.implementedControls.linkAuthentication = "mutual_pairing"  (S)</span>
+<span class="cv">M-S-001</span>  alreadyImplemented: <span class="ck">true</span>
+<span class="cv">M-S-002</span>  alreadyImplemented: <span class="ck">true</span>
 
-<span class="cm">// Interface.implementedControls.debugProtection = "fused_off"</span>
+<span class="cm">// Interface.implementedControls.debugProtection ≠ "none"  (T, E)</span>
+<span class="cv">M-CB-T-001</span>  alreadyImplemented: <span class="ck">true</span>
+
+<span class="cm">// Interface.operationalState = "hw_disabled"  (S, T, E)</span>
 <span class="cv">M-IF-E-001</span>  alreadyImplemented: <span class="ck">true</span>
-<span class="cv">M-IF-DBG-003</span> alreadyImplemented: <span class="ck">true</span>
 
 <span class="cm">// DataFlow.physicalPathProtection = "conduit"</span>
 <span class="cv">M-T-001</span>  alreadyImplemented: <span class="ck">true</span>
