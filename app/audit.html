@@ -36,7 +36,26 @@ description: "Every change in TARAflow is logged with timestamp, actor, action, 
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Sign-off &amp; Governance</h2></div>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">TARA Verification</h2></div>
+  <ul class="bullet-list">
+    <li>ISO/SAE 21434 projects: record the verification of the TARA — the four points of RQ-09-07 as a checklist, result and findings</li>
+    <li>Sealed with a hash of the analysis: TARAflow tells you when the analysis changed since, or when the verification is older than 90 days</li>
+    <li>Ticket and status changes of mitigations do not count as a change of the analysis</li>
+    <li>The status shows in the Overview, the phase bar and the report</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">Signing &amp; Identity</h2></div>
+  <ul class="bullet-list">
+    <li>Once an audit repository has a signer manifest, every commit in it is signed, for every project</li>
+    <li>The commit dialog tells you before the click when a key or an authorization is missing</li>
+    <li>The commit author stays on your machine — it is not written into the project file, every team member uses their own</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">05</span><h2 class="sec-title">Sign-off &amp; Governance</h2></div>
   <ul class="bullet-list">
     <li>Risk owner sign-off per threat table</li>
     <li>Won't-fix decisions require documented justification</li>

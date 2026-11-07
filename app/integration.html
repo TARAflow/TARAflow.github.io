@@ -14,10 +14,9 @@ description: "Export mitigations as tickets to Jira, Azure DevOps, or GitHub Iss
 <section>
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Supported Systems</h2></div>
   <ul class="bullet-list">
-    <li>Jira — project and issue type configurable, rich text description, custom fields</li>
-    <li>Azure DevOps — work item creation with area path and iteration</li>
-    <li>GitHub Issues — label mapping, milestone assignment</li>
-    <li>Polarion (planned)</li>
+    <li>Jira — one Integration tab: connection test, project and issue type, create and link tickets</li>
+    <li>Azure DevOps — returns with a later release (not connected in 0.16)</li>
+    <li>GitHub Issues, Polarion (planned)</li>
   </ul>
 </section>
 
@@ -26,8 +25,10 @@ description: "Export mitigations as tickets to Jira, Azure DevOps, or GitHub Iss
   <ul class="bullet-list">
     <li>Select mitigations from the risk table and export as tickets</li>
     <li>Ticket includes: threat description, risk level, proposed mitigation, verification criteria, DFD reference</li>
-    <li>Status sync: when ticket is closed, mitigation is marked implemented in TARAflow</li>
-    <li>Credential storage via system keychain (keytar) — no plaintext secrets in project files</li>
+    <li>Ticket states sync when the Risk tab opens or on <em>Sync ticket status</em></li>
+    <li>The mitigation status follows its ticket in both directions; a ticket closed as <em>won't fix</em> marks the mitigation rejected with the ticket as reason</li>
+    <li>The API token stays in the OS keychain, bound to the Jira address — a project file can never point it elsewhere</li>
+    <li>Your Jira e-mail is not written into the project file — every team member uses their own account</li>
   </ul>
 </section>
 

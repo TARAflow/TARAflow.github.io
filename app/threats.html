@@ -74,8 +74,18 @@ description: "TARAflow generates STRIDE threats automatically from your DFD. Eve
   </div>
 </section>
 
+<section id="project-mitigations">
+  <div class="sec-head"><span class="sec-tag">06</span><h2 class="sec-title">Project Mitigations &amp; Closed Loop</h2></div>
+  <ul class="bullet-list">
+    <li>Write your own mitigations once (M-C-nnn) — text, STRIDE category, optional attack vectors and the DFD properties they set — and use them on any threat or risk like a catalog entry</li>
+    <li>Project mitigations are kept on regeneration, can be merged and are checked by the closed loop; free-text mitigations are no longer offered, existing ones can be converted</li>
+    <li>The DFD notification panel separates <em>planned</em> mitigations (information) from mitigations marked done that the DFD contradicts (warning / conflict) — in the Smoke Detector example 1 notification instead of 81</li>
+    <li><em>Apply</em> is offered only for a mitigation that is done, and can restore a value that was changed back</li>
+  </ul>
+</section>
+
 <section id="controls">
-  <div class="sec-head"><span class="sec-tag">06</span><h2 class="sec-title">Controls by Attack Vector</h2></div>
+  <div class="sec-head"><span class="sec-tag">07</span><h2 class="sec-title">Controls by Attack Vector</h2></div>
   <ul class="bullet-list">
     <li>Attack-path risks get the catalog controls that fit the path's attack vector first (network / adjacent / local / physical), then vector-independent ones — a physical-access path is no longer offered rate limiting</li>
     <li>The project context gates the proposals: in-vehicle controls only in the Automotive domain, embedded-only controls only on an embedded platform; without a vector the proposals are as before</li>
