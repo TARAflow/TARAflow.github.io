@@ -15,12 +15,15 @@ description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Element Types</h2></div>
   <div class="card-grid-2">
     <div class="card"><div class="tag-label">Process [P-xx]</div><h3>Process</h3><p>Software component, service, or controller. Properties: technology (bootloader, rtos_task, driver, protocol_stack), malwareProtection, accountManagement, update mechanism, session control (session lock, remote termination, session limit).</p></div>
+    <div class="card"><div class="tag-label">Multiprocess [MP-xx]</div><h3>Multiprocess</h3><p>A composite of processes — decomposed on a child page (leveled DFD) or kept as a black box with <em>Inside</em> fields for what it contains. Security in sub-tabs like a process, plus boundary authentication.</p></div>
     <div class="card"><div class="tag-label">DataStore [DS-xx]</div><h3>DataStore</h3><p>Persistent storage. Properties: technology (flash, eeprom, ram, database), encryption, backupMechanism.</p></div>
     <div class="card"><div class="tag-label">DataFlow [DF-xx]</div><h3>DataFlow</h3><p>Communication channel. Properties: protocol, encryptionInTransit, location (field_cable, on_board), safetyFunction, accessMode.</p></div>
-    <div class="card"><div class="tag-label">ExternalEntity [EE-xx]</div><h3>ExternalEntity</h3><p>Actor outside the system boundary. Properties: entityType (human, external_system, sensor).</p></div>
+    <div class="card"><div class="tag-label">ExternalEntity [EE-xx]</div><h3>ExternalEntity</h3><p>Actor outside the system boundary — and the physical environment a sensor measures or an actuator acts on. Properties: entityType (user and admin roles, operator, maintenance, remote service, SCADA / HMI, gateway, controller, engineering workstation, debugger …), trustLevel, authenticationMethod.</p></div>
     <div class="card"><div class="tag-label">TrustBoundary [TB-xx]</div><h3>TrustBoundary</h3><p>Logical security zone boundary. Threats are generated at crossing points. Several traffic policies — default deny, island mode, fail close — as IEC 62443 counts them separately.</p></div>
     <div class="card"><div class="tag-label">PhysicalBoundary [PB-xx]</div><h3>PhysicalBoundary</h3><p>Physical enclosure boundary. Properties: tamperProtection, physicalAccessControl, physicalMobility.</p></div>
     <div class="card"><div class="tag-label">ChipBoundary [CB-xx]</div><h3>ChipBoundary</h3><p>Hardware security boundary. Properties: chipType, debugInterfaceLocked, sideChannelProtection, cryptoStandard.</p></div>
+    <div class="card"><div class="tag-label">Sensor [SE-xx]</div><h3>Sensor</h3><p>Transducer physical → cyber, only the conversion itself. Physical side: a data flow with medium physical from an ExternalEntity; cyber side: to a Process or Interface. Properties: measurand, transduction principle, stimulus domain, sensing exposure, signal authentication, plausibility check, redundancy, loss detection, safety relevance.</p></div>
+    <div class="card"><div class="tag-label">Actuator [AC-xx]</div><h3>Actuator</h3><p>Transducer cyber → physical, typically the top event of a hazard. Receives the command from a Process or Interface, acts on an ExternalEntity. Properties: actuator class, energy domain, hazard potential, command authentication, safe state, fail behavior, feedback verification, hardware interlock, safety relevance.</p></div>
     <div class="card"><div class="tag-label">Interface [IF-xx]</div><h3>Interface / PhysicalInterface</h3><p>Physical or logical interface port. Properties: implementedControls (logicalAccessControl, debugProtection, physicalAccessProtection, abuseProtection, monitoringControl).</p></div>
   </div>
 </section>
@@ -102,7 +105,7 @@ description: "TARAflow uses draw.io as its DFD editor. Import or draw your data-
   <div class="sec-head"><span class="sec-tag">07</span><h2 class="sec-title">DFD Completeness Rules</h2></div>
   <ul class="bullet-list">
     <li>All system components, data flows, and trust boundaries must be present</li>
-    <li>All elements must be named and numbered (P-xx, DS-xx, DF-xx, EE-xx; on child pages hierarchically, e.g. P-2.1)</li>
+    <li>All elements must be named and numbered (P-xx, MP-xx, DS-xx, DF-xx, EE-xx, SE-xx, AC-xx; on child pages hierarchically, e.g. P-2.1)</li>
     <li>Assets and Interfaces must be placed on the correct elements</li>
     <li>Consistent with architecture — version-controlled in repository</li>
     <li>Re-assessment trigger when context or architecture changes</li>
