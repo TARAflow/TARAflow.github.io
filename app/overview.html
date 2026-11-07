@@ -19,13 +19,15 @@ description: "Create a project, set the system context, choose criticality, and 
     <li>Criticality: standard or critical system (affects workflow variant selection)</li>
     <li>Industry tags: OT, Medical, Automotive, IoT, Cloud</li>
     <li>Platform tags: Embedded, Linux, RTOS, Bare-Metal, Cloud, Mobile</li>
-    <li>Regulatory tags: IEC 62443, ISO 21434, CRA, EN 50742 — drive mitigation catalog filtering</li>
+    <li>Regulatory tags: IEC 62443, EN IEC 62443 (CRA), ISO 21434, CRA, EN 50742 — drive mitigation catalog filtering</li>
+    <li>Tags that change the workflow are marked: method tags (ISO 21434, EN 50742, ETSI TVRA) dark with a cog, matrix tags (<code>IEC 62443</code>, <code>EN IEC 62443 (CRA)</code>) outlined with a shield</li>
   </ul>
 </section>
 
 <section>
-  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Item Definition</h2></div>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Item / System Definition</h2></div>
   <ul class="bullet-list">
+    <li>Called <em>Item Definition</em> in ISO/SAE 21434 projects, <em>System Definition</em> everywhere else</li>
     <li>Overview → <em>Definition</em>: purpose and functions, item boundary, preliminary architecture, operational environment and constraints — each with text, a source document and links into the DFD and the assets</li>
     <li>Functions with their lifecycle phases</li>
     <li>Assumptions (ASM-nn) with owner, review date and status; trust boundaries link the assumptions they rely on</li>

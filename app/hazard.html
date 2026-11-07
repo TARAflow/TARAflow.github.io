@@ -15,6 +15,7 @@ description: "An optional safety-analysis tab, alongside the security workflow: 
   <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Enabling the tab</h2></div>
   <ul class="bullet-list">
     <li>Off by default — a project only gets a Hazard tab once marked safety-relevant via the switch in the Overview tab (below the Criticality switch)</li>
+    <li>A regulation tag that mandates hazard analysis (e.g. EN 50742) always shows the tab — the setting is taken from the tags when the project is opened, also for files written outside TARAflow</li>
     <li>Existing projects are unaffected; no migration required</li>
     <li>When enabled, Hazard also joins the Overview progress bar alongside the other phases</li>
   </ul>
@@ -37,7 +38,7 @@ description: "An optional safety-analysis tab, alongside the security workflow: 
   <ul class="bullet-list">
     <li>A master-detail review workspace, not a plain edit dialog: a sidebar lists every hazard with its review status and completeness, the detail pane holds the decision and the Bowtie</li>
     <li>Every hazard is first triaged on one question — <em>is this reachable by a cyberattack?</em> — answered as in scope, out of scope (with a required reason), or unknown</li>
-    <li>Only in-scope hazards need a Bowtie modeled; out-of-scope hazards stay in the safety record but are excluded from threat derivation, never deleted</li>
+    <li>Only in-scope hazards need a Bowtie modeled; out-of-scope hazards (protective measure purely mechanical or organisational) need no contributing asset, stay in the safety record but are excluded from threat derivation, never deleted</li>
     <li>Commit-on-close: there is no separate Save button — closing the dialog (OK, Escape, or clicking outside) commits the draft</li>
   </ul>
 </section>

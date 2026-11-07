@@ -68,6 +68,7 @@ description: "TARAflow is a model-driven, relationship-based TARA tool for embed
       <div class="standards">
         <span class="label">// Standards &amp; regulatory alignment</span>
         <span class="tag">IEC 62443</span>
+        <span class="tag">EN IEC 62443-4-2</span>
         <span class="tag">ISO/SAE 21434</span>
         <span class="tag">EU Cyber Resilience Act</span>
         <span class="tag">EN 50742</span>
@@ -121,6 +122,16 @@ description: "TARAflow is a model-driven, relationship-based TARA tool for embed
     <div class="feature"><div class="fnum">06</div><h3>Security &amp; safety together</h3><p>A BowTie-based hazard workflow feeds physical-impact and safety-override rules into the same risk model.</p></div>
     <div class="feature"><div class="fnum">07</div><h3>Auditability</h3><p>Git-based history, signed commits, authorized-signer management and the Audit Verification Engine.</p></div>
     <div class="feature"><div class="fnum">08</div><h3>Headless reporting</h3><p>The same Markdown, AsciiDoc, HTML, PDF and StrictDoc output from <code>taraflow-report</code> in CI/CD, no desktop app required.</p></div>
+  </div>
+</section>
+
+<section id="iec62443">
+  <div class="sec-head"><span class="sec-tag">Industrial &amp; CRA</span><h2 class="sec-title">Requirement matrices from the model</h2></div>
+  <div class="features">
+    <div class="feature"><div class="fnum">A</div><h3>IEC 62443-4-2, two editions</h3><p>The classic edition (2019) with its device categories, or the CRA edition EN IEC 62443-4-2 — chosen by the project tag, side by side when both apply.</p></div>
+    <div class="feature"><div class="fnum">B</div><h3>Derived, not ticked</h3><p>Every row is checked against the DFD properties, the mitigations of the risk treatment and supporting measures. An unset property is unknown, never "not applicable".</p></div>
+    <div class="feature"><div class="fnum">C</div><h3>SL-T, SL-C, planned</h3><p>Set the target per foundational requirement and see what the component reaches now, once the chosen mitigations are done, and with the measures of the system around it.</p></div>
+    <div class="feature"><div class="fnum">D</div><h3>Gaps and CRA view</h3><p>A to-do list per element up to the SL-T; the report adds the statement of applicability, the CRA view by Annex I letter and the gaps with suggested mitigations.</p></div>
   </div>
 </section>
 

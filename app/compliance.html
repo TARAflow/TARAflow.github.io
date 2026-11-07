@@ -1,0 +1,59 @@
+---
+layout: default
+section: app
+title: "TARAflow — App — Compliance"
+description: "The IEC 62443-4-2 requirement matrix of your component — classic edition or the CRA edition EN IEC 62443-4-2 — derived from the TARA you already have."
+---
+
+<div class="page-head">
+  <div class="eyebrow">App / 09</div>
+  <h1>Compliance</h1>
+  <p>The requirement matrix of your component — IEC 62443-4-2 in the classic edition (2019) or the CRA edition EN IEC 62443-4-2 — derived from the DFD, the risk treatment and the project data you already have. Rows are checked, not ticked.</p>
+</div>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">01</span><h2 class="sec-title">Choosing the Matrix</h2></div>
+  <ul class="bullet-list">
+    <li>The tag decides: <code>IEC 62443</code> for the classic edition with its device categories, <code>EN IEC 62443 (CRA)</code> for the CRA edition (draft prAA:2026, marked as draft)</li>
+    <li>With both tags the two editions appear side by side as sub-tabs</li>
+    <li>One statement per requirement holds in both editions — switching between the classic and the CRA tag keeps your statements</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">02</span><h2 class="sec-title">Security Levels</h2></div>
+  <div class="card-grid-2">
+    <div class="card"><div class="tag-label">SL-T</div><h3>Target</h3><p>Choose the component (or the whole model) and set the target security level per foundational requirement.</p></div>
+    <div class="card"><div class="tag-label">SL-C</div><h3>Achieved</h3><p>What the product reaches from the model and the mitigations marked done.</p></div>
+    <div class="card"><div class="tag-label">SL-C planned</div><h3>Planned</h3><p>What it reaches once the chosen mitigations are done.</p></div>
+    <div class="card"><div class="tag-label">With system</div><h3>With measures of the system</h3><p>The value including the supporting measures of the system around the component.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">03</span><h2 class="sec-title">Derived, Not Ticked</h2></div>
+  <ul class="bullet-list">
+    <li>Every row is checked against the DFD properties, the mitigations of the risk treatment (per element; only done ones count for the achieved value) and supporting measures</li>
+    <li>An unset property is <em>unknown</em>, never <em>not applicable</em></li>
+    <li>What the model cannot show gets a statement with reasoning and evidence; TARAflow tells you when the model changed since</li>
+    <li>Hover a requirement number for its title and summary, click it for everything — how TARAflow checks it, the elements concerned, fitting catalog mitigations, your statement. The summaries are in our own words; the standard is authoritative</li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">04</span><h2 class="sec-title">What to Do Next</h2></div>
+  <ul class="bullet-list">
+    <li>A to-do list up to the SL-T names, per element, the property to set or check, marks what the planned mitigations close and lists the missing statements</li>
+    <li>A click on the element shows it in the diagram; a filter shows the rows by status</li>
+    <li>A quick guide walks through the steps</li>
+    <li>The report gets a chapter with the security levels, the statement of applicability (with the source of every row), the CRA view by Annex I letter and the gaps with suggested mitigations — in every format and the CLI</li>
+  </ul>
+  <div class="notice-box">
+    <p><strong>Example:</strong> the <em>Pump Station Controller</em> in <a href="https://github.com/TARAflow/TARAflow_Examples" target="_blank" rel="noopener">TARAflow_Examples</a> is an IEC 62443 / CRA example project to try the matrix on.</p>
+  </div>
+</section>
+
+<div class="foot-nav">
+  <a href="{{ '/app/documentation.html' | relative_url }}">← Documentation</a>
+  <a href="{{ '/app/audit.html' | relative_url }}">Next: Audit Trail →</a>
+</div>
